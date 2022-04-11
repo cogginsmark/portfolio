@@ -66,11 +66,11 @@ const TextContainer = styled.div`
 `
 
 const Heading = styled.h1`
-  font-size: 5rem;
+  font-size: 3rem;
   margin: 32px auto;
   font-weight: bold;
   @media screen and (max-width: ${({theme}) => theme.screen.width.desktop}px) {
-    font-size: 52px;
+    font-size: 42px;
   }
 `
 
