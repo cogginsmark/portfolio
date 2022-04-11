@@ -1,7 +1,7 @@
 export default {
-  author: "Sam Xie",
+  author: "Mark Coggins",
   hero: {
-    subtitle: "Software engineer at Cash App.",
+    subtitle: "Graphic Designer at California State University Stanislaus.",
     description: "Building reliable and scalable systems by day. Leveraging technology to launch fully featured products by night.",
     cta: "Browse Products",
   },
