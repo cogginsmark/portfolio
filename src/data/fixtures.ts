@@ -4,7 +4,8 @@ export default {
     subtitle: "Graphic Designer at California State University Stanislaus.",
     description: "Enjoying the exploration of new software and techniques to create engaging and compelling designs.",
     cta: "Browse Designs",
-    link: {
+      url: "https://portfolium.com/cogginsmark",
+    links: {
       name: "Resume",
       url: "https://portfolium.com/cogginsmark"
     }
