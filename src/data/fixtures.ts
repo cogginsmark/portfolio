@@ -87,7 +87,7 @@ export default {
         alt: "Unimelb"
       },
       {
-        src: "/logos/csustan2.svg",
+        src: "/logos/csustan3.svg",
         url: "https://www.csustan.edu/",
         alt: "California State University Stanislaus"
       },
