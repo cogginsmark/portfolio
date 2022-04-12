@@ -7,6 +7,7 @@ export default {
     link: {
       name: "Resume",
       url: "https://portfolium.com/cogginsmark"
+    }
   },
   products: {
     featured: [
