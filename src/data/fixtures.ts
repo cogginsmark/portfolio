@@ -3,7 +3,7 @@ export default {
   hero: {
     subtitle: "Graphic Designer at California State University Stanislaus.",
     description: "Enjoying the exploration of new software and techniques to create engaging and compelling designs.",
-    cta: "Browse Products",
+    cta: "Browse Designs",
   },
   products: {
     featured: [
@@ -61,7 +61,7 @@ export default {
       },
       {
         name: "JukeBuds",
-        description: "Product and advertising design for wireless earbuds.",
+        description: "Product and ad design for wireless earbuds.",
         link: {
           name: "Project",
           url: "https://portfolium.com/entry/jukebuds"
@@ -92,9 +92,9 @@ export default {
         alt: "United States Census Bureau"
       },
       {
-        src: "/logos/cashapp.svg",
-        url: "https://cash.app/",
-        alt: "Cash App"
+        src: "/logos/suezwahlen.svg",
+        url: "https://www.sueformayor.com/",
+        alt: "Sue Zwahlen for Congress"
       }
   ]
   },
