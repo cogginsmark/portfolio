@@ -4,6 +4,9 @@ export default {
     subtitle: "Graphic Designer at California State University Stanislaus.",
     description: "Enjoying the exploration of new software and techniques to create engaging and compelling designs.",
     cta: "Browse Designs",
+    link: {
+      name: "Resume",
+      url: "https://portfolium.com/cogginsmark"
   },
   products: {
     featured: [
