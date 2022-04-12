@@ -34,7 +34,7 @@ export default {
     width: {
       mobile: 360,
       tablet: 600,
-      desktop: 980
+      desktop: 1000
     },
     padding: {
       mobile: 20,

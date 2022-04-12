@@ -2,7 +2,7 @@ export default {
   author: "Mark Coggins",
   hero: {
     subtitle: "Graphic Designer at California State University Stanislaus.",
-    description: "Building reliable and scalable systems by day. Leveraging technology to launch fully featured products by night.",
+    description: "Enjoying the exploration of new software and techniques to create engaging and compelling designs.",
     cta: "Browse Products",
   },
   products: {
