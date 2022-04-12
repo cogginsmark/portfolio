@@ -8,16 +8,16 @@ export default {
   products: {
     featured: [
       {
-        name: "DoubleText",
-        medium: "React · GraphQL · Golang",
-        summary: "The #1 Facebook Messenger analyzer.",
+        name: "Associated Students Inc.",
+        medium: "Photoshop · Illustrator · Smartsheet",
+        summary: "Graphic Design Assistant",
         copy: [
-          "See millions of messages at a glance, without data leaving your computer."
+          "See my work with the student voice of CSU Stanislaus."
         ],
         links: {
           color: "#363636",
           primary: {
-            name: "Discover",
+            name: "Explore",
             url: "https://doubletext.me/"
           }
         },
@@ -30,17 +30,17 @@ export default {
         ]
       },
       {
-        name: "ClimbList",
-        medium: "React · Next.js",
-        summary: "Construction is now in progress.",
+        name: "Flux",
+        medium: "Photoshop · Illustrator · Premiere Pro",
+        summary: "Brand creation.",
         copy: [
-          "Compare and track grades and pricing between gyms around the country.",
+          "See my work with creating a content creation house in Austin, Texas.",
         ],
         links: {
           color: "#363636",
           primary: {
             name: "Learn more",
-            url: "https://climblist.com/"
+            url: "https://portfolium.com/entry/flux"
           }
         },
         images: [
@@ -52,27 +52,27 @@ export default {
     // Only supports 0-3 at the moment
     minor: [
       {
-        name: "Volunteer Portal",
-        description: "Find and track volunteer opportunities.",
+        name: "Cover Your Cover",
+        description: "Web and brand design for facemask cases.",
         link: {
-          name: "Github",
-          url: "https://github.com/zendesk/volunteer_portal"
+          name: "Project",
+          url: "https://portfolium.com/entry/cover-your-cover"
         }
       },
       {
-        name: "Final Slash VR",
-        description: "Short survival experience on an abandoned planet.",
+        name: "JukeBuds",
+        description: "Product and advertising design for wireless earbuds.",
         link: {
-          name: "Download",
-          url: "https://samzx.itch.io/final-slash-vr"
+          name: "Project",
+          url: "https://portfolium.com/entry/jukebuds"
         }
       },
       {
-        name: "MPH Watch",
-        description: "Stats for miners mining on Mining Pool Hub.",
+        name: "ShapeLamps",
+        description: "Web and brand design for colorful & unique lamps.",
         link: {
-          name: "Demo",
-          url: "https://mphwatch.samxie.net/demo"
+          name: "Project",
+          url: "https://portfolium.com/entry/shapelamps"
         }
       }
     ]
@@ -82,14 +82,14 @@ export default {
     // Only supports 0-3 at the moment
     logos: [
       {
-        src: "/logos/unimelb.svg",
-        url: "https://unimelb.edu.au/",
-        alt: "Unimelb"
-      },
-      {
         src: "/logos/csustan3.svg",
         url: "https://www.csustan.edu/",
         alt: "California State University Stanislaus"
+      },
+      {
+        src: "/logos/census.svg",
+        url: "https://www.census.gov/",
+        alt: "United States Census Bureau"
       },
       {
         src: "/logos/cashapp.svg",
@@ -99,31 +99,31 @@ export default {
   ]
   },
   footer: {
-    tagline: "Sam Xie — Melbourne, Australia",
+    tagline: "Mark Coggins — Turlock, California",
     links: [
       {
         name: "Twitter",
-        url: "https://twitter.com/samxstudio",
+        url: "https://twitter.com/markacoggins",
         fa: "fab fa-twitter" // Code from: https://fontawesome.com/v5/icons/twitter?s=brands
       },
       {
         name: "Medium",
-        url: "https://medium.com/@samxie",
+        url: "https://medium.com/@markcoggins",
         fa: "fab fa-medium"
       },
       {
         name: "Github",
-        url: "https://github.com/samzx",
+        url: "https://github.com/cogginsmark",
         fa: "fab fa-github"
       },
       {
         name: "Linkedin",
-        url: "https://www.linkedin.com/in/xiesam/",
+        url: "https://www.linkedin.com/in/cogginsmark/",
         fa: "fab fa-linkedin"
       },
       {
         name: "Email",
-        url: "mailto:contact@samxie.net",
+        url: "mailto:cogginsmark@icloud.com",
         fa: "fa fa-envelope"
       },
     ]
