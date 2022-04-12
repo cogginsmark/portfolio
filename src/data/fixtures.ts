@@ -87,9 +87,9 @@ export default {
         alt: "Unimelb"
       },
       {
-        src: "/logos/zendesk.svg",
-        url: "https://www.zendesk.com/",
-        alt: "Zendesk"
+        src: "/logos/csustan.svg",
+        url: "https://www.csustan.edu/",
+        alt: "California State University Stanislaus"
       },
       {
         src: "/logos/cashapp.svg",
