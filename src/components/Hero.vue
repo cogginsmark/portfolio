@@ -6,7 +6,7 @@
         <subtitle>{{subtitle}}</subtitle>
         <paragraph>{{description}}</paragraph>
         <cta-section>
-          <styled-button secondary :color="'#363636'" v-bind:href="'/#products'"><button-text>{{cta}}</button-text><i class="fas fa-arrow-down"></i></styled-button>
+          <styled-button secondary :color="'#363636'" v-bind:href="'/#designs'"><button-text>{{cta}}</button-text><i class="fas fa-arrow-down"></i></styled-button>
         </cta-section>
       </text-container>
     </container>
@@ -53,7 +53,7 @@ const Container = styled.div`
 
 const TextContainer = styled.div`
   /* TODO: CONFIGURABLE */
-  width: 470px;
+  width: 0px;
   margin: 10px;
 
   /* Responsive */
@@ -66,7 +66,7 @@ const TextContainer = styled.div`
 `
 
 const Heading = styled.h1`
-  font-size: 3rem;
+  font-size: 4rem;
   margin: 32px auto;
   font-weight: bold;
   @media screen and (max-width: ${({theme}) => theme.screen.width.desktop}px) {

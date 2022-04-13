@@ -10,7 +10,7 @@ export default {
       url: "https://portfolium.com/cogginsmark"
     }
   },
-  products: {
+  designs: {
     featured: [
       {
         name: "Associated Students Inc.",
@@ -60,7 +60,7 @@ export default {
         name: "Cover Your Cover",
         description: "Web and brand design for facemask cases.",
         link: {
-          name: "Project",
+          name: "View Project",
           url: "https://portfolium.com/entry/cover-your-cover"
         }
       },
@@ -68,7 +68,7 @@ export default {
         name: "JukeBuds",
         description: "Product and ad design for wireless earbuds.",
         link: {
-          name: "Project",
+          name: "View Project",
           url: "https://portfolium.com/entry/jukebuds"
         }
       },
@@ -76,7 +76,7 @@ export default {
         name: "ShapeLamps",
         description: "Web and brand design for colorful & unique lamps.",
         link: {
-          name: "Project",
+          name: "View Project",
           url: "https://portfolium.com/entry/shapelamps"
         }
       }
