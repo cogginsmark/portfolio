@@ -23,15 +23,15 @@ export default {
           color: "#363636",
           primary: {
             name: "Explore",
-            url: "https://doubletext.me/"
+            url: "https://portfolium.com/mcoggins"
           }
         },
         images: [
-          "/doubletext/0.jpg",
-          "/doubletext/1.jpg",
-          "/doubletext/2.jpg",
-          "/doubletext/3.jpg",
-          "/doubletext/4.jpg"
+          "/asi/0.jpg",
+          "/asi/1.jpg",
+          "/asi/2.jpg",
+          "/asi/3.jpg",
+          "/asi/4.jpg"
         ]
       },
       {
