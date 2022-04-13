@@ -10,7 +10,7 @@ export default {
       url: "https://portfolium.com/cogginsmark"
     }
   },
-  designs: {
+  products: {
     featured: [
       {
         name: "Associated Students Inc.",

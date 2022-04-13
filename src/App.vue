@@ -6,7 +6,7 @@
       v-bind:description="hero.description"
       v-bind:cta="hero.cta"
     />
-    <card-container id="designs">
+    <card-container id="products">
       <card
         v-for="(product, index) in products.featured" :key="index"
         v-bind:name="product.name"
