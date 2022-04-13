@@ -49,8 +49,8 @@ export default {
           }
         },
         images: [
-          "/climblist/0.jpg",
-          "/climblist/1.jpg",
+          "/flux/0.png",
+          "/flux/1.png",
         ]
       }
     ],
