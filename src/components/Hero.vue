@@ -53,7 +53,7 @@ const Container = styled.div`
 
 const TextContainer = styled.div`
   /* TODO: CONFIGURABLE */
-  width: 0px;
+  width: 390px;
   margin: 10px;
 
   /* Responsive */
