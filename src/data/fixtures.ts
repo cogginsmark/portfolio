@@ -27,11 +27,11 @@ export default {
           }
         },
         images: [
-          "/asi/0.jpg",
-          "/asi/1.jpg",
-          "/asi/2.jpg",
-          "/asi/3.jpg",
-          "/asi/4.jpg"
+          "/asi/0.png",
+          "/asi/1.png",
+          "/asi/2.png",
+          "/asi/3.png",
+          "/asi/4.png"
         ]
       },
       {
