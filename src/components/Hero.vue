@@ -66,7 +66,7 @@ const TextContainer = styled.div`
 `
 
 const Heading = styled.h1`
-  font-size: 4rem;
+  font-size: 3rem;
   margin: 32px auto;
   font-weight: bold;
   @media screen and (max-width: ${({theme}) => theme.screen.width.desktop}px) {
