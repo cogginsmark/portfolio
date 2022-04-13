@@ -1,7 +1,7 @@
 export default {
   hero: {
     background: {
-      image: "/falcon-light-plus-50-shado.png",
+      image: "/falcon-light-plus-50-shadow2.png",
     }
   },
   color: {
