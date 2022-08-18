@@ -101,6 +101,11 @@ export default {
         url: "https://www.sueformayor.com/",
         alt: "Sue Zwahlen for Congress"
       }
+      {
+        src: "/logos/bayvalleytech.svg",
+        url: "https://www.bayvalleytech.com/",
+        alt: "Bay Valley Tech"
+      }
   ]
   },
   footer: {
