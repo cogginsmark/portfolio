@@ -87,6 +87,11 @@ export default {
     // Only supports 0-3 at the moment
     logos: [
       {
+        src: "/logos/bayvalleytech.svg",
+        url: "https://www.bayvalleytech.com/",
+        alt: "Bay Valley Tech"
+      }
+      {
         src: "/logos/csustan3.svg",
         url: "https://www.csustan.edu/",
         alt: "California State University Stanislaus"
@@ -96,11 +101,7 @@ export default {
         url: "https://www.census.gov/",
         alt: "United States Census Bureau"
       },
-      {
-        src: "/logos/bayvalleytech.svg",
-        url: "https://www.bayvalleytech.com/",
-        alt: "Bay Valley Tech"
-      }
+
   ]
   },
   footer: {
