@@ -90,7 +90,7 @@ export default {
         src: "/logos/bayvalleytech.svg",
         url: "https://www.bayvalleytech.com/",
         alt: "Bay Valley Tech"
-      }
+      },
       {
         src: "/logos/csustan3.svg",
         url: "https://www.csustan.edu/",
@@ -100,8 +100,7 @@ export default {
         src: "/logos/census.svg",
         url: "https://www.census.gov/",
         alt: "United States Census Bureau"
-      },
-
+      }
   ]
   },
   footer: {
