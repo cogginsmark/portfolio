@@ -1,7 +1,7 @@
 export default {
   author: "Mark Coggins",
   hero: {
-    subtitle: "Graphic Designer at California State University Stanislaus.",
+    subtitle: "Graphic Designer",
     description: "Exploring new software and techniques to create engaging and compelling designs.",
     cta: "Browse Designs",
       url: "https://portfolium.com/cogginsmark",
