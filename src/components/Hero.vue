@@ -6,7 +6,7 @@
         <subtitle>{{subtitle}}</subtitle>
         <paragraph>{{description}}</paragraph>
         <cta-section>
-          <styled-button secondary :color="'#363636'" v-bind:href="'/#products'"><button-text>{{cta}}</button-text><i class="fas fa-arrow-down"></i></styled-button>
+          <styled-button secondary :color="'#363636'" v-bind:href="'/public/resume.pdf'"><button-text>{{cta}}</button-text><i class="fas fa-arrow-down"></i></styled-button>
         </cta-section>
       </text-container>
     </container>
