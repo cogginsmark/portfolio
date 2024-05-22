@@ -6,7 +6,7 @@ export default {
     cta: "Browse Designs",
       url: "https://portfolium.com/cogginsmark",
       cta2: "Resume",
-      url: "/public/resume.pdf",
+      href: "/public/resume.pdf",
     links: {
       name: "Resume",
       url: "https://portfolium.com/cogginsmark"
