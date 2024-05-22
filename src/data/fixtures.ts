@@ -5,6 +5,8 @@ export default {
     description: "Exploring new software and techniques to create engaging and compelling designs.",
     cta: "Browse Designs",
       url: "https://portfolium.com/cogginsmark",
+      cta: "Resume",
+      url: "/public/resume.pdf",
     links: {
       name: "Resume",
       url: "https://portfolium.com/cogginsmark"
