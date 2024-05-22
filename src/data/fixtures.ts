@@ -3,7 +3,7 @@ export default {
   hero: {
     subtitle: "Graphic Designer",
     description: "Exploring new software and techniques to create engaging and compelling designs.",
-    cta: "Resume,
+    cta: "Resume",
       url: "/public/resume.pdf",
     links: {
       name: "Resume",
