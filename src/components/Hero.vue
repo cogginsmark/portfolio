@@ -93,6 +93,7 @@ export default {
   props: {
     author: String,
     cta: String,
+    cta2: String,
     subtitle: String,
     description: String
   }
