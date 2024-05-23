@@ -1,5 +1,5 @@
 <template>
-  <div id="about">
+  <div id="app">
   <theme-provider :theme="theme">
     <hero
       v-bind:author="author"
@@ -40,6 +40,12 @@
     <foot v-bind:author="author" v-bind:footer="footer" />
     <light-toggle v-on:click="toggleTheme()"><span v-if="!isDark" >💡</span><span v-if="isDark">💡</span></light-toggle>
     </theme-provider>
+      <nav>
+    <router-link to="/">Home</router-link>
+    <router-link to="/about">About</router-link>
+    <router-link to="/contact">Contact</router-link>
+  </nav>
+    <router-view/>
   </div>
 </template>
 
@@ -47,10 +53,14 @@
 import Vue from 'vue'
 import styled from 'vue-styled-components'
 import Hero from './components/Hero.vue'
+import Card from './components/Card.vue'
+import MinorCard from './components/MinorCard.vue'
+import LogoCard from './components/LogoCard.vue'
 import Foot from './components/Foot.vue'
 import { ThemeProvider, injectGlobal } from 'vue-styled-components'
 
-import baseData from './data/2fixtures.ts'
+import { MainTitle } from './components/styles/Text.ts'
+import baseData from './data/fixtures.ts'
 import light from './themes/light.ts'
 import dark from './themes/dark.ts'
 
@@ -152,6 +162,77 @@ injectGlobal`
   }
 `
 
+const CardContainer = styled.div`
+  margin-top: -60px;
+  @media screen and (max-width: ${({theme}) => theme.screen.width.desktop}px) {
+    margin-top: -48px;
+  }
+`
+
+const MinorCardContainer = styled.div`
+  margin: auto;
+  margin-bottom: 80px;
+  width: ${({theme}) => theme.screen.width.desktop}px;
+  display: flex;
+  @media screen and (max-width: ${({theme}) => theme.screen.width.desktop}px) {
+    width: ${({theme}) => theme.screen.width.tablet}px;
+    flex-direction: column;
+  }
+  @media screen and (max-width: ${({theme}) => theme.screen.width.tablet}px) {
+    width: ${({theme}) => theme.screen.width.mobile}px;
+    flex-direction: column;
+  }
+  & > * {
+    margin: 16px;
+  }
+  & > *:nth-child(3n+1) {
+    margin-left: 0px;
+  }
+  & > *:nth-child(3n+0) {
+    margin-right: 0px;
+  }
+  @media screen and (max-width: ${({theme}) => theme.screen.width.desktop}px) {
+    & > * {
+      margin: 16px 0px;
+    & > *:nth-child(3n+1) {
+      margin: 16px 0px;
+    }
+    & > *:nth-child(3n+0) {
+      margin: 16px 0px;
+    }
+  }
+  }
+`
+
+const LogoSectionContainer = styled.div`
+  margin:auto;
+  text-align: center;
+  width: ${({theme}) => theme.screen.width.desktop}px;
+  @media screen and (max-width: ${({theme}) => theme.screen.width.desktop}px) {
+    width: ${({theme}) => theme.screen.width.tablet}px;
+    flex-direction: column;
+  }
+  @media screen and (max-width: ${({theme}) => theme.screen.width.tablet}px) {
+    width: ${({theme}) => theme.screen.width.mobile}px;
+    flex-direction: column;
+  }
+`
+
+const LogoContainer = styled.div`
+  justify-content: center;
+  margin:auto;
+  margin-top: 20px;
+  width: ${({theme}) => theme.screen.width.desktop}px;
+  display: flex;
+  @media screen and (max-width: ${({theme}) => theme.screen.width.desktop}px) {
+    width: ${({theme}) => theme.screen.width.tablet}px;
+    flex-direction: column;
+  }
+  @media screen and (max-width: ${({theme}) => theme.screen.width.tablet}px) {
+    width: ${({theme}) => theme.screen.width.mobile}px;
+    flex-direction: column;
+  }
+`
 
 const LightToggle = styled.button`
   border: none;
@@ -174,12 +255,20 @@ const LightToggle = styled.button`
 `
 
 export default {
-  name: 'About',
+  name: 'App',
   components: {
     Hero,
+    Card,
+    MinorCard,
+    MinorCardContainer,
     Foot,
     ThemeProvider,
+    CardContainer,
     LightToggle,
+    MainTitle,
+    LogoContainer,
+    LogoSectionContainer,
+    LogoCard
   },
   computed: {
     theme() {
