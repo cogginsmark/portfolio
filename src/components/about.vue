@@ -58,7 +58,7 @@ import Foot from './components/Foot.vue'
 import { ThemeProvider, injectGlobal } from 'vue-styled-components'
 
 import { MainTitle } from './components/styles/Text.ts'
-import baseData from './data/fixtures2.ts'
+import baseData from './data/2fixtures.ts'
 import light from './themes/light.ts'
 import dark from './themes/dark.ts'
 
