@@ -6,7 +6,7 @@ export default {
   }
 };
   footer: {
-    tagline: "Mark Coggins — Turlock, California",
+    tagline: "Mark Coggins — Turlock, California",;
     links: [
       {
         name: "Twitter",
