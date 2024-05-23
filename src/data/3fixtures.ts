@@ -3,7 +3,7 @@ export default {
   hero: {
     subtitle: "Graphic Designer",
     description: `
-      cogginsmark@icloud.com
+cogginsmark@icloud.com
     `,
   },
   footer: {
