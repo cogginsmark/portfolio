@@ -1,7 +1,7 @@
 <template>
   <div id="about">
-  <theme-provider :theme="theme">
     <img src="/photo.jpg" alt="Author" class="author-image" />
+  <theme-provider :theme="theme">
     <hero
       v-bind:author="author"
       v-bini d:subtitle="hero.subtitle"
