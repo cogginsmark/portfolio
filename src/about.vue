@@ -174,7 +174,7 @@ const LightToggle = styled.button`
 `
 
 export default {
-  name: 'App',
+  name: 'Abour',
   components: {
     Hero,
     Foot,

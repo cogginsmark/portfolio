@@ -249,7 +249,7 @@ const LightToggle = styled.button`
 `
 
 export default {
-  name: 'App',
+  name: 'Contact',
   components: {
     Hero,
     Card,
