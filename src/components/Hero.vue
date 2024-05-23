@@ -36,6 +36,7 @@ const Background = styled.div`
     background-size: inherit;
 }
 `
+<p style="white-space: pre-wrap;">{{description}}</p>
 
 const Container = styled.div`
   max-width: ${({theme}) => theme.screen.width.desktop}px;
