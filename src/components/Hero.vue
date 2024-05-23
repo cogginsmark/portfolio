@@ -4,13 +4,14 @@
       <text-container>
         <heading>{{author}}</heading>
         <subtitle>{{subtitle}}</subtitle>
-        <paragraph>{{description}}</paragraph>
+        <paragraph style="white-space: pre-wrap;">{{description}}</paragraph>
         <cta-section>
           <styled-button secondary :color="'#363636'" v-bind:href="'/resume.pdf'"><button-text>{{cta}}</button-text><i class="fas fa-arrow-down"></i></styled-button>
         </cta-section>
       </text-container>
     </container>
   </background>
+
 </template>
 
 <script>
@@ -36,8 +37,6 @@ const Background = styled.div`
     background-size: inherit;
 }
 `
-<p style="white-space: pre-wrap;">{{description}}</p>
-
 const Container = styled.div`
   max-width: ${({theme}) => theme.screen.width.desktop}px;
   margin: auto;
