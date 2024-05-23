@@ -1,5 +1,5 @@
 <template>
-  <div id="about">
+  <div id="about" class="container">
     <img src="/photo.jpg" alt="Author" class="author-image" />
   <theme-provider :theme="theme">
     <hero
@@ -200,10 +200,17 @@ a {
   color: var(--link-color);
 }
 
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 50px; /* 50px margin from the top */
+}
+
 .author-image {
   border-radius: 50%; /* this makes the image round */
-  width: 100px; /* adjust as needed */
-  height: 100px; /* adjust as needed */
+  width: 400px; /* adjust as needed */
+  height: auto; /* adjust as needed */
   object-fit: cover; /* this will ensure the image covers the whole area */
 }
 </style>
