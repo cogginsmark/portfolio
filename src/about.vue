@@ -1,6 +1,6 @@
 <template>
-  <div id="about" class="container">
-    <img src="/photo.jpg" alt="Author" class="author-image" />
+  <div id="about">
+    <img class="container" src="/photo.jpg" alt="Author" class="author-image" />
   <theme-provider :theme="theme">
     <hero
       v-bind:author="author"
