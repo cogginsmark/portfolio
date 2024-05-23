@@ -1,5 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import App from './App.vue'
+import About from './about.vue'
+import Contact from './contact.vue'
 
 Vue.use(Router)
 
@@ -9,17 +12,17 @@ export default new Router({
     {
       path: '/',
       name: 'home',
-      component: () => import('./App.vue')
+      component: App
     },
     {
       path: '/about',
       name: 'about',
-      component: () => import('./about.vue')
+      component: About
     },
     {
       path: '/contact',
       name: 'contact',
-      component: () => import('./contact.vue')
+      component: Contact
     }
   ]
 })
