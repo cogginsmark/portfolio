@@ -5,7 +5,6 @@
       v-bind:author="author"
       v-bini d:subtitle="hero.subtitle"
       v-bind:description="hero.description"
-      v-bind:cta="hero.cta"
     />
     <foot v-bind:author="author" v-bind:footer="footer" />
     <light-toggle v-on:click="toggleTheme()"><span v-if="!isDark" >💡</span><span v-if="isDark">💡</span></light-toggle>
