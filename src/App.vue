@@ -39,7 +39,7 @@
     <foot v-bind:author="author" v-bind:footer="footer" />
     <light-toggle v-on:click="toggleTheme()"><span v-if="!isDark" >💡</span><span v-if="isDark">💡</span></light-toggle>
     <div id="app">
-    <nav>
+    <nav class="top-left-nav">
       <router-link to="/about">About</router-link>
       <router-link to="/contact">Contact</router-link>
     </nav>
@@ -295,6 +295,19 @@ setup()
 html {
   background: var(--main-background-color);
   background-color: var(--fallback-background-color);
+}
+
+.top-left-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  padding: 10px;
+  background-color: #fff;
+  z-index: 1000;
+}
+
+.top-left-nav > a {
+  margin-right: 10px;
 }
 
 body {
