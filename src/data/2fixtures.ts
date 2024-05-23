@@ -2,11 +2,7 @@ export default {
   author: "Coggins",
   hero: {
     subtitle: "Graphic Designer",
-    description: `Residence - Turlock, CA<p>
-Education - California State University Stanislaus<p>
-Major - Bachelor of Communication Studies, Bachelor of Creative Media<p>
-Internships - Bay Valley Tech (6 Months) Position: Lead Design Intern<p>
-Experience - Graphic Design Student Assistant position at Associated Students Inc, at California State University Stanislaus`,
+    description: "Residence - Turlock, CA\nEducation - California State University Stanislaus\nMajor - Bachelor of Communication Studies, Bachelor of Creative Media\nInternships - Bay Valley Tech (6 Months) Position: Lead Design Intern\nExperience - Graphic Design Student Assistant position at Associated Students Inc, at California State University Stanislaus",
   },
   footer: {
     tagline: "Mark Coggins — Turlock, California",
