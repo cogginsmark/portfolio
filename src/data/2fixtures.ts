@@ -7,8 +7,7 @@ export default {
       name: "Resume",
       url: "https://portfolium.com/cogginsmark"
     }
-  }
-};
+  },
   footer: {
     tagline: "Mark Coggins — Turlock, California",
     links: [
