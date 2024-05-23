@@ -2,9 +2,9 @@ export default {
   author: " Coggins",
   hero: {
     subtitle: "Graphic Designer",
-    description: "Residence - Turlock, CAEducation - California State University StanislausMajor -  Bachelor of Communication Studies, Bachelor of Creative MediaInternships - Bay Valley Tech (6 Months) Position: Lead Design InternExperience -  Graphic Design Student Assistant position at Associated Students Inc, at California State University Stanislaus",
-    }
-  };
+    description: "Residence - Turlock, CAEducation - California State University StanislausMajor -  Bachelor of Communication Studies, Bachelor of Creative MediaInternships - Bay Valley Tech (6 Months) Position: Lead Design InternExperience -  Graphic Design Student Assistant position at Associated Students Inc, at California State University Stanislaus"
+  }
+};
   footer: {
     tagline: "Mark Coggins — Turlock, California",
     links: [
@@ -32,7 +32,7 @@ export default {
         name: "Email",
         url: "mailto:cogginsmark@icloud.com",
         fa: "fa fa-envelope"
-      },
+      }
     ]
   }
 }
