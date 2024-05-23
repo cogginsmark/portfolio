@@ -1,5 +1,5 @@
 export default {
-  author: "Coggins",
+  author: "About",
   hero: {
     subtitle: "Graphic Designer",
     description: `
