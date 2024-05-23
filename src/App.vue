@@ -1,4 +1,5 @@
 <template>
+  <div id="app">
   <theme-provider :theme="theme">
     <hero
       v-bind:author="author"
@@ -38,7 +39,7 @@
     </card-container>
     <foot v-bind:author="author" v-bind:footer="footer" />
     <light-toggle v-on:click="toggleTheme()"><span v-if="!isDark" >💡</span><span v-if="isDark">💡</span></light-toggle>
-    <div id="app">
+    </theme-provider>
       <nav>
     <router-link to="/">Home</router-link>
     <router-link to="/about">About</router-link>
@@ -46,7 +47,6 @@
   </nav>
     <router-view/>
   </div>
-  </theme-provider>
 </template>
 
 <script>
