@@ -15,9 +15,6 @@
 import Vue from 'vue'
 import styled from 'vue-styled-components'
 import Hero from './components/Hero.vue'
-import Card from './components/Card.vue'
-import MinorCard from './components/MinorCard.vue'
-import LogoCard from './components/LogoCard.vue'
 import Foot from './components/Foot.vue'
 import { ThemeProvider, injectGlobal } from 'vue-styled-components'
 
