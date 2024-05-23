@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import HomePage from './App.vue'
-import AboutPage from './components/about.vue'
-import ContactPage from './components/contact.vue'
+import AboutPage from './about.vue'
+import ContactPage from './contact.vue'
 
 Vue.use(Router)
 
