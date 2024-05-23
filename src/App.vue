@@ -2,7 +2,7 @@
   <theme-provider :theme="theme">
     <hero
       v-bind:author="author"
-      v-bind:subtitle="hero.subtitle"
+      v-bini d:subtitle="hero.subtitle"
       v-bind:description="hero.description"
       v-bind:cta="hero.cta"
     />
@@ -38,7 +38,6 @@
     </card-container>
     <foot v-bind:author="author" v-bind:footer="footer" />
     <light-toggle v-on:click="toggleTheme()"><span v-if="!isDark" >💡</span><span v-if="isDark">💡</span></light-toggle>
-  </div>
   </theme-provider>
 </template>
 
