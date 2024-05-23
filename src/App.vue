@@ -14,3 +14,9 @@ export default {
   name: 'App'
 }
 </script>
+
+<style scoped>
+.nav-link {
+  padding: 10px;
+}
+</style>
