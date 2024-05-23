@@ -1,6 +1,7 @@
 <template>
   <div id="about">
   <theme-provider :theme="theme">
+    <img src="/photo.jpg" alt="Author" class="author-image" />
     <hero
       v-bind:author="author"
       v-bini d:subtitle="hero.subtitle"
@@ -197,5 +198,12 @@ body {
 
 a {
   color: var(--link-color);
+}
+
+.author-image {
+  border-radius: 50%; /* this makes the image round */
+  width: 100px; /* adjust as needed */
+  height: 100px; /* adjust as needed */
+  object-fit: cover; /* this will ensure the image covers the whole area */
 }
 </style>
