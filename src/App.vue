@@ -298,3 +298,13 @@ a {
   color: var(--link-color);
 }
 </style>
+
+<template>
+  <div id="app">
+    <nav>
+      <router-link to="/about">About</router-link>
+      <router-link to="/contact">Contact</router-link>
+    </nav>
+    <router-view/>
+  </div>
+</template>
