@@ -1,6 +1,6 @@
 <template>
   <div id="about">
-    <img class="container" src="/photo.jpg" alt="Author" class="author-image" />
+    <img src="/photo.jpg" alt="Author" class="author-image" />
   <theme-provider :theme="theme">
     <hero
       v-bind:author="author"
@@ -200,14 +200,11 @@ a {
   color: var(--link-color);
 }
 
-.container {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  padding-top: 50px; /* 50px margin from the top */
-}
 
 .author-image {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
   border-radius: 50%; /* this makes the image round */
   width: 400px; /* adjust as needed */
   height: auto; /* adjust as needed */
