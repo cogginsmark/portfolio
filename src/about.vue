@@ -1,12 +1,12 @@
 <template>
   <div id="about">
-  <theme-provider :theme="theme">
-    <img src="/photo.jpg" alt="Author" class="author-image" />
-    <hero
-      v-bind:author="author"
-      v-bini d:subtitle="hero.subtitle"
-      v-bind:description="hero.description"
-    />
+    <theme-provider :theme="theme">
+      <img src="/photo.jpg" alt="Author" class="author-image" />
+      <hero
+        v-bind:author="author"
+        v-bind:subtitle="hero.subtitle"
+        v-bind:description="hero.description"
+      />
     <foot v-bind:author="author" v-bind:footer="footer" />
     <light-toggle v-on:click="toggleTheme()"><span v-if="!isDark" >💡</span><span v-if="isDark">💡</span></light-toggle>
     </theme-provider>

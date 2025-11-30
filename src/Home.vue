@@ -3,9 +3,10 @@
   <theme-provider :theme="theme">
     <hero
       v-bind:author="author"
-      v-bini d:subtitle="hero.subtitle"
+      v-bind:subtitle="hero.subtitle"
       v-bind:description="hero.description"
       v-bind:cta="hero.cta"
+      v-bind:cta-url="hero.ctaUrl"
     />
     <card-container id="products">
       <card
