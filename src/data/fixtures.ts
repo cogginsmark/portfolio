@@ -4,7 +4,7 @@ export default {
     subtitle: "Graphic Designer",
     description: "Exploring new software and techniques to create engaging and compelling designs.",
     cta: "Resume",
-      url: "/resume.pdf",
+    ctaUrl: "/resume.pdf",
     links: {
       name: "Resume",
       url: "https://portfolium.com/cogginsmark"
@@ -101,7 +101,7 @@ export default {
         url: "https://www.census.gov/",
         alt: "United States Census Bureau"
       }
-  ]
+    ]
   },
   footer: {
     tagline: "Mark Coggins — Turlock, California",

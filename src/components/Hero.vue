@@ -5,8 +5,12 @@
         <heading>{{author}}</heading>
         <subtitle>{{subtitle}}</subtitle>
         <paragraph style="white-space: pre-wrap;">{{description}}</paragraph>
-        <cta-section>
-          <styled-button secondary :color="'#363636'" v-bind:href="'/resume.pdf'"><button-text>{{cta}}</button-text><i class="fas fa-arrow-down"></i></styled-button>
+        <cta-section v-if="cta">
+          <styled-button
+            secondary
+            :color="'#363636'"
+            v-bind:href="ctaUrl || '/resume.pdf'"
+          ><button-text>{{cta}}</button-text><i class="fas fa-arrow-down"></i></styled-button>
         </cta-section>
       </text-container>
     </container>
@@ -93,6 +97,7 @@ export default {
   props: {
     author: String,
     cta: String,
+    ctaUrl: String,
     cta2: String,
     subtitle: String,
     description: String
