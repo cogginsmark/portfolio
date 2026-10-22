@@ -24,7 +24,7 @@ Clone and deploy with vercel.
 
 - Download company logos and use [Figma](https://www.figma.com/) to edit and export svg with no borders.
 
-Push your changes to master to auto-deploy to vercel.
+Push your changes to main to auto-deploy to vercel. Pull requests get preview deployments. `vercel.json` pins the Vite build (output `dist`) and rewrites non-file routes to `index.html`, so history-mode routes like `/about` load correctly when visited directly.
 
 ## Development
 ```
