@@ -1,24 +1,17 @@
 /* Global styles. Was an injectGlobal`...` block from vue-styled-components,
    duplicated in Home.vue, about.vue and contact.vue (so injected up to three
    times); now imported once from main.js. Content unchanged. */
-@font-face {
-  font-family: "SF Pro Display";
-  font-weight: 400;
-  src: url("/fonts/SFProDisplay-Regular.ttf");
-}
-@font-face {
-  font-family: "SF Pro Display";
-  font-weight: 700;
-  src: url("/fonts/SFProDisplay-Bold.ttf");
-}
-@font-face {
-  font-family: "SF Pro Display";
-  font-weight: 300;
-  src: url("/fonts/SFProDisplay-Light.ttf");
-}
+/* Loaded variable font: Inter via the Google Fonts css2 API, full axes
+   live — opsz 14..32, wght 100..900, display=swap. Replaces the three
+   static self-hosted "SF Pro Display" TTF faces (300/400/700);
+   those files remain in public/fonts/ but are no longer referenced.
+   A genuine variable SF Pro could not be delivered to this repo: the
+   GitHub connector pushes text only and no git push route exists from
+   the build environment — see the "Variable font" comment on PR #2. */
+@import url("https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,100..900&display=swap");
 
 html {
-  font-family: 'SF Pro Display', -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-family: 'Inter', -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   font-size: 18px;
   -ms-text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
