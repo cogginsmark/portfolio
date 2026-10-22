@@ -1,0 +1,41 @@
+/* Global styles. Was an injectGlobal`...` block from vue-styled-components,
+   duplicated in Home.vue, about.vue and contact.vue (so injected up to three
+   times); now imported once from main.js. Content unchanged. */
+@font-face {
+  font-family: "SF Pro Display";
+  font-weight: 400;
+  src: url("/fonts/SFProDisplay-Regular.ttf");
+}
+@font-face {
+  font-family: "SF Pro Display";
+  font-weight: 700;
+  src: url("/fonts/SFProDisplay-Bold.ttf");
+}
+@font-face {
+  font-family: "SF Pro Display";
+  font-weight: 300;
+  src: url("/fonts/SFProDisplay-Light.ttf");
+}
+
+html {
+  font-family: 'SF Pro Display', -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 18px;
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0px;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+a {
+  text-decoration: none;
+  position: relative;
+}

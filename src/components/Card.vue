@@ -1,238 +1,69 @@
 <template>
-  <card>
-    <contents>
-      <left-container>
+  <div class="card">
+    <div class="contents">
+      <div class="left-container">
         <div>
-          <main-title>{{name}}</main-title>
-          <medium>{{medium}}</medium>
-          <carousel-container v-if="windowWidth <= 980">
-            <styled-carousel v-if="images" :perPage="1">
-              <slide v-for="(image, index) in images" :key="index">
-                <carousel-image loading="lazy" v-bind:src="image"/>
-              </slide>
-            </styled-carousel>
-          </carousel-container>
-          <subtitle>{{summary}}</subtitle>
-          <paragraph v-for="(text, index) in copy" :key="index">{{text}}</paragraph>
+          <h1 class="text-main-title">{{name}}</h1>
+          <div class="medium">{{medium}}</div>
+          <div class="carousel-container" v-if="windowWidth <= 980">
+            <Carousel v-if="images" class="styled-carousel" :items-to-show="1">
+              <Slide v-for="(image, index) in images" :key="index">
+                <img class="carousel-image" loading="lazy" v-bind:src="image"/>
+              </Slide>
+              <template #addons>
+                <Pagination />
+              </template>
+            </Carousel>
+          </div>
+          <p class="text-paragraph text-subtitle">{{summary}}</p>
+          <p class="text-paragraph" v-for="(text, index) in copy" :key="index">{{text}}</p>
         </div>
-        <button-container :empty="!copy">
-          <styled-button
+        <div class="button-container" :class="{ empty: !copy }">
+          <StyledButton
             v-if="links.primary"
             primary
             :color="links.color"
             v-bind:href="links.primary.url"
             target="_blank"
-          ><button-text>{{links.primary.name}}</button-text><i class="fas fa-arrow-right"></i></styled-button>
-          <styled-button
+          ><span class="text-button-text">{{links.primary.name}}</span><i class="fas fa-arrow-right"></i></StyledButton>
+          <StyledButton
             v-if="links.secondary"
             secondary
             :color="links.color"
             v-bind:href="links.secondary.url"
             target="_blank"
-          ><button-text>{{links.secondary.name}}</button-text><i class="fas fa-arrow-right"></i></styled-button>
-        </button-container>
-      </left-container>
-      <carousel-container v-if="windowWidth > 980">
-        <styled-carousel v-if="images" :perPage="1">
-          <slide v-for="(image, index) in images" :key="index">
-            <carousel-image loading="lazy" v-bind:src="image"/>
-          </slide>
-        </styled-carousel>
-      </carousel-container>
-    </contents>
-  </card>
+          ><span class="text-button-text">{{links.secondary.name}}</span><i class="fas fa-arrow-right"></i></StyledButton>
+        </div>
+      </div>
+      <div class="carousel-container" v-if="windowWidth > 980">
+        <Carousel v-if="images" class="styled-carousel" :items-to-show="1">
+          <Slide v-for="(image, index) in images" :key="index">
+            <img class="carousel-image" loading="lazy" v-bind:src="image"/>
+          </Slide>
+          <template #addons>
+            <Pagination />
+          </template>
+        </Carousel>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
-import styled from 'vue-styled-components'
-import { Carousel, Slide } from 'vue-carousel'
-import { Subtitle, Paragraph, MainTitle, ButtonText } from './styles/Text.ts'
+import { Carousel, Slide, Pagination } from 'vue3-carousel'
+import 'vue3-carousel/carousel.css'
+import StyledButton from './StyledButton.vue'
 
-const Card = styled.div`
-  width: ${({theme}) => theme.screen.width.desktop}px;
-  background: ${({theme}) => theme.card.background};
-  box-shadow: ${({theme}) => theme.card.boxShadow};
-  border-radius: 20px;
-  margin: auto;
-  margin-bottom: 80px;
-  /* Can't transition radial gradients */
-  /* transition: 0.3s background; */
-  @media screen and (max-width: ${({theme}) => theme.screen.width.desktop}px) {
-    width: ${({theme}) => theme.screen.width.tablet}px;
-    margin-bottom: 40px;
-  }
-  @media screen and (max-width: ${({theme}) => theme.screen.width.tablet}px) {
-    width: ${({theme}) => theme.screen.width.mobile}px;
-    margin-bottom: 40px;
-  }
-  /* Disabled for performance issues */
-  /* backdrop-filter: blur(10px); */
-`
-
-const Contents = styled.div`
-  display: flex;
-  padding: 64px ${({theme}) => theme.screen.padding.desktop}px;
-  /* height: 100%; */
-
-  @media screen and (max-width: ${({theme}) => theme.screen.width.desktop}px) {
-    padding: 40px ${({theme}) => theme.screen.padding.tablet}px;
-    width: ${({theme}) => theme.screen.width.tablet - theme.screen.padding.tablet * 2}px;
-    margin: 0;
-  }
-
-  @media screen and (max-width: ${({theme}) => theme.screen.width.tablet}px) {
-    padding: 40px ${({theme}) => theme.screen.padding.mobile}px;
-    width: ${({theme}) => theme.screen.width.mobile - theme.screen.padding.mobile * 2}px;
-  }
-`
-
-const LeftContainer = styled.div`
-  width: 320px;
-  margin-right: 10px;
-  display: flex;
-  justify-content: space-between;
-  flex-direction: column;
-
-  @media screen and (max-width: ${({theme}) => theme.screen.width.desktop}px) {
-    width: ${({theme}) => theme.screen.width.tablet - theme.screen.padding.tablet * 2}px;
-  }
-
-  @media screen and (max-width: ${({theme}) => theme.screen.width.tablet}px) {
-    width: ${({theme}) => theme.screen.width.mobile - theme.screen.padding.mobile * 2}px;
-  }
-`
-
-const Medium = styled.div`
-  font-weight: 300;
-  font-size: 0.75rem;
-  letter-spacing: 1.8px;
-  margin-bottom: 1.5em;
-`
-
-const btnContainerProps = { empty: Boolean }
-const ButtonContainer = styled('div', btnContainerProps)`
-  @media screen and (max-width: ${({theme}) => theme.screen.width.desktop}px) {
-    margin-top: 32px;
-  }
-  margin-top: ${(props) => props.empty ? 32 : 0}px;
-`
-
-const btnProps = { primary: Boolean, secondary: Boolean, color: String }
-export const StyledButton = styled('a', btnProps)`
-  font-size: 0.66rem;
-  letter-spacing: 1.2px;
-  text-transform: uppercase;
-  padding: 0.75rem 1.5rem;
-  font-weight: bold;
-  margin-right: 20px;
-  border-radius: 24px;
-  line-height: 40px;
-  color: ${(props) => props.primary ? "#eee" : props.secondary ? props.theme.card.button.text : 'black'};
-  background: ${(props) => props.primary ? props.color : props.secondary ? props.theme.card.button.background : 'white'};
-  box-shadow: ${(props) => props.primary ? props.theme.card.button.boxShadow.primary : props.secondary ? props.theme.card.button.boxShadow.secondary : 'none'};
-  /* Won't transition background since card can't transition. */
-  /* transition: 0.3s background; */
-  &::before {
-    content: "";
-    height: 100%;
-    width: 100%;
-    background: ${({theme}) => theme.card.button.boxShadow.hover};
-    mix-blend-mode: luminosity;
-    position: absolute;
-    left: 0;
-    top: 0;
-    border-radius: 24px;
-    animation: none;
-    opacity: 0;
-    transition: 0.3s opacity ease-in-out, 0.3s background;
-  }
-  &:hover::before {
-    opacity: ${({theme}) => theme.card.button.hoverIntensity};
-    transition: 0.3s opacity ease-in-out, 0.3s background;
-  }
-`
-
-const CarouselImage = styled.img`
-  width: 100%;
-  float: right;
-  object-fit: cover;
-  object-position: top;
-  opacity: ${({theme}) => theme.card.carousel.opacity}
-  &:hover {
-    cursor: grab;
-  }
-  &:active {
-    cursor:grabbing;
-  }
-`
-
-const CarouselContainer = styled.div`
-  margin: auto;
-`
-
-const StyledCarousel = styled(Carousel)`
-&.VueCarousel {
-  box-shadow: ${({theme}) => theme.card.carousel.boxShadow};
-  border-radius: 10px;
-  overflow: hidden;
-  height: 275px;
-  width: 500px;
-}
-
-& > .VueCarousel-pagination {
-    position: absolute;
-    bottom: 0;
-}
-
-& > * > .VueCarousel-dot-container {
-  margin-top: 0px !important;
-}
-
-& > * > * > .VueCarousel-dot {
-  margin-top: 0px !important;
-  background-color: rgb(127 127 127 / 25%) !important;
-  transition: 0.3s background-color ease-in-out;
-  /* outline: none !important; */
-}
-
-& > * > * > .VueCarousel-dot--active {
-  background-color: rgb(127 127 127) !important;
-  transition: 0.3s background-color ease-in-out;
-  /* outline: none !important; */
-}
-
-@media screen and (max-width: ${({theme}) => theme.screen.width.desktop}px) {
-  &.VueCarousel {
-    width: ${({theme}) => theme.screen.width.tablet - theme.screen.padding.tablet * 2}px;
-    height: ${({theme}) => (theme.screen.width.tablet - theme.screen.padding.tablet * 2) * 8.8 / 16}px;
-    margin: 20px 0px;
-  }
-}
-
-@media screen and (max-width: ${({theme}) => theme.screen.width.tablet}px) {
-  &.VueCarousel {
-    width: ${({theme}) => theme.screen.width.mobile - theme.screen.padding.mobile * 2}px;
-    height: ${({theme}) => (theme.screen.width.mobile - theme.screen.padding.mobile * 2) * 8.8 / 16}px;
-  }
-}
-`
-
+// All vue-styled-components wrappers in this file became plain elements with
+// the scoped classes below; theme interpolations became the CSS variables
+// ThemeRoot sets (screen widths/paddings are theme constants — 980/600/360
+// and 48/20/20 in both themes — inlined in the media queries).
 export default {
   components: {
+    Carousel,
     Slide,
-    Card,
-    Contents,
-    LeftContainer,
-    MainTitle,
-    Subtitle,
-    Paragraph,
-    ButtonContainer,
-    StyledButton,
-    CarouselImage,
-    CarouselContainer,
-    StyledCarousel,
-    Medium,
-    ButtonText
+    Pagination,
+    StyledButton
   },
   props: {
     name: String,
@@ -257,13 +88,164 @@ export default {
         windowWidth: window.innerWidth
     }
   },
-  mounted() {
-    window.addEventListener('resize', () => {
+  methods: {
+    onResize() {
       this.windowWidth = window.innerWidth
-    })
+    }
   },
-  beforeDestroy() {
-      window.removeEventListener('resize', () => {});
+  mounted() {
+    window.addEventListener('resize', this.onResize)
+  },
+  // Vue 3 rename of beforeDestroy; also now actually removes the listener
+  // (the original passed a fresh anonymous function, so removal was a no-op).
+  beforeUnmount() {
+      window.removeEventListener('resize', this.onResize)
   }
 }
 </script>
+
+<style scoped>
+.card {
+  width: 980px;
+  background: var(--card-background);
+  box-shadow: var(--card-box-shadow);
+  border-radius: 20px;
+  margin: auto;
+  margin-bottom: 80px;
+  /* Can't transition radial gradients */
+  /* transition: 0.3s background; */
+}
+@media screen and (max-width: 980px) {
+  .card {
+    width: 600px;
+    margin-bottom: 40px;
+  }
+}
+@media screen and (max-width: 600px) {
+  .card {
+    width: 360px;
+    margin-bottom: 40px;
+  }
+}
+/* Disabled for performance issues */
+/* backdrop-filter: blur(10px); */
+
+.contents {
+  display: flex;
+  padding: 64px 48px;
+}
+@media screen and (max-width: 980px) {
+  .contents {
+    padding: 40px 20px;
+    width: 560px;
+    margin: 0;
+  }
+}
+@media screen and (max-width: 600px) {
+  .contents {
+    padding: 40px 20px;
+    width: 320px;
+  }
+}
+
+.left-container {
+  width: 320px;
+  margin-right: 10px;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+}
+@media screen and (max-width: 980px) {
+  .left-container {
+    width: 560px;
+  }
+}
+@media screen and (max-width: 600px) {
+  .left-container {
+    width: 320px;
+  }
+}
+
+.medium {
+  font-weight: 300;
+  font-size: 0.75rem;
+  letter-spacing: 1.8px;
+  margin-bottom: 1.5em;
+}
+
+/* Order preserved from the styled-components template (media query first,
+   then the prop-driven margin) so the cascade resolves the same way. */
+@media screen and (max-width: 980px) {
+  .button-container {
+    margin-top: 32px;
+  }
+}
+.button-container {
+  margin-top: 0px;
+}
+.button-container.empty {
+  margin-top: 32px;
+}
+
+.carousel-image {
+  width: 100%;
+  float: right;
+  object-fit: cover;
+  object-position: top;
+  opacity: var(--card-carousel-opacity);
+}
+.carousel-image:hover {
+  cursor: grab;
+}
+.carousel-image:active {
+  cursor: grabbing;
+}
+
+.carousel-container {
+  margin: auto;
+}
+
+/* vue3-carousel replacement for the styled(vue-carousel) block below it in
+   the original file: root keeps the same size/shadow/radius; the
+   .VueCarousel-* selectors map to vue3-carousel's .carousel__* classes. */
+.styled-carousel {
+  box-shadow: var(--card-carousel-box-shadow);
+  border-radius: 10px;
+  overflow: hidden;
+  height: 275px;
+  width: 500px;
+}
+.styled-carousel :deep(.carousel__viewport),
+.styled-carousel :deep(.carousel__track),
+.styled-carousel :deep(.carousel__slide) {
+  height: 100%;
+}
+.styled-carousel :deep(.carousel__pagination) {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin-top: 0px;
+}
+.styled-carousel :deep(.carousel__pagination-button::after) {
+  background-color: rgb(127 127 127 / 25%);
+  transition: 0.3s background-color ease-in-out;
+}
+.styled-carousel :deep(.carousel__pagination-button--active::after) {
+  background-color: rgb(127 127 127);
+  transition: 0.3s background-color ease-in-out;
+}
+@media screen and (max-width: 980px) {
+  .styled-carousel {
+    width: 560px;
+    height: 308px;
+    margin: 20px 0px;
+  }
+}
+@media screen and (max-width: 600px) {
+  .styled-carousel {
+    width: 320px;
+    height: 176px;
+  }
+}
+</style>
