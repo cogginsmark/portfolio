@@ -1,0 +1,45 @@
+/* Shared text styles. Was src/components/styles/Text.ts — styled.h1 /
+   styled.p / styled.span components from vue-styled-components, imported by
+   Home, Card, Hero and MinorCard. The styled components rendered plain
+   h1/p/span elements, so they are now utility classes on those elements.
+   Class order matters: .text-subtitle must come after .text-paragraph
+   (Subtitle was styled(Paragraph) with a heavier weight). */
+.text-main-title {
+  font-size: 2rem;
+  margin-top: 0px;
+  letter-spacing: 1.5px;
+  margin-bottom: 8px;
+}
+
+.text-paragraph {
+  font-size: 1rem;
+  margin: 0 0 0.5em 0;
+  line-height: 1.47059;
+  letter-spacing: 0.5px;
+  font-weight: 300;
+}
+
+.text-subtitle {
+  font-weight: 400;
+}
+
+.text-button-text {
+  margin-right: 0.5em;
+}
+
+/* Was the `Linked` styled.a in Text.ts (defined but not used by any
+   template); kept for parity. */
+.text-linked::after {
+  width: 0%;
+  content: "";
+  height: 2px;
+  background: var(--link-color);
+  position: absolute;
+  left: 0;
+  bottom: -3px;
+  transition: width 0.3s;
+}
+
+.text-linked:hover::after {
+  width: 100%;
+}

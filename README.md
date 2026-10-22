@@ -24,27 +24,26 @@ Clone and deploy with vercel.
 
 - Download company logos and use [Figma](https://www.figma.com/) to edit and export svg with no borders.
 
-Push your changes to master to auto-deploy to vercel.
+Push your changes to main to auto-deploy to vercel. Pull requests get preview deployments. `vercel.json` pins the Vite build (output `dist`) and rewrites non-file routes to `index.html`, so history-mode routes like `/about` load correctly when visited directly.
 
 ## Development
 ```
-yarn install
+npm install
 ```
 
 ### Compiles and hot-reloads for development
 ```
-yarn start
+npm run dev
 ```
 
 ### Compiles and minifies for production
 ```
-yarn build
+npm run build
 ```
 
-### Lints and fixes files
+### Lints files
 ```
-yarn lint
+npm run lint
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+Built with Vue 3 + Vite (migrated from Vue 2 + Vue CLI — see the migration PR).
