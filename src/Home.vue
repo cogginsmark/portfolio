@@ -81,7 +81,12 @@ export default {
 }
 @media screen and (max-width: 61.25rem) {
   .card-container {
-    margin-top: -4rem;
+    margin-top: -5.25rem;
+  }
+}
+@media screen and (max-width: 37.5rem) {
+  .card-container {
+    margin-top: -6.5rem;
   }
 }
 
