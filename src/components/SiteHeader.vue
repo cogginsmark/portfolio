@@ -1,5 +1,5 @@
 <template>
-  <header class="site-header" :class="{ 'is-scrolled': scrolled }">
+  <header class="site-header lg-glass" :class="{ 'is-scrolled': scrolled }">
     <div class="header-inner">
       <router-link to="/" class="brand" aria-label="Mark Coggins — home">
         <span class="brand-name">Mark Coggins</span>
@@ -76,9 +76,10 @@ export default {
   position: sticky;
   top: 0;
   z-index: 1000;
-  background: color-mix(in srgb, var(--main-background-color) 82%, transparent);
-  -webkit-backdrop-filter: blur(0.5rem) saturate(1.25);
-  backdrop-filter: blur(0.5rem) saturate(1.25);
+  /* Liquid Glass experiment (branch feat/liquid-glass): the surface
+     itself — fill, backdrop blur/saturate, edge, shadow — comes from
+     the library's .lg-glass on the header element; the hairline
+     bottom border stays as the site's own divider. */
   border-bottom: 1px solid color-mix(in srgb, var(--main-color) 10%, transparent);
   transition: box-shadow 0.25s ease;
 }

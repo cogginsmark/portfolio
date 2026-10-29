@@ -6,8 +6,8 @@
         <p class="text-paragraph text-subtitle">{{subtitle}}</p>
         <p class="text-paragraph" style="white-space: pre-wrap;">{{description}}</p>
         <div class="cta-section">
-          <StyledButton secondary :color="'#363636'" v-bind:href="ctaUrl || '/resume.pdf'"><span class="text-button-text">{{cta}}</span><i class="fas fa-arrow-down"></i></StyledButton>
-          <StyledButton v-if="cta2" secondary :color="'#363636'" v-bind:href="cta2Url" target="_blank" rel="noopener"><span class="text-button-text">{{cta2}}</span><span class="journalism-icon" aria-hidden="true">history_edu</span></StyledButton>
+          <StyledButton glass secondary :color="'#363636'" v-bind:href="ctaUrl || '/resume.pdf'"><span class="text-button-text">{{cta}}</span><i class="fas fa-arrow-down"></i></StyledButton>
+          <StyledButton glass v-if="cta2" secondary :color="'#363636'" v-bind:href="cta2Url" target="_blank" rel="noopener"><span class="text-button-text">{{cta2}}</span><span class="journalism-icon" aria-hidden="true">history_edu</span></StyledButton>
         </div>
       </div>
     </div>
