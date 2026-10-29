@@ -4,7 +4,10 @@
     <section class="contact-main" aria-labelledby="contact-heading">
       <h1 id="contact-heading" class="visually-hidden">Contact</h1>
       <a class="contact-email" :href="`mailto:${email}`">{{ email }}</a>
-      <StyledButton primary color="#363636" v-bind:href="cta.url"><span class="text-button-text">{{ cta.label }}</span><i class="fas fa-arrow-down"></i></StyledButton>
+      <div class="contact-actions">
+        <StyledButton primary color="#363636" :href="`mailto:${email}`"><span class="text-button-text">Email</span><i class="fas fa-envelope"></i></StyledButton>
+        <StyledButton secondary v-bind:href="cta.url"><span class="text-button-text">{{ cta.label }}</span><i class="fas fa-arrow-down"></i></StyledButton>
+      </div>
     </section>
     <foot v-bind:author="author" v-bind:footer="footer"/>
     </ThemeRoot>
@@ -63,6 +66,13 @@ export default {
   opacity: 0.65;
   text-decoration: underline;
   text-underline-offset: 0.18em;
+}
+
+.contact-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
 }
 
 .visually-hidden {

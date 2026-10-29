@@ -19,7 +19,7 @@
         <router-link class="nav-link" to="/" @click="open = false"><span class="nav-text" data-text="Home">Home</span></router-link>
         <router-link class="nav-link" to="/about" @click="open = false"><span class="nav-text" data-text="About">About</span></router-link>
         <router-link class="nav-link" to="/contact" @click="open = false"><span class="nav-text" data-text="Contact">Contact</span></router-link>
-        <LightToggle aria-label="Toggle light and dark mode"><span aria-hidden="true">💡</span><span class="theme-toggle-label">{{ isDark ? 'Dark' : 'Light' }} mode</span></LightToggle>
+        <LightToggle><span class="theme-toggle-label">{{ isDark ? 'Dark' : 'Light' }} mode</span></LightToggle>
       </nav>
     </div>
   </header>
@@ -169,10 +169,7 @@ export default {
 /* The theme toggle lives in the header now; undo the sticky/float
    positioning it needed when it sat at the bottom of each view. */
 .primary-nav :deep(.light-toggle) {
-  position: static;
-  float: none;
   margin: 0 0 0 0.35rem;
-  font-size: 1.25rem;
 }
 
 /* No hamburger iconography: on mobile the menu is a labelled pill
@@ -225,10 +222,13 @@ export default {
     align-items: stretch;
     gap: 0.15rem;
     padding: 0.6rem 1rem 0.9rem;
-    background: color-mix(in srgb, var(--main-background-color) 94%, transparent);
-    -webkit-backdrop-filter: blur(0.5rem) saturate(1.25);
-    backdrop-filter: blur(0.5rem) saturate(1.25);
+    /* The open panel is opaque on mobile: it drops over scrolling
+       content, and the translucent glass it had before read as a
+       transparency bug there (Mark, 2026-10-29). The header bar above
+       it keeps the light frost. */
+    background: var(--main-background-color);
     border-bottom: 1px solid color-mix(in srgb, var(--main-color) 10%, transparent);
+    box-shadow: 0 1rem 1.5rem rgb(0 0 0 / 0.12);
   }
 
   .primary-nav.is-open {
@@ -239,9 +239,10 @@ export default {
     padding: 0.7rem 0.9rem;
   }
 
+  /* The switch sits centred in the mobile menu list. */
   .primary-nav :deep(.light-toggle) {
-    align-self: flex-start;
-    margin: 0.3rem 0 0;
+    align-self: center;
+    margin: 0.45rem auto 0.2rem;
   }
 }
 

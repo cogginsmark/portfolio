@@ -69,6 +69,7 @@ export default {
   font-size: 1.5rem;
   margin-top: 0;
   letter-spacing: 0.02em;
+  line-height: var(--leading-title);
   margin-bottom: 0.5rem;
 }
 

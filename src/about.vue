@@ -128,14 +128,15 @@ a {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
   gap: 1rem;
+  justify-content: center;
   margin: 0;
 }
 
+/* Cards abandoned on this page (Mark, 2026-10-29): no boxes, fills or
+   borders — the grid and list layouts carry the structure on their
+   own. */
 .fact-card {
-  padding: 1.1rem 1.2rem;
-  border-radius: 16px;
-  background: color-mix(in srgb, var(--main-color) 5%, transparent);
-  border: 1px solid color-mix(in srgb, var(--main-color) 9%, transparent);
+  padding: 0;
 }
 
 .fact-card dt,
@@ -157,14 +158,12 @@ a {
 .experience-list {
   display: grid;
   gap: 1rem;
+  justify-content: center;
   margin: 0;
 }
 
 .experience-item {
-  padding: 1.1rem 1.2rem;
-  border-radius: 16px;
-  background: color-mix(in srgb, var(--main-color) 5%, transparent);
-  border: 1px solid color-mix(in srgb, var(--main-color) 9%, transparent);
+  padding: 0;
 }
 
 [data-reveal] {
