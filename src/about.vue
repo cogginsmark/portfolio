@@ -83,7 +83,6 @@ a {
   display: flex;
   align-items: center;
   justify-content: center;
-  text-align: center;
   gap: 2rem;
   flex-wrap: wrap;
   margin-bottom: 3rem;
