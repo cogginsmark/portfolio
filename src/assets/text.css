@@ -29,11 +29,28 @@
   margin-right: 0.5em;
 }
 
-/* The Journalism button's quill-and-paper combo: a feather knocked
-   out of a solid page, stacked with Font Awesome's own fa-stack. */
+/* The Journalism button's icon is Material Symbols' history_edu —
+   the properly sourced quill-and-paper glyph (its own tags: feather,
+   paper, pen, quill, document) — set from the variable font loaded
+   in index.html, full axis ranges live; this instance is filled at
+   the 24 optical size. text-transform and letter-spacing are reset
+   because the buttons' uppercase tracking would break the ligature
+   the glyph renders from. */
 .journalism-icon {
-  font-size: 0.5rem;
-  vertical-align: -0.3em;
+  font-family: 'Material Symbols Rounded';
+  font-size: 1.15rem;
+  font-style: normal;
+  font-weight: normal;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-smoothing: antialiased;
+  font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  vertical-align: -0.22em;
 }
 
 /* Was the `Linked` styled.a in Text.ts (defined but not used by any
