@@ -4,7 +4,7 @@
       <h1 class="product-title">{{name}}</h1>
       <p class="text-paragraph">{{description}}</p>
     </div>
-    <div>
+    <div class="button-row">
       <a class="minor-button" v-bind:href="link.url" target="_blank" ><span class="text-button-text">{{link.name}}</span><i class="fas fa-arrow-right"></i></a>
     </div>
   </div>
@@ -27,58 +27,66 @@ export default {
 
 <style scoped>
 .minor-card {
-  /* width: 100px; */
-  height: 200px;
   flex: 1;
   display: flex;
-  justify-content: space-between;
   flex-direction: column;
   background: var(--card-background);
-  /* background: radial-gradient(118.99% 670.46% at -7.06% -9.5%, #FFFFFF 0%, #F1F1F1 100%); */
   box-shadow: var(--card-box-shadow);
-  border-radius: 20px;
+  border-radius: 1.25rem;
   margin: auto;
   position: relative;
-  margin-bottom: 40px;
-  padding: 32px 48px;
+  margin-bottom: 2.5rem;
+  padding: 2rem 3rem;
   /* Can't transition radial gradients */
   /* transition: 0.3s background; */
 }
-@media screen and (max-width: 980px) {
+
+/* In the three-across row the cards are slightly portrait (4:5)
+   instead of square, and the row stretches them to one height, so a
+   card whose copy runs long grows the whole row instead of pushing
+   its own View Project link out of line. Stacked layouts keep a
+   natural height. The link row is pinned to the card's foot either
+   way. */
+@media screen and (min-width: 61.25rem) {
   .minor-card {
-    padding: 32px 20px;
+    aspect-ratio: 4 / 5;
   }
 }
-@media screen and (max-width: 600px) {
+
+.button-row {
+  margin-top: auto;
+}
+
+@media screen and (max-width: 61.25rem) {
   .minor-card {
-    padding: 32px 20px;
+    padding: 2rem 1.25rem;
   }
 }
 /* Disabled for performance issues */
 /* backdrop-filter: blur(10px); */
 
 .product-title {
-  font-size: 24px;
-  margin-top: 0px;
-  letter-spacing: 0.5px;
-  margin-bottom: 8px;
+  font-size: 1.5rem;
+  margin-top: 0;
+  letter-spacing: 0.02em;
+  margin-bottom: 0.5rem;
 }
 
 .contents > * {
-  margin: 24px 0px;
+  margin: 1.5rem 0;
 }
 
 .minor-button {
   display: block;
   width: fit-content;
   font-size: 0.7rem;
-  letter-spacing: 1.2px;
+  letter-spacing: 0.11em;
   text-transform: uppercase;
   padding: 0.25rem;
-  padding-left: 0px;
+  padding-left: 0;
   font-weight: bold;
-  margin-right: 20px;
-  line-height: 40px;
+  margin-right: 1.25rem;
+  line-height: 2.5rem;
   color: var(--theme-text);
   transform: translateY(0px);
   transition: 0.3s all ease-out;

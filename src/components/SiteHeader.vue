@@ -16,9 +16,9 @@
       </button>
 
       <nav id="primary-nav" class="primary-nav" :class="{ 'is-open': open }" aria-label="Primary">
-        <router-link class="nav-link" to="/" @click="open = false">Home</router-link>
-        <router-link class="nav-link" to="/about" @click="open = false">About</router-link>
-        <router-link class="nav-link" to="/contact" @click="open = false">Contact</router-link>
+        <router-link class="nav-link" to="/" @click="open = false"><span class="nav-text" data-text="Home">Home</span></router-link>
+        <router-link class="nav-link" to="/about" @click="open = false"><span class="nav-text" data-text="About">About</span></router-link>
+        <router-link class="nav-link" to="/contact" @click="open = false"><span class="nav-text" data-text="Contact">Contact</span></router-link>
         <LightToggle aria-label="Toggle light and dark mode"><span aria-hidden="true">💡</span><span class="theme-toggle-label">{{ isDark ? 'Dark' : 'Light' }} mode</span></LightToggle>
       </nav>
     </div>
@@ -116,11 +116,34 @@ export default {
 }
 
 .nav-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   color: var(--main-color);
   padding: 0.45rem 0.9rem;
   border-radius: 999px;
   font-size: 0.95rem;
+  line-height: 1.25;
   transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* The label carries a hidden bold twin (::after, height 0) so every
+   link is always exactly as wide as its bold state. When the active
+   page bolds or the hover pill appears, nothing reflows: the pill is
+   the same size in every state and the text sits centred in it. */
+.nav-text {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.nav-text::after {
+  content: attr(data-text);
+  font-weight: 700;
+  height: 0;
+  overflow: hidden;
+  visibility: hidden;
+  pointer-events: none;
 }
 
 .nav-link:hover {

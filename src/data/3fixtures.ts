@@ -1,12 +1,11 @@
+// The Contact page is deliberately two things only: the email address
+// and the Resume / CV button. No name, no title, no hero — Mark's call,
+// 2026-10-29 review round.
 export default {
   author: "Contact",
-  name: "Mark Coggins",
-  hero: {
-    subtitle: "Graphic Designer",
-    description: `
-cogginsmark@icloud.com
-    `,
-    cta: "Resume / CV",
+  email: "cogginsmark@icloud.com",
+  cta: {
+    label: "Resume / CV",
     url: "/cv.pdf",
   },
   footer: {
