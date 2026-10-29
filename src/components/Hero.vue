@@ -124,4 +124,30 @@ export default {
     padding-right: 1rem;
   }
 }
+
+/* On mobile the hero stops being a full-viewport stage: it was
+   centring its text inside a 100vh box that starts below the header,
+   which dropped the name far down the screen over an empty wash
+   (Mark's screenshot, 2026-10-29). Now the hero hugs its content —
+   text starts up under the header, and the bottom padding leaves
+   exactly the room the raised cards overlap into. */
+@media screen and (max-width: 61.25rem) {
+  .hero-background {
+    height: auto;
+    min-height: 0;
+    max-height: none;
+  }
+
+  .hero-container {
+    height: auto;
+    min-height: 0;
+    max-height: none;
+    justify-content: flex-start;
+    padding: 3.5rem 0 6.5rem;
+  }
+
+  .hero-text-container {
+    margin-top: 0;
+  }
+}
 </style>
