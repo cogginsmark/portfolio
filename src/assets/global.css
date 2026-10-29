@@ -36,5 +36,12 @@ a {
 /* Anchored sections clear the sticky SiteHeader instead of sliding
    underneath it. */
 [id] {
-  scroll-margin-top: 84px;
+  scroll-margin-top: 5.25rem;
+}
+
+/* Home only, light theme only: the hero's background-cover photograph
+   is removed, so the light gradient carries the hero. The Contact
+   page keeps the cover image in both themes. */
+:root[data-theme="light"] .home-view .hero-background {
+  background-image: none;
 }

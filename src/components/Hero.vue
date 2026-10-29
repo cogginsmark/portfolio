@@ -6,7 +6,7 @@
         <p class="text-paragraph text-subtitle">{{subtitle}}</p>
         <p class="text-paragraph" style="white-space: pre-wrap;">{{description}}</p>
         <div class="cta-section">
-          <StyledButton secondary :color="'#363636'" v-bind:href="'/resume.pdf'"><span class="text-button-text">{{cta}}</span><i class="fas fa-arrow-down"></i></StyledButton>
+          <StyledButton secondary :color="'#363636'" v-bind:href="ctaUrl || '/resume.pdf'"><span class="text-button-text">{{cta}}</span><i class="fas fa-arrow-down"></i></StyledButton>
         </div>
       </div>
     </div>
@@ -27,6 +27,7 @@ export default {
     author: String,
     cta: String,
     cta2: String,
+    ctaUrl: String,
     subtitle: String,
     description: String
   }

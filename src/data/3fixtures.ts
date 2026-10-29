@@ -1,19 +1,17 @@
 export default {
   author: "Contact",
+  name: "Mark Coggins",
   hero: {
     subtitle: "Graphic Designer",
     description: `
 cogginsmark@icloud.com
     `,
+    cta: "Resume / CV",
+    url: "/cv.pdf",
   },
   footer: {
     tagline: "Mark Coggins — Turlock, California",
     links: [
-      {
-        name: "Twitter",
-        url: "https://twitter.com/markacoggins",
-        fa: "fab fa-twitter" // Code from: https://fontawesome.com/v5/icons/twitter?s=brands
-      },
       {
         name: "Medium",
         url: "https://medium.com/@markcoggins",

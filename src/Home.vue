@@ -1,11 +1,12 @@
 <template>
-  <div id="app">
+  <div id="app" class="home-view">
   <ThemeRoot>
     <hero
       v-bind:author="author"
       v-bind:subtitle="hero.subtitle"
       v-bind:description="hero.description"
       v-bind:cta="hero.cta"
+      v-bind:cta-url="hero.url"
     />
     <div class="card-container" id="products">
       <card

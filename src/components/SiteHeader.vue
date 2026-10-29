@@ -3,7 +3,6 @@
     <div class="header-inner">
       <router-link to="/" class="brand" aria-label="Mark Coggins — home">
         <span class="brand-name">Mark Coggins</span>
-        <span class="brand-role">Graphic Designer</span>
       </router-link>
 
       <button
@@ -73,6 +72,9 @@ export default {
 </script>
 
 <style scoped>
+/* Unit rules for this header: font sizes and spacing in rem, letter
+   tracking in em (it scales with the text it spaces), and px reserved
+   for hairline borders only. */
 .site-header {
   position: sticky;
   top: 0;
@@ -85,7 +87,7 @@ export default {
 }
 
 .site-header.is-scrolled {
-  box-shadow: 0 6px 24px color-mix(in srgb, var(--main-color) 10%, transparent);
+  box-shadow: 0 0.375rem 1.5rem color-mix(in srgb, var(--main-color) 10%, transparent);
 }
 
 .header-inner {
@@ -99,8 +101,7 @@ export default {
 
 .brand {
   display: flex;
-  flex-direction: column;
-  line-height: 1.15;
+  align-items: center;
   margin-right: auto;
   color: var(--main-color);
 }
@@ -109,13 +110,6 @@ export default {
   font-weight: 700;
   font-size: 1.02rem;
   letter-spacing: -0.01em;
-}
-
-.brand-role {
-  font-size: 0.72rem;
-  text-transform: uppercase;
-  letter-spacing: 0.14em;
-  opacity: 0.65;
 }
 
 .primary-nav {
@@ -137,8 +131,10 @@ export default {
 }
 
 .nav-link.router-link-exact-active {
-  background: var(--main-color);
-  color: var(--main-background-color);
+  background: color-mix(in srgb, var(--main-color) 14%, transparent);
+  color: var(--main-color);
+  font-weight: 600;
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--main-color) 28%, transparent);
 }
 
 /* The theme toggle lives in the header now; undo the sticky/float
@@ -147,19 +143,19 @@ export default {
   position: static;
   float: none;
   margin: 0 0 0 0.35rem;
-  font-size: 20px;
+  font-size: 1.25rem;
 }
 
 .nav-toggle {
   display: none;
   flex-direction: column;
   justify-content: center;
-  gap: 5px;
-  width: 42px;
-  height: 42px;
-  padding: 9px;
+  gap: 0.3125rem;
+  width: 2.625rem;
+  height: 2.625rem;
+  padding: 0.5625rem;
   border: 0;
-  border-radius: 10px;
+  border-radius: 0.625rem;
   background: transparent;
   cursor: pointer;
 }
@@ -170,14 +166,14 @@ export default {
 
 .nav-toggle-bar {
   display: block;
-  height: 2px;
-  border-radius: 2px;
+  height: 0.125rem;
+  border-radius: 0.125rem;
   background: var(--main-color);
   transition: transform 0.25s ease, opacity 0.2s ease;
 }
 
 .nav-toggle[aria-expanded="true"] .nav-toggle-bar:nth-child(1) {
-  transform: translateY(7px) rotate(45deg);
+  transform: translateY(0.4375rem) rotate(45deg);
 }
 
 .nav-toggle[aria-expanded="true"] .nav-toggle-bar:nth-child(2) {
@@ -185,10 +181,10 @@ export default {
 }
 
 .nav-toggle[aria-expanded="true"] .nav-toggle-bar:nth-child(3) {
-  transform: translateY(-7px) rotate(-45deg);
+  transform: translateY(-0.4375rem) rotate(-45deg);
 }
 
-@media (max-width: 640px) {
+@media (max-width: 40rem) {
   .nav-toggle {
     display: flex;
   }

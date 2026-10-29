@@ -11,7 +11,7 @@
         </section>
 
         <section class="about-section" data-reveal aria-labelledby="facts-heading">
-          <h2 id="facts-heading" class="about-section-title">At a glance</h2>
+          <h2 id="facts-heading" class="about-section-title">Background</h2>
           <dl class="fact-grid">
             <div class="fact-card" v-for="fact in facts" :key="fact.label">
               <dt>{{ fact.label }}</dt>
@@ -71,6 +71,8 @@ a {
 </style>
 
 <style scoped>
+/* Unit rules: rem for font sizes and spacing, em for letter
+   tracking, px reserved for hairline borders. */
 .about-wrap {
   max-width: 980px;
   margin: 0 auto;
@@ -167,7 +169,7 @@ a {
 
 [data-reveal] {
   opacity: 0;
-  transform: translateY(14px);
+  transform: translateY(0.875rem);
   transition: opacity 0.55s ease, transform 0.55s ease;
 }
 
@@ -176,7 +178,7 @@ a {
   transform: none;
 }
 
-@media (max-width: 640px) {
+@media (max-width: 40rem) {
   .about-intro {
     flex-direction: column;
     text-align: center;

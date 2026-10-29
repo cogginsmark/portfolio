@@ -7,7 +7,7 @@ export default {
   author: "Mark Coggins",
   role: "Graphic Designer",
   facts: [
-    { label: "Residence", value: "Turlock, CA" },
+    { label: "Residence", value: "Modesto, CA" },
     { label: "Education", value: "California State University Stanislaus" },
     { label: "Major", value: "Bachelor of Communication Studies, Bachelor of Creative Media" }
   ],
@@ -24,11 +24,6 @@ export default {
   footer: {
     tagline: "Mark Coggins — Turlock, California",
     links: [
-      {
-        name: "Twitter",
-        url: "https://twitter.com/markacoggins",
-        fa: "fab fa-twitter" // Code from: https://fontawesome.com/v5/icons/twitter?s=brands
-      },
       {
         name: "Medium",
         url: "https://medium.com/@markcoggins",
