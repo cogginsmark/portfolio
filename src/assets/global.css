@@ -32,3 +32,9 @@ a {
   text-decoration: none;
   position: relative;
 }
+
+/* Anchored sections clear the sticky SiteHeader instead of sliding
+   underneath it. */
+[id] {
+  scroll-margin-top: 84px;
+}

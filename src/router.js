@@ -6,6 +6,17 @@ import Contact from './contact.vue'
 // Was vue-router 3 `new Router({ mode: 'history', ... })` — history mode preserved.
 export default createRouter({
   history: createWebHistory(),
+  // New pages start at the top (below the sticky header); back/forward
+  // restores the saved position; in-page anchors keep their target.
+  scrollBehavior(to, from, savedPosition) {
+    if (savedPosition) {
+      return savedPosition
+    }
+    if (to.hash) {
+      return { el: to.hash }
+    }
+    return { top: 0 }
+  },
   routes: [
     {
       path: '/',
