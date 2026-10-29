@@ -5,6 +5,8 @@ export default {
     description: "Exploring new software and techniques to create engaging and compelling designs.",
     cta: "Resume / CV",
       url: "/cv.pdf",
+    cta2: "Journalism",
+      url2: "https://csusignal.com/staff_name/mark-coggins/",
     links: {
       name: "Resume",
       url: "https://portfolium.com/cogginsmark"

@@ -7,6 +7,7 @@
         <p class="text-paragraph" style="white-space: pre-wrap;">{{description}}</p>
         <div class="cta-section">
           <StyledButton secondary :color="'#363636'" v-bind:href="ctaUrl || '/resume.pdf'"><span class="text-button-text">{{cta}}</span><i class="fas fa-arrow-down"></i></StyledButton>
+          <StyledButton v-if="cta2" secondary :color="'#363636'" v-bind:href="cta2Url" target="_blank" rel="noopener"><span class="text-button-text">{{cta2}}</span><i class="fas fa-feather-alt"></i></StyledButton>
         </div>
       </div>
     </div>
@@ -28,6 +29,7 @@ export default {
     cta: String,
     cta2: String,
     ctaUrl: String,
+    cta2Url: String,
     subtitle: String,
     description: String
   }
@@ -100,5 +102,13 @@ export default {
 
 .cta-section {
   margin: 2.25rem 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.cta-section :deep(.styled-button) {
+  margin-right: 0;
 }
 </style>

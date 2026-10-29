@@ -7,6 +7,8 @@
       v-bind:description="hero.description"
       v-bind:cta="hero.cta"
       v-bind:cta-url="hero.url"
+      v-bind:cta2="hero.cta2"
+      v-bind:cta2-url="hero.url2"
     />
     <div class="card-container" id="products">
       <card

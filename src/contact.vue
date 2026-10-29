@@ -7,6 +7,7 @@
       <div class="contact-actions">
         <StyledButton primary color="#363636" :href="`mailto:${email}`"><span class="text-button-text">Email</span><i class="fas fa-envelope"></i></StyledButton>
         <StyledButton secondary v-bind:href="cta.url"><span class="text-button-text">{{ cta.label }}</span><i class="fas fa-arrow-down"></i></StyledButton>
+        <StyledButton secondary v-bind:href="journalism.url" target="_blank" rel="noopener"><span class="text-button-text">{{ journalism.label }}</span><i class="fas fa-feather-alt"></i></StyledButton>
       </div>
     </section>
     <foot v-bind:author="author" v-bind:footer="footer"/>

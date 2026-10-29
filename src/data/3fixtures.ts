@@ -8,6 +8,10 @@ export default {
     label: "Resume / CV",
     url: "/cv.pdf",
   },
+  journalism: {
+    label: "Journalism",
+    url: "https://csusignal.com/staff_name/mark-coggins/",
+  },
   footer: {
     tagline: "Mark Coggins — Modesto, California",
     links: [
