@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="home">
   <ThemeRoot>
     <hero
       v-bind:author="author"

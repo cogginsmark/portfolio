@@ -87,16 +87,18 @@ export default {
 
 .hero-heading {
   font-size: 3rem;
-  margin: 32px auto;
+  margin: 0.67em auto;
   font-weight: bold;
+  line-height: var(--leading-display);
+  letter-spacing: -0.015em;
 }
-@media screen and (max-width: 980px) {
+@media screen and (max-width: 61.25rem) {
   .hero-heading {
-    font-size: 42px;
+    font-size: 2.625rem;
   }
 }
 
 .cta-section {
-  margin: 36px 0px;
+  margin: 2.25rem 0;
 }
 </style>

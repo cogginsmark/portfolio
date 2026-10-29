@@ -10,8 +10,20 @@
    remain in public/fonts/ but are not referenced. */
 @import url("https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap");
 
+/* Leading and spacing are solved from the variable stack itself:
+   optical sizing is automatic, the leading scale below is the single
+   source every text style draws from, and spacing beside text is in
+   em, so it scales with the type it sits next to instead of being
+   re-tuned per component. */
+:root {
+  --leading-display: 1.08;
+  --leading-title: 1.15;
+  --leading-text: 1.55;
+}
+
 html {
   font-family: 'Manrope', -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-optical-sizing: auto;
   font-size: 18px;
   -ms-text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
@@ -21,7 +33,17 @@ html {
 }
 
 body {
-  margin: 0px;
+  margin: 0;
+  line-height: var(--leading-text);
+}
+
+/* The theme root stretches with the app shell's flex column, so the
+   footer can be pushed to the bottom of short pages (see Foot.vue). */
+.theme-root {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
 }
 
 html {

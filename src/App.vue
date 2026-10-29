@@ -26,6 +26,29 @@ export default {
 </script>
 
 <style scoped>
+/* Sticky-footer shell: the column always fills the viewport, <main>
+   takes whatever height is left, and each routed page stretches to
+   fill it — so on short pages the footer ends at the bottom of the
+   screen instead of sticking out mid-page where the content ended. */
+#app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+}
+
+#main {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+#main > div {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+
 .skip-link {
   position: absolute;
   left: 1rem;

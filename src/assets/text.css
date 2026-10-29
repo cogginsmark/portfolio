@@ -6,21 +6,23 @@
    (Subtitle was styled(Paragraph) with a heavier weight). */
 .text-main-title {
   font-size: 2rem;
-  margin-top: 0px;
-  letter-spacing: 1.5px;
-  margin-bottom: 8px;
+  margin-top: 0;
+  letter-spacing: -0.01em;
+  line-height: var(--leading-title);
+  margin-bottom: 0.25em;
 }
 
 .text-paragraph {
   font-size: 1rem;
   margin: 0 0 0.5em 0;
-  line-height: 1.47059;
-  letter-spacing: 0.5px;
+  line-height: var(--leading-text);
+  letter-spacing: 0.01em;
   font-weight: 300;
 }
 
 .text-subtitle {
   font-weight: 400;
+  line-height: 1.4;
 }
 
 .text-button-text {
