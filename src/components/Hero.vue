@@ -7,7 +7,7 @@
         <p class="text-paragraph" style="white-space: pre-wrap;">{{description}}</p>
         <div class="cta-section">
           <StyledButton secondary :color="'#363636'" v-bind:href="ctaUrl || '/resume.pdf'"><span class="text-button-text">{{cta}}</span><i class="fas fa-arrow-down"></i></StyledButton>
-          <StyledButton v-if="cta2" secondary :color="'#363636'" v-bind:href="cta2Url" target="_blank" rel="noopener"><span class="text-button-text">{{cta2}}</span><i class="fas fa-feather-alt"></i></StyledButton>
+          <StyledButton v-if="cta2" secondary :color="'#363636'" v-bind:href="cta2Url" target="_blank" rel="noopener"><span class="text-button-text">{{cta2}}</span><span class="fa-stack journalism-icon" aria-hidden="true"><i class="fas fa-file fa-stack-2x"></i><i class="fas fa-feather-alt fa-stack-1x fa-inverse"></i></span></StyledButton>
         </div>
       </div>
     </div>
@@ -110,5 +110,18 @@ export default {
 
 .cta-section :deep(.styled-button) {
   margin-right: 0;
+}
+
+/* On mobile the pair stays side by side on one row instead of
+   wrapping under each other. */
+@media screen and (max-width: 61.25rem) {
+  .cta-section {
+    flex-wrap: nowrap;
+  }
+
+  .cta-section :deep(.styled-button) {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
 }
 </style>

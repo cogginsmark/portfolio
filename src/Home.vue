@@ -77,11 +77,11 @@ export default {
 
 <style scoped>
 .card-container {
-  margin-top: -60px;
+  margin-top: -5.25rem;
 }
-@media screen and (max-width: 980px) {
+@media screen and (max-width: 61.25rem) {
   .card-container {
-    margin-top: -48px;
+    margin-top: -4rem;
   }
 }
 

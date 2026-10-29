@@ -29,6 +29,13 @@
   margin-right: 0.5em;
 }
 
+/* The Journalism button's quill-and-paper combo: a feather knocked
+   out of a solid page, stacked with Font Awesome's own fa-stack. */
+.journalism-icon {
+  font-size: 0.5rem;
+  vertical-align: -0.3em;
+}
+
 /* Was the `Linked` styled.a in Text.ts (defined but not used by any
    template); kept for parity. */
 .text-linked::after {
