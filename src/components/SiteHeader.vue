@@ -80,8 +80,8 @@ export default {
   top: 0;
   z-index: 1000;
   background: color-mix(in srgb, var(--main-background-color) 82%, transparent);
-  -webkit-backdrop-filter: blur(14px) saturate(1.5);
-  backdrop-filter: blur(14px) saturate(1.5);
+  -webkit-backdrop-filter: blur(0.5rem) saturate(1.25);
+  backdrop-filter: blur(0.5rem) saturate(1.25);
   border-bottom: 1px solid color-mix(in srgb, var(--main-color) 10%, transparent);
   transition: box-shadow 0.25s ease;
 }
@@ -130,11 +130,20 @@ export default {
   background: color-mix(in srgb, var(--main-color) 8%, transparent);
 }
 
+/* The current page is carried by the bold text. The pill itself sits
+   faded and only comes fully forward on hover or press. */
 .nav-link.router-link-exact-active {
-  background: color-mix(in srgb, var(--main-color) 14%, transparent);
+  background: color-mix(in srgb, var(--main-color) 6%, transparent);
   color: var(--main-color);
-  font-weight: 600;
-  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--main-color) 28%, transparent);
+  font-weight: 700;
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--main-color) 12%, transparent);
+  transition: background-color 0.25s ease, box-shadow 0.25s ease, color 0.2s ease;
+}
+
+.nav-link.router-link-exact-active:hover,
+.nav-link.router-link-exact-active:active {
+  background: color-mix(in srgb, var(--main-color) 16%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--main-color) 30%, transparent);
 }
 
 /* The theme toggle lives in the header now; undo the sticky/float
@@ -200,8 +209,8 @@ export default {
     gap: 0.15rem;
     padding: 0.6rem 1rem 0.9rem;
     background: color-mix(in srgb, var(--main-background-color) 94%, transparent);
-    -webkit-backdrop-filter: blur(14px) saturate(1.5);
-    backdrop-filter: blur(14px) saturate(1.5);
+    -webkit-backdrop-filter: blur(0.5rem) saturate(1.25);
+    backdrop-filter: blur(0.5rem) saturate(1.25);
     border-bottom: 1px solid color-mix(in srgb, var(--main-color) 10%, transparent);
   }
 

@@ -10,7 +10,7 @@ cogginsmark@icloud.com
     url: "/cv.pdf",
   },
   footer: {
-    tagline: "Mark Coggins — Turlock, California",
+    tagline: "Mark Coggins — Modesto, California",
     links: [
       {
         name: "Medium",

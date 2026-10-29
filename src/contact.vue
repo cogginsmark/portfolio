@@ -2,7 +2,6 @@
   <div id="contact">
   <ThemeRoot>
     <section class="contact-intro" aria-labelledby="contact-intro-heading">
-      <img src="/photo.jpg" alt="Portrait of Mark Coggins" class="author-image" />
       <div class="contact-intro-text">
         <h1 id="contact-intro-heading" class="contact-intro-heading">{{ name }}</h1>
         <p class="contact-intro-role">{{ hero.subtitle }}</p>
@@ -84,15 +83,6 @@ a {
   max-width: 61.25rem;
   margin: 0 auto;
   padding: 3rem 1.25rem 0;
-}
-
-.contact-intro .author-image {
-  display: block;
-  border-radius: 50%;
-  width: min(13.75rem, 55vw);
-  height: auto;
-  aspect-ratio: 1;
-  object-fit: cover;
 }
 
 .contact-intro-heading {
