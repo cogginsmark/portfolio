@@ -10,19 +10,16 @@
         class="nav-toggle"
         :aria-expanded="open ? 'true' : 'false'"
         aria-controls="primary-nav"
-        aria-label="Toggle navigation"
         @click="open = !open"
       >
-        <span class="nav-toggle-bar"></span>
-        <span class="nav-toggle-bar"></span>
-        <span class="nav-toggle-bar"></span>
+        <span class="nav-toggle-label">{{ open ? 'Close' : 'Menu' }}</span>
       </button>
 
       <nav id="primary-nav" class="primary-nav" :class="{ 'is-open': open }" aria-label="Primary">
         <router-link class="nav-link" to="/" @click="open = false">Home</router-link>
         <router-link class="nav-link" to="/about" @click="open = false">About</router-link>
         <router-link class="nav-link" to="/contact" @click="open = false">Contact</router-link>
-        <LightToggle><span>{{ isDark ? '💡' : '💡' }}</span></LightToggle>
+        <LightToggle aria-label="Toggle light and dark mode"><span aria-hidden="true">💡</span><span class="theme-toggle-label">{{ isDark ? 'Dark' : 'Light' }} mode</span></LightToggle>
       </nav>
     </div>
   </header>
@@ -155,47 +152,44 @@ export default {
   font-size: 1.25rem;
 }
 
+/* No hamburger iconography: on mobile the menu is a labelled pill
+   that reads Menu, and Close while the panel is open. */
 .nav-toggle {
   display: none;
-  flex-direction: column;
-  justify-content: center;
-  gap: 0.3125rem;
-  width: 2.625rem;
-  height: 2.625rem;
-  padding: 0.5625rem;
-  border: 0;
-  border-radius: 0.625rem;
+  align-items: center;
+  padding: 0.45rem 0.95rem;
+  border: 1px solid color-mix(in srgb, var(--main-color) 22%, transparent);
+  border-radius: 999px;
   background: transparent;
+  color: var(--main-color);
+  font: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
   cursor: pointer;
+  transition: background-color 0.2s ease;
 }
 
 .nav-toggle:hover {
   background: color-mix(in srgb, var(--main-color) 8%, transparent);
 }
 
-.nav-toggle-bar {
-  display: block;
-  height: 0.125rem;
-  border-radius: 0.125rem;
-  background: var(--main-color);
-  transition: transform 0.25s ease, opacity 0.2s ease;
-}
-
-.nav-toggle[aria-expanded="true"] .nav-toggle-bar:nth-child(1) {
-  transform: translateY(0.4375rem) rotate(45deg);
-}
-
-.nav-toggle[aria-expanded="true"] .nav-toggle-bar:nth-child(2) {
-  opacity: 0;
-}
-
-.nav-toggle[aria-expanded="true"] .nav-toggle-bar:nth-child(3) {
-  transform: translateY(-0.4375rem) rotate(-45deg);
+/* The light/dark switch is labelled on mobile only; on desktop the
+   bulb stands alone in the nav row. */
+.theme-toggle-label {
+  display: none;
 }
 
 @media (max-width: 40rem) {
   .nav-toggle {
-    display: flex;
+    display: inline-flex;
+  }
+
+  .theme-toggle-label {
+    display: inline;
+    margin-left: 0.5rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
   }
 
   .primary-nav {
@@ -231,7 +225,7 @@ export default {
 @media (prefers-reduced-motion: reduce) {
   .site-header,
   .nav-link,
-  .nav-toggle-bar {
+  .nav-toggle {
     transition: none;
   }
 }
