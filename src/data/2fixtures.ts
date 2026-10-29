@@ -1,23 +1,29 @@
+// About page data. Was a single pre-wrap text blob in hero.description
+// ("Residence - ... / Education - ... / ..."), rendered through the
+// Home hero. The facts are unchanged, word for word — they are now
+// structured so the About page can lay them out as real sections:
+// a facts list, education, and experience.
 export default {
-  author: "About",
-  hero: {
-    subtitle: "Graphic Designer",
-    description: `
-Residence - Turlock, CA
-Education - California State University Stanislaus
-Major - Bachelor of Communication Studies, Bachelor of Creative Media
-Internships - Bay Valley Tech (6 Months) Position: Lead Design Intern
-Experience - Graphic Design Student Assistant position at Associated Students Inc, at California State University Stanislaus
-    `,
-  },
+  author: "Mark Coggins",
+  role: "Graphic Designer",
+  facts: [
+    { label: "Residence", value: "Modesto, CA" },
+    { label: "Education", value: "California State University Stanislaus" },
+    { label: "Major", value: "Bachelor of Communication Studies, Bachelor of Creative Media" }
+  ],
+  experience: [
+    {
+      label: "Internships",
+      value: "Bay Valley Tech (6 Months) Position: Lead Design Intern"
+    },
+    {
+      label: "Experience",
+      value: "Graphic Design Student Assistant position at Associated Students Inc, at California State University Stanislaus"
+    }
+  ],
   footer: {
-    tagline: "Mark Coggins — Turlock, California",
+    tagline: "Mark Coggins — Modesto, California",
     links: [
-      {
-        name: "Twitter",
-        url: "https://twitter.com/markacoggins",
-        fa: "fab fa-twitter" // Code from: https://fontawesome.com/v5/icons/twitter?s=brands
-      },
       {
         name: "Medium",
         url: "https://medium.com/@markcoggins",

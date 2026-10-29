@@ -1,19 +1,16 @@
+// The Contact page is deliberately two things only: the email address
+// and the Resume / CV button. No name, no title, no hero — Mark's call,
+// 2026-10-29 review round.
 export default {
   author: "Contact",
-  hero: {
-    subtitle: "Graphic Designer",
-    description: `
-cogginsmark@icloud.com
-    `,
+  email: "cogginsmark@icloud.com",
+  cta: {
+    label: "Resume / CV",
+    url: "/cv.pdf",
   },
   footer: {
-    tagline: "Mark Coggins — Turlock, California",
+    tagline: "Mark Coggins — Modesto, California",
     links: [
-      {
-        name: "Twitter",
-        url: "https://twitter.com/markacoggins",
-        fa: "fab fa-twitter" // Code from: https://fontawesome.com/v5/icons/twitter?s=brands
-      },
       {
         name: "Medium",
         url: "https://medium.com/@markcoggins",

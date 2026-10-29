@@ -1,17 +1,31 @@
 /* Global styles. Was an injectGlobal`...` block from vue-styled-components,
    duplicated in Home.vue, about.vue and contact.vue (so injected up to three
    times); now imported once from main.js. Content unchanged. */
-/* Loaded variable font: Inter via the Google Fonts css2 API, full axes
-   live — opsz 14..32, wght 100..900, display=swap. Replaces the three
-   static self-hosted "SF Pro Display" TTF faces (300/400/700);
-   those files remain in public/fonts/ but are no longer referenced.
-   A genuine variable SF Pro could not be delivered to this repo: the
-   GitHub connector pushes text only and no git push route exists from
-   the build environment — see the "Variable font" comment on PR #2. */
-@import url("https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,100..900&display=swap");
+/* Loaded variable font: Manrope via the Google Fonts css2 API, full
+   weight axis live — wght 200..800, display=swap. Chosen 2026-10-29
+   (Mark: "select new font based on my preferences i believe in you"):
+   a soft geometric grotesque in the SF spirit the site was designed
+   in, with rounder forms than the Inter it replaces, and a genuinely
+   variable single file. Loading from Google Fonts is Mark's call —
+   a brief self-hosting detour the same evening was reversed on his
+   word. The static self-hosted "SF Pro Display" TTFs remain in
+   public/fonts/ but are not referenced. */
+@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap");
+
+/* Leading and spacing are solved from the variable stack itself:
+   optical sizing is automatic, the leading scale below is the single
+   source every text style draws from, and spacing beside text is in
+   em, so it scales with the type it sits next to instead of being
+   re-tuned per component. */
+:root {
+  --leading-display: 1.08;
+  --leading-title: 1.15;
+  --leading-text: 1.55;
+}
 
 html {
-  font-family: 'Inter', -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-family: 'Manrope', -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-optical-sizing: auto;
   font-size: 18px;
   -ms-text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
@@ -21,7 +35,17 @@ html {
 }
 
 body {
-  margin: 0px;
+  margin: 0;
+  line-height: var(--leading-text);
+}
+
+/* The theme root stretches with the app shell's flex column, so the
+   footer can be pushed to the bottom of short pages (see Foot.vue). */
+.theme-root {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
 }
 
 html {
@@ -31,4 +55,41 @@ html {
 a {
   text-decoration: none;
   position: relative;
+}
+
+/* Anchored sections clear the sticky SiteHeader instead of sliding
+   underneath it. */
+[id] {
+  scroll-margin-top: 5.25rem;
+}
+
+/* Light theme: the hero cover is the DARK theme's cover photograph,
+   inverted. It lives on a ::before layer so only the image inverts —
+   the hero text above it keeps its own colours. Supersedes the brief
+   removal of the cover on Home (2026-10-29 review rounds). */
+:root[data-theme="light"] .hero-background {
+  background-image: none;
+  position: relative;
+}
+
+:root[data-theme="light"] .hero-background::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("/falcon-dark-minus-50-brightness2.png");
+  background-size: cover;
+  background-position: 50%;
+  filter: invert(1);
+}
+
+:root[data-theme="light"] .hero-container {
+  position: relative;
+  z-index: 1;
+}
+
+@media screen and (max-width: 61.25rem) {
+  :root[data-theme="light"] .hero-background::before {
+    background-position: 60% -2.8125rem;
+    background-size: inherit;
+  }
 }

@@ -25,6 +25,9 @@ export const mutations = {
 // the views' <style> blocks and src/assets/global.css rely on)
 export const adjustTheme = () => {
   const theme = currentTheme()
+  // Lets CSS make per-theme decisions (e.g. the Home hero rule in
+  // global.css) that follow the toggle, not just the OS setting.
+  document.documentElement.dataset.theme = localStore.dark ? 'dark' : 'light'
   document.documentElement.style.setProperty('--main-color', theme.color.text)
   document.documentElement.style.setProperty('--main-background-color', theme.color.background)
   document.documentElement.style.setProperty('--fallback-background-color', theme.color.fallbackBackground)

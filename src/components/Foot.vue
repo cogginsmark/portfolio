@@ -23,19 +23,23 @@ export default {
 <style scoped>
 .app-footer {
   width: 884px;
-  margin: 64px auto;
-  padding: 0px 48px;
+  /* margin-top: auto is the sticky-footer half of the shell in
+     App.vue: on short pages it pushes the footer to the bottom of
+     the viewport; the padding keeps its breathing room on tall ones. */
+  margin: 0 auto;
+  margin-top: auto;
+  padding: 4rem 3rem;
   display: flex;
   font-weight: bold;
   flex-direction: column;
 }
-@media screen and (max-width: 980px) {
+@media screen and (max-width: 61.25rem) {
   .app-footer {
-    padding: 0px 20px;
+    padding: 4rem 1.25rem;
     width: 560px;
   }
 }
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 37.5rem) {
   .app-footer {
     width: 320px;
   }

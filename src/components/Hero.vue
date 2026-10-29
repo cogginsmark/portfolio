@@ -6,7 +6,7 @@
         <p class="text-paragraph text-subtitle">{{subtitle}}</p>
         <p class="text-paragraph" style="white-space: pre-wrap;">{{description}}</p>
         <div class="cta-section">
-          <StyledButton secondary :color="'#363636'" v-bind:href="'/resume.pdf'"><span class="text-button-text">{{cta}}</span><i class="fas fa-arrow-down"></i></StyledButton>
+          <StyledButton secondary :color="'#363636'" v-bind:href="ctaUrl || '/resume.pdf'"><span class="text-button-text">{{cta}}</span><i class="fas fa-arrow-down"></i></StyledButton>
         </div>
       </div>
     </div>
@@ -27,6 +27,7 @@ export default {
     author: String,
     cta: String,
     cta2: String,
+    ctaUrl: String,
     subtitle: String,
     description: String
   }
@@ -86,16 +87,18 @@ export default {
 
 .hero-heading {
   font-size: 3rem;
-  margin: 32px auto;
+  margin: 0.67em auto;
   font-weight: bold;
+  line-height: var(--leading-display);
+  letter-spacing: -0.015em;
 }
-@media screen and (max-width: 980px) {
+@media screen and (max-width: 61.25rem) {
   .hero-heading {
-    font-size: 42px;
+    font-size: 2.625rem;
   }
 }
 
 .cta-section {
-  margin: 36px 0px;
+  margin: 2.25rem 0;
 }
 </style>

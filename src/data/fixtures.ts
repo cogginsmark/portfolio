@@ -3,8 +3,8 @@ export default {
   hero: {
     subtitle: "Graphic Designer",
     description: "Exploring new software and techniques to create engaging and compelling designs.",
-    cta: "Resume",
-      url: "/resume.pdf",
+    cta: "Resume / CV",
+      url: "/cv.pdf",
     links: {
       name: "Resume",
       url: "https://portfolium.com/cogginsmark"
@@ -104,13 +104,8 @@ export default {
   ]
   },
   footer: {
-    tagline: "Mark Coggins — Turlock, California",
+    tagline: "Mark Coggins — Modesto, California",
     links: [
-      {
-        name: "Twitter",
-        url: "https://twitter.com/markacoggins",
-        fa: "fab fa-twitter" // Code from: https://fontawesome.com/v5/icons/twitter?s=brands
-      },
       {
         name: "Medium",
         url: "https://medium.com/@markcoggins",

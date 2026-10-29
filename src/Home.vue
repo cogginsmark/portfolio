@@ -1,11 +1,12 @@
 <template>
-  <div id="app">
+  <div id="home">
   <ThemeRoot>
     <hero
       v-bind:author="author"
       v-bind:subtitle="hero.subtitle"
       v-bind:description="hero.description"
       v-bind:cta="hero.cta"
+      v-bind:cta-url="hero.url"
     />
     <div class="card-container" id="products">
       <card
@@ -38,7 +39,6 @@
       </div>
     </div>
     <foot v-bind:author="author" v-bind:footer="footer" />
-    <LightToggle><span v-if="!isDark" >💡</span><span v-if="isDark">💡</span></LightToggle>
     </ThemeRoot>
   </div>
 </template>
@@ -50,8 +50,6 @@ import MinorCard from './components/MinorCard.vue'
 import LogoCard from './components/LogoCard.vue'
 import Foot from './components/Foot.vue'
 import ThemeRoot from './components/ThemeRoot.vue'
-import LightToggle from './components/LightToggle.vue'
-import { localStore } from './theme.js'
 
 import baseData from './data/fixtures.ts'
 
@@ -67,13 +65,7 @@ export default {
     MinorCard,
     Foot,
     ThemeRoot,
-    LightToggle,
     LogoCard
-  },
-  computed: {
-    isDark() {
-      return localStore.dark
-    }
   },
   data: () => ({
     ...baseData
