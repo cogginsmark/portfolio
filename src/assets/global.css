@@ -1,14 +1,15 @@
 /* Global styles. Was an injectGlobal`...` block from vue-styled-components,
    duplicated in Home.vue, about.vue and contact.vue (so injected up to three
    times); now imported once from main.js. Content unchanged. */
-/* Loaded variable font: Manrope via the Google Fonts css2 API, full
-   weight axis live — wght 200..800, display=swap. Chosen 2026-10-29
-   (Mark: "select new font based on my preferences i believe in you"):
-   a soft geometric grotesque in the SF spirit the site was designed
-   in, with rounder forms than the Inter it replaces, and a genuinely
-   variable single file. The static self-hosted "SF Pro Display" TTFs
-   remain in public/fonts/ but are not referenced. */
-@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap");
+/* The site's font is Manrope Variable (wght 200..800), self-hosted
+   from the @fontsource-variable/manrope package — imported in
+   main.js, emitted by the build as site assets, so the font loads
+   for every user from the site itself. Chosen 2026-10-29 (Mark:
+   "select new font based on my preferences i believe in you"): a soft
+   geometric grotesque in the SF spirit the site was designed in, with
+   rounder forms than the Inter it replaces. The static self-hosted
+   "SF Pro Display" TTFs remain in public/fonts/ but are not
+   referenced. System faces below are a last-resort fallback only. */
 
 /* Leading and spacing are solved from the variable stack itself:
    optical sizing is automatic, the leading scale below is the single
@@ -22,7 +23,7 @@
 }
 
 html {
-  font-family: 'Manrope', -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-family: 'Manrope Variable', 'Manrope', -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   font-optical-sizing: auto;
   font-size: 18px;
   -ms-text-size-adjust: 100%;
