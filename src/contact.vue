@@ -8,9 +8,10 @@
         <StyledButton glass primary color="#363636" :href="`mailto:${email}`"><span class="text-button-text">Email</span><i class="fas fa-envelope"></i></StyledButton>
         <StyledButton glass secondary v-bind:href="cta.url"><span class="text-button-text">{{ cta.label }}</span><i class="fas fa-arrow-down"></i></StyledButton>
         <StyledButton glass secondary v-bind:href="journalism.url" target="_blank" rel="noopener"><span class="text-button-text">{{ journalism.label }}</span><span class="journalism-icon" aria-hidden="true">history_edu</span></StyledButton>
+        <StyledButton glass secondary v-for="(link, index) in footer.links" :key="`contact-link-${index}`" v-bind:href="link.url" v-bind:target="link.url.startsWith('http') ? '_blank' : undefined" v-bind:rel="link.url.startsWith('http') ? 'noopener' : undefined"><span class="text-button-text">{{ link.name }}</span><i v-bind:class="link.fa"></i></StyledButton>
       </div>
     </section>
-    <foot v-bind:author="author" v-bind:footer="footer" link-buttons/>
+    <foot v-bind:author="author" v-bind:footer="footer" hide-links/>
     </ThemeRoot>
   </div>
 </template>
