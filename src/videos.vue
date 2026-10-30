@@ -50,7 +50,10 @@
             class="video-grid"
             :class="{
               'video-grid--single':
-                section.entries.filter((e) => !e.feature).length === 1
+                section.entries.filter((e) => !e.feature).length === 1,
+              'video-grid--side':
+                section.entries.filter((e) => !e.feature).length === 1 &&
+                section.entries.some((e) => e.src)
             }"
           >
             <article
@@ -93,6 +96,7 @@
                 />
                 <span class="video-play" aria-hidden="true"><i class="fas fa-play"></i></span>
               </a>
+              <div class="video-card-text">
               <h3 class="video-title">{{ entry.title }}</h3>
               <p class="video-meta">
                 <span class="video-role">{{ entry.role }}</span>
@@ -109,6 +113,7 @@
                   · <a :href="entry.article" target="_blank" rel="noopener">Read the article</a>
                 </template>
               </p>
+              </div>
             </article>
           </div>
         </section>
@@ -326,6 +331,60 @@ onUnmounted(() => {
 
 .video-grid--single .video-player {
   margin-inline: auto;
+}
+
+/* While a section holds a single self-hosted player entry —
+   Client Work's 916 Day piece, for now — the entry goes wide
+   instead of centring as a lone card: player on the left, its
+   content alongside it on the right (Mark's call, 2026-10-30).
+   The card's text elements sit in a .video-card-text wrapper
+   that is display: contents in every other layout, so the
+   thumbnail cards are untouched; here it becomes the right-hand
+   column, with the CTA pinned to its foot. On small screens the
+   pair stacks again, player centred over its text. */
+.video-card-text {
+  display: contents;
+}
+
+.video-grid--side {
+  justify-items: stretch;
+}
+
+.video-grid--side .video-card {
+  flex-direction: row;
+  gap: 1.5rem;
+  max-width: none;
+}
+
+.video-grid--side .video-player {
+  flex: none;
+  width: min(300px, 40%);
+  margin-bottom: 0;
+}
+
+.video-grid--side .video-card-text {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+
+@media screen and (max-width: 40rem) {
+  .video-grid--side .video-card {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .video-grid--side .video-player {
+    width: 100%;
+    max-width: 340px;
+    margin-inline: auto;
+    margin-bottom: 0.85rem;
+  }
+
+  .video-grid--side .video-card-text {
+    display: contents;
+  }
 }
 
 .video-player {
