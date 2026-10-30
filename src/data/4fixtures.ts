@@ -13,9 +13,13 @@
 //
 // Client Work was added the same night (Mark's "yes for 9/16"): the
 // Early Bird Plumbing reel is his credited videography, sourced from
-// the live grid after the search index missed it. It renders as a
-// card linking to the original post; its thumbnail is a frame from
-// the video, hosted here, because the CDN cover frame is blank.
+// the live grid after the search index missed it. It first rendered
+// as a card linking to the original post; since 2026-10-30 it plays
+// in a self-hosted native player (Mark supplied the original file
+// and directed that it play directly on the page, unmuted and
+// looping — browsers require a muted start, so the player begins
+// muted and unmutes on the first tap). An entry with a `src` field
+// renders as that player instead of a thumbnail card.
 export default {
   author: "Videos",
   intro:
@@ -31,6 +35,7 @@ export default {
           role: "Videography",
           note: "Sacramento pride piece for 916 Day — Tower Bridge to the American River — shot for Early Bird Plumbing. Video by Mark Coggins, as credited on the original post; photos by @leo_visions_.",
           thumb: "/videos/early-bird-916.jpg",
+          src: "/videos/early-bird-916.mp4",
           instagram: "https://www.instagram.com/p/DOq20ApEh9T/"
         }
       ]

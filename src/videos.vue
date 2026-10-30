@@ -52,7 +52,34 @@
               v-for="entry in section.entries.filter((e) => !e.feature)"
               :key="entry.videoId || entry.title"
             >
-              <a class="video-thumb" :href="entry.youtube || entry.instagram" target="_blank" rel="noopener" :aria-label="`Watch: ${entry.title}`">
+              <div v-if="entry.src" class="video-player">
+                <video
+                  ref="nativeVideo"
+                  class="video-native"
+                  :src="entry.src"
+                  :poster="entry.thumb"
+                  :title="entry.title"
+                  autoplay
+                  loop
+                  muted
+                  playsinline
+                  preload="auto"
+                  @click="toggleSound"
+                ></video>
+                <button
+                  type="button"
+                  class="video-sound"
+                  :aria-pressed="soundOn"
+                  @click="toggleSound"
+                >
+                  <i
+                    :class="soundOn ? 'fas fa-volume-up' : 'fas fa-volume-off'"
+                    aria-hidden="true"
+                  ></i>
+                  {{ soundOn ? 'Sound on' : 'Tap for sound' }}
+                </button>
+              </div>
+              <a v-else class="video-thumb" :href="entry.youtube || entry.instagram" target="_blank" rel="noopener" :aria-label="`Watch: ${entry.title}`">
                 <img
                   :src="entry.thumb || `https://i.ytimg.com/vi/${entry.videoId}/hqdefault.jpg`"
                   :alt="entry.title"
@@ -83,7 +110,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import Foot from './components/Foot.vue'
 import ThemeRoot from './components/ThemeRoot.vue'
 import { useReveal } from './composables/useReveal.js'
@@ -96,10 +123,46 @@ import baseData from './data/4fixtures.ts'
 // embedded player, everything else is a thumbnail card linking out —
 // the same card the Instagram pieces will use when the ASI section
 // lands, since IG embeds are unreliable.
+//
+// Self-hosted entries (a `src` field in the data) play directly on
+// the page instead: Mark's direction for the Early Bird reel
+// (2026-10-30) is on-page, unmuted, looping. Browsers refuse
+// autoplay with sound, so the player starts muted and the first
+// tap — on the video or its sound pill — unmutes it; it loops
+// throughout. Reduced-motion visitors get a paused player they
+// can start themselves.
 const { author, intro, sections, footer } = baseData
 
 const root = ref(null)
 useReveal(root)
+
+const nativeVideo = ref(null)
+const soundOn = ref(false)
+
+function playerEl() {
+  const v = nativeVideo.value
+  return Array.isArray(v) ? v[0] : v
+}
+
+function toggleSound() {
+  const v = playerEl()
+  if (!v) return
+  v.muted = !v.muted
+  soundOn.value = !v.muted
+  if (!v.muted) v.play().catch(() => {})
+}
+
+onMounted(() => {
+  const v = playerEl()
+  if (!v) return
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    v.removeAttribute('autoplay')
+    v.pause()
+    return
+  }
+  v.muted = true
+  v.play().catch(() => {})
+})
 </script>
 
 <style scoped>
@@ -172,6 +235,45 @@ useReveal(root)
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
   gap: 2rem 1.5rem;
+}
+
+.video-player {
+  position: relative;
+  max-width: 340px;
+  margin-bottom: 0.85rem;
+}
+
+.video-native {
+  display: block;
+  width: 100%;
+  aspect-ratio: 9 / 16;
+  border-radius: 12px;
+  background: #000;
+  object-fit: cover;
+  cursor: pointer;
+}
+
+.video-sound {
+  position: absolute;
+  right: 0.6rem;
+  bottom: 0.6rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 0.8rem;
+  border: 0;
+  border-radius: 999px;
+  background: rgb(0 0 0 / 0.55);
+  color: #fff;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.25s ease;
+}
+
+.video-sound:hover {
+  background: rgb(0 0 0 / 0.78);
 }
 
 .video-thumb {
@@ -260,7 +362,8 @@ useReveal(root)
 
 @media (prefers-reduced-motion: reduce) {
   .video-thumb img,
-  .video-play i {
+  .video-play i,
+  .video-sound {
     transition: none;
   }
 }
