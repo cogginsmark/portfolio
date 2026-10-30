@@ -238,27 +238,31 @@ export default {
   overflow: hidden;
   height: 275px;
   width: 500px;
+  /* The slide indicators, through the library's own variables:
+     round dots in the site's neutral grey, the active one solid,
+     lifted off the carousel's bottom edge. */
+  --vc-pgn-width: 0.5rem;
+  --vc-pgn-height: 0.5rem;
+  --vc-pgn-border-radius: 50%;
+  --vc-pgn-gap: 0.45rem;
+  --vc-pgn-background-color: rgb(127 127 127 / 35%);
+  --vc-pgn-active-color: rgb(127 127 127);
+  --vc-png-bottom: 0.6rem;
 }
 .styled-carousel :deep(.carousel__viewport),
 .styled-carousel :deep(.carousel__track),
 .styled-carousel :deep(.carousel__slide) {
   height: 100%;
 }
-.styled-carousel :deep(.carousel__pagination) {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  margin-top: 0px;
-}
-.styled-carousel :deep(.carousel__pagination-button::after) {
-  background-color: rgb(127 127 127 / 25%);
-  transition: 0.3s background-color ease-in-out;
-}
-.styled-carousel :deep(.carousel__pagination-button--active::after) {
-  background-color: rgb(127 127 127);
-  transition: 0.3s background-color ease-in-out;
-}
+/* No pagination overrides here on purpose: the old block forced
+   left: 0 / right: 0 / bottom: 0 onto the library's pagination,
+   which centres itself with left: 50% and translateX(-50%) — a
+   transform this block never reset, so the indicator row sat
+   shifted half its own width off centre, flush against the
+   bottom edge. Its ::after rules were also leftovers from the
+   previous carousel library, painting over this one's buttons.
+   The library's own positioning plus the variables above are
+   the whole design now. */
 @media screen and (max-width: 980px) {
   .styled-carousel {
     width: 100%;
