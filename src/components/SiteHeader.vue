@@ -18,6 +18,7 @@
       <nav id="primary-nav" class="primary-nav" :class="{ 'is-open': open }" aria-label="Primary">
         <router-link class="nav-link" to="/" @click="open = false"><span class="nav-text" data-text="Home">Home</span></router-link>
         <router-link class="nav-link" to="/about" @click="open = false"><span class="nav-text" data-text="About">About</span></router-link>
+        <router-link class="nav-link" to="/videos" @click="open = false"><span class="nav-text" data-text="Videos">Videos</span></router-link>
         <router-link class="nav-link" to="/contact" @click="open = false"><span class="nav-text" data-text="Contact">Contact</span></router-link>
         <LightToggle><span class="theme-toggle-label">{{ isDark ? 'Dark' : 'Light' }} mode</span></LightToggle>
       </nav>
