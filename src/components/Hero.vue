@@ -87,7 +87,11 @@ export default {
 }
 @media screen and (max-width: 980px) {
   .hero-text-container {
-    width: min(320px, calc(100% - 1.25rem));
+    /* No 320px step (2026-10-30 fix): on wide phones that cap was
+       narrower than the CTA pair, so the buttons could only stack
+       one per row. The column keeps its desktop measure and simply
+       goes fluid under it. */
+    width: min(390px, calc(100% - 1.25rem));
     margin: auto;
   }
 }
@@ -114,10 +118,13 @@ export default {
 }
 
 .cta-section {
-  /* The trio's shared width, set by its widest label (Journalism:
-     label, icon block and the glass button's padding), held as one
-     token so all three buttons are that width exactly. */
-  --cta-w: 10rem;
+  /* The trio's shared width, set by its widest label — measured,
+     not guessed: Resume / CV is the widest of the three in Manrope
+     at the button's size (label, icon block, label gap and the
+     glass button's padding come to ~168px), so the token sits a
+     step above that at 9.5rem and all three buttons are that width
+     exactly. */
+  --cta-w: 9.5rem;
 }
 
 .cta-section :deep(.styled-button) {

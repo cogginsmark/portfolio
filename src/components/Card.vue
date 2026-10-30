@@ -106,7 +106,12 @@ export default {
 
 <style scoped>
 .card {
-  width: 980px;
+  /* Fluid under the authored sizes (2026-10-30): the old fixed
+     steps (980/600/360) stranded wide phones on the 360 step while
+     the rest of the page went fluid. One cap per range now, and
+     the card takes whatever the viewport actually offers. */
+  width: 100%;
+  max-width: 980px;
   background: var(--card-background);
   box-shadow: var(--card-box-shadow);
   border-radius: 20px;
@@ -117,13 +122,13 @@ export default {
 }
 @media screen and (max-width: 980px) {
   .card {
-    width: 600px;
+    max-width: 600px;
     margin-bottom: 40px;
   }
 }
 @media screen and (max-width: 600px) {
   .card {
-    width: 360px;
+    max-width: 600px;
     margin-bottom: 40px;
   }
 }
@@ -137,14 +142,18 @@ export default {
 @media screen and (max-width: 980px) {
   .contents {
     padding: 40px 20px;
-    width: 560px;
+    /* Border-box at the card's full width: content lands at the
+       card's width less the padding, the old 560 content-box step
+       plus its padding having been the same total by accident. */
+    box-sizing: border-box;
+    width: 100%;
     margin: 0;
   }
 }
 @media screen and (max-width: 600px) {
   .contents {
     padding: 40px 20px;
-    width: 320px;
+    width: 100%;
   }
 }
 
@@ -157,12 +166,18 @@ export default {
 }
 @media screen and (max-width: 980px) {
   .left-container {
-    width: 560px;
+    width: 100%;
+    max-width: 560px;
+    /* The carousel lives inside this container at these widths
+       (see the template's windowWidth switch), so the desktop
+       margin-right — room for a carousel beside it that is not
+       there — goes, or the row overflows its own card. */
+    margin-right: 0;
   }
 }
 @media screen and (max-width: 600px) {
   .left-container {
-    width: 320px;
+    width: 100%;
   }
 }
 
@@ -237,15 +252,19 @@ export default {
 }
 @media screen and (max-width: 980px) {
   .styled-carousel {
-    width: 560px;
-    height: 308px;
+    width: 100%;
+    max-width: 560px;
+    /* Height follows width at the authored ratio instead of a
+       second fixed step. */
+    aspect-ratio: 560 / 308;
+    height: auto;
     margin: 20px 0px;
   }
 }
 @media screen and (max-width: 600px) {
   .styled-carousel {
-    width: 320px;
-    height: 176px;
+    width: 100%;
+    height: auto;
   }
 }
 </style>

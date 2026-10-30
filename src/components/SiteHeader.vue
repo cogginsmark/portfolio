@@ -102,10 +102,11 @@ export default {
   --nav-size: 0.95rem;
   max-width: 1180px;
   margin: 0 auto;
-  /* Bar height trimmed on Mark's word (2026-10-30): the hit floor
-     inside the controls is unchanged; the bar's own breathing room
-     above and below them is what gives. */
-  padding: 0.25rem 1.25rem;
+  /* Bar height trimmed on Mark's word (2026-10-30, twice): first
+     the bar's breathing room went, then the hit floor itself came
+     down (see --hit). No vertical padding remains; the controls
+     are the bar's height. */
+  padding: 0 1.25rem;
   display: flex;
   align-items: center;
   gap: 1rem;

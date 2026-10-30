@@ -22,11 +22,13 @@
   --leading-title: 1.15;
   --leading-text: 1.55;
   /* The hit floor every header control shares (Mark's nav pass,
-     2026-10-30): Apple's 44pt minimum target translated into the
-     site's own units — the root here is 18px, so 2.5rem lands at
-     45px — and held as one token, so the bar re-derives from a
-     single value instead of per-component measurements. */
-  --hit: 2.5rem;
+     2026-10-30), held as one token so the bar re-derives from a
+     single value instead of per-component measurements. It began
+     at Apple's 44pt translated into the site's units (2.5rem at
+     the 18px root); Mark then asked for a shorter bar twice, so
+     the floor itself gave: 2.25rem, ~40px, still above the 28pt
+     minimum the same guidelines allow. */
+  --hit: 2.25rem;
   /* Liquid Glass speaks the site's typeface. Its own theme variables
      (fill, foreground, track) follow its data-theme convention, which
      theme.js already drives on <html>. */
