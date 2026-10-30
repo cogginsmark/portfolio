@@ -46,7 +46,12 @@ export default {
   background-position: 50%;
   height: 800px;
   width: 100%;
-  min-width: 360px;
+  /* No fixed floor under the width (2026-10-30): this used to
+     carry min-width: 360px, the last hard minimum on the home
+     page — any viewport narrower than that (small phones, split
+     view, an app webview) got a hero wider than its screen and
+     a page that outgrew its own width. The hero is the width it
+     is given, full stop. */
   margin: auto;
 
   /* Responsive */
