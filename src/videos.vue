@@ -234,7 +234,10 @@ onUnmounted(() => {
 /* Unit rules: rem for font sizes and spacing, em for letter
    tracking, px reserved for hairline borders. */
 .videos-wrap {
-  max-width: 980px;
+  /* The media page takes the shell's measure (Mark's pick,
+     2026-10-30): 1180, the header's width, so the grid's columns
+     breathe and bylines stop squeezing. */
+  max-width: 1180px;
   margin: 0 auto;
   padding: 3rem 1.25rem 1rem;
 }
@@ -300,6 +303,13 @@ onUnmounted(() => {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
   gap: 2rem 1.5rem;
+}
+
+/* Cards are columns so the links row can pin to the foot (below):
+   notes vary in length, links should not. */
+.video-card {
+  display: flex;
+  flex-direction: column;
 }
 
 /* A section with a single card centres it (Mark's call for Client
@@ -426,6 +436,9 @@ onUnmounted(() => {
 
 .video-date {
   opacity: 0.65;
+  /* A date wraps as one piece or not at all (2026-10-30): no more
+     DECEMBER / 9, 2022 split across lines by the wide tracking. */
+  white-space: nowrap;
 }
 
 .video-note {
@@ -436,7 +449,10 @@ onUnmounted(() => {
 }
 
 .video-links {
+  /* Pinned to the card's foot: cards in a row share one link
+     baseline regardless of how long their notes run. */
   margin: 0;
+  margin-top: auto;
   font-size: 0.9rem;
   font-weight: 600;
 }
@@ -448,6 +464,7 @@ onUnmounted(() => {
    is the button there. */
 .video-cta-row {
   margin: 0;
+  margin-top: auto;
 }
 
 .video-cta {
