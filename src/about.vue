@@ -29,17 +29,6 @@
             </div>
           </dl>
         </section>
-
-        <section class="about-section" data-reveal aria-labelledby="awards-heading">
-          <h2 id="awards-heading" class="about-section-title">Awards</h2>
-          <dl class="experience-list">
-            <div class="experience-item" v-for="item in awards" :key="item.label">
-              <dt>{{ item.label }}</dt>
-              <dd>{{ item.value }}</dd>
-            </div>
-          </dl>
-          <p class="awards-note">{{ awardsNote }} <a v-bind:href="awardsSource.url" target="_blank" rel="noopener">{{ awardsSource.label }}</a></p>
-        </section>
       </div>
       <foot v-bind:author="author" v-bind:footer="footer" />
     </ThemeRoot>
@@ -59,19 +48,14 @@ import baseData from './data/2fixtures.ts'
 // intro with the portrait, a facts grid, and an experience list, all
 // from the structured data in 2fixtures.ts. The theme toggle that used
 // to be pasted into this view lives in the SiteHeader now.
-const { author, role, facts, experience, awards, awardsNote, awardsSource, footer } = baseData
+const { author, role, facts, experience, footer } = baseData
 
 const root = ref(null)
 useReveal(root)
 </script>
 
 <style>
-/* Hack until createGlobalStyles comes to vue-styled-components.
-   html carries only the flat fallback colour now: the theme
-   gradient moved to the shell's fixed .page-background layer
-   (App.vue), because a gradient painted on html sizes itself to
-   the whole document and shifted between pages of different
-   heights. */
+/* Hack until createGlobalStyles comes to vue-styled-components */
 html {
   background-color: var(--fallback-background-color);
 }
@@ -180,12 +164,6 @@ a {
 
 .experience-item {
   padding: 0;
-}
-
-.awards-note {
-  margin: 1.1rem 0 0;
-  line-height: 1.55;
-  opacity: 0.8;
 }
 
 [data-reveal] {
