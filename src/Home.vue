@@ -9,6 +9,8 @@
       v-bind:cta-url="hero.url"
       v-bind:cta2="hero.cta2"
       v-bind:cta2-url="hero.url2"
+      v-bind:cta3="hero.cta3"
+      v-bind:cta3-url="hero.url3"
     />
     <div class="card-container" id="products">
       <card

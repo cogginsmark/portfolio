@@ -7,6 +7,8 @@ export default {
       url: "/cv.pdf",
     cta2: "Journalism",
       url2: "https://csusignal.com/staff_name/mark-coggins/",
+    cta3: "Videos",
+      url3: "/videos",
     links: {
       name: "Resume",
       url: "https://portfolium.com/cogginsmark"
