@@ -2,13 +2,12 @@
   <div id="contact">
     <ThemeRoot>
     <section class="contact-main" aria-labelledby="contact-heading">
-      <h1 id="contact-heading" class="visually-hidden">Contact</h1>
-      <a class="contact-email" :href="`mailto:${email}`">{{ email }}</a>
+      <h1 id="contact-heading" class="contact-title">Contact me</h1>
       <div class="contact-actions">
         <StyledButton glass primary color="#363636" :href="`mailto:${email}`"><span class="text-button-text">Email</span><i class="fas fa-envelope"></i></StyledButton>
         <StyledButton glass secondary v-bind:href="cta.url"><span class="text-button-text">{{ cta.label }}</span><i class="fas fa-arrow-down"></i></StyledButton>
         <StyledButton glass secondary v-bind:href="journalism.url" target="_blank" rel="noopener"><span class="text-button-text">{{ journalism.label }}</span><span class="journalism-icon" aria-hidden="true">history_edu</span></StyledButton>
-        <StyledButton glass secondary v-for="(link, index) in footer.links" :key="`contact-link-${index}`" v-bind:href="link.url" v-bind:target="link.url.startsWith('http') ? '_blank' : undefined" v-bind:rel="link.url.startsWith('http') ? 'noopener' : undefined"><span class="text-button-text">{{ link.name }}</span><i v-bind:class="link.fa"></i></StyledButton>
+        <StyledButton glass secondary v-for="(link, index) in stackLinks" :key="`contact-link-${index}`" v-bind:href="link.url" target="_blank" rel="noopener"><span class="text-button-text">{{ link.name }}</span><i v-bind:class="link.fa"></i></StyledButton>
       </div>
     </section>
     <foot v-bind:author="author" v-bind:footer="footer" hide-links/>
@@ -30,6 +29,15 @@ export default {
       ...baseData
     }
   },
+  computed: {
+    // The profile links join the main stack as buttons, minus the
+    // mailto entry — the Email button at the top of the stack already
+    // covers it, so a second Email button at the end was redundant
+    // (Mark, 2026-10-30).
+    stackLinks() {
+      return this.footer.links.filter(link => !link.url.startsWith('mailto:'))
+    }
+  },
   components: {
     ThemeRoot,
     Foot,
@@ -39,9 +47,8 @@ export default {
 </script>
 
 <style scoped>
-/* The page is designed around two things only — the email and the
-   Resume / CV button — centred in the viewport space between the
-   header and the footer. */
+/* The page is a Linktree-style stack under a "Contact me" title,
+   centred in the viewport space between the header and the footer. */
 .contact-main {
   display: flex;
   flex-direction: column;
@@ -53,21 +60,16 @@ export default {
   min-height: 55vh;
 }
 
-.contact-email {
+/* The page header is a plain "Contact me" title in the same display
+   treatment the email address used to carry — the Email button in
+   the stack below is the mailto action (Mark, 2026-10-30). */
+.contact-title {
   font-size: clamp(1.5rem, 5.5vw, 2.75rem);
   font-weight: 700;
   letter-spacing: -0.01em;
   line-height: 1.15;
   color: var(--main-color);
-  text-decoration: none;
-  overflow-wrap: anywhere;
-  transition: opacity 0.2s ease;
-}
-
-.contact-email:hover {
-  opacity: 0.65;
-  text-decoration: underline;
-  text-underline-offset: 0.18em;
+  margin: 0;
 }
 
 /* Linktree-style: the actions are a single stacked column of
@@ -91,12 +93,4 @@ export default {
   text-align: center;
 }
 
-.visually-hidden {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip-path: inset(50%);
-  white-space: nowrap;
-}
 </style>
