@@ -78,7 +78,9 @@ export default {
 }
 
 .minor-button {
-  display: block;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--pill-icon-gap);
   width: fit-content;
   font-size: 0.7rem;
   letter-spacing: 0.11em;
@@ -91,6 +93,9 @@ export default {
   color: var(--theme-text);
   transform: translateY(0px);
   transition: 0.3s all ease-out;
+}
+.minor-button .text-button-text {
+  margin-right: 0;
 }
 .minor-button:hover {
   transform: translateX(2px);

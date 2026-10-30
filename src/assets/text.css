@@ -68,7 +68,8 @@
    1em square whether or not the icon font has arrived yet. */
 .styled-button i,
 .minor-button i,
-.video-cta i {
+.video-cta i,
+.video-sound i {
   inline-size: 1em;
   block-size: 1em;
   flex: none;

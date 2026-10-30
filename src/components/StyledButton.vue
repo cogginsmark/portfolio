@@ -1,10 +1,11 @@
 <template>
   <a
     class="styled-button"
-    :class="{ primary, secondary }"
+    :class="{ primary, secondary, 'lg-glass': glass, 'lg-button': glass, 'lg-button--glass': glass }"
     :style="primary ? { '--btn-primary-bg': color } : {}"
   >
-    <slot />
+    <span v-if="glass" class="lg-button__label"><slot /></span>
+    <slot v-else />
   </a>
 </template>
 
@@ -18,7 +19,10 @@ export default {
   props: {
     primary: Boolean,
     secondary: Boolean,
-    color: String
+    color: String,
+    // Liquid Glass experiment (branch feat/liquid-glass): render on
+    // the @zakisheriff/liquid-glass button system instead.
+    glass: Boolean
   }
 }
 </script>
@@ -36,6 +40,13 @@ export default {
   color: black;
   background: white;
   box-shadow: none;
+  /* Label and icon are flex children spaced by the site-wide
+     pill gap token (see global.css), not by a margin on the
+     label — the gap is the same whichever side the icon sits. */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--pill-icon-gap);
 }
 .styled-button.primary {
   color: #eee;
@@ -46,6 +57,36 @@ export default {
   color: var(--card-button-text);
   background: var(--card-button-background);
   box-shadow: var(--card-button-shadow-secondary);
+}
+
+/* Glass variant: the library owns the surface (fill, blur, edge,
+   shadow, typography); the legacy declarations above are stood down
+   where they would fight it. */
+.styled-button.lg-button {
+  background: transparent;
+  box-shadow: var(--lg-glass-shadow, var(--lg-shadow)), inset 0 0 0 0.5px var(--lg-edge);
+  line-height: 1;
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  text-transform: none;
+  padding: 0 calc(var(--lg-h, 44px) * 0.42);
+  height: var(--lg-h, 44px);
+}
+
+.styled-button.lg-button::before {
+  display: none;
+}
+
+.styled-button .text-button-text {
+  margin-right: 0;
+}
+
+/* The library's label row inherits its gap from the button (8px
+   in its stylesheet); the site's pill gap token governs instead,
+   so glass buttons space label and icon like every other pill. */
+.styled-button.lg-button .lg-button__label {
+  gap: var(--pill-icon-gap);
 }
 /* Won't transition background since card can't transition. */
 /* transition: 0.3s background; */
