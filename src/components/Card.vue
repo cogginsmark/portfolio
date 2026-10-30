@@ -6,7 +6,7 @@
           <h1 class="text-main-title">{{name}}</h1>
           <div class="medium">{{medium}}</div>
           <div class="carousel-container" v-if="windowWidth <= 980">
-            <Carousel v-if="images" class="styled-carousel" :items-to-show="1">
+            <Carousel v-if="images" class="styled-carousel" :items-to-show="1" :autoplay="autoplay" :wrap-around="true" :pause-autoplay-on-hover="true">
               <Slide v-for="(image, index) in images" :key="index">
                 <img class="carousel-image" loading="lazy" v-bind:src="image"/>
               </Slide>
@@ -36,7 +36,7 @@
         </div>
       </div>
       <div class="carousel-container" v-if="windowWidth > 980">
-        <Carousel v-if="images" class="styled-carousel" :items-to-show="1">
+        <Carousel v-if="images" class="styled-carousel" :items-to-show="1" :autoplay="autoplay" :wrap-around="true" :pause-autoplay-on-hover="true">
           <Slide v-for="(image, index) in images" :key="index">
             <img class="carousel-image" loading="lazy" v-bind:src="image"/>
           </Slide>
@@ -84,8 +84,17 @@ export default {
     images: Array
   },
   data() {
+    // Timed slides are back (Mark's call, 2026-10-30: the ASI and
+    // Flux carousels used to advance on their own). 4.5 seconds a
+    // slide, wrapping at the end and pausing while a pointer hovers;
+    // visitors who ask for reduced motion get the manual carousel
+    // back, so autoplay resolves to 0 for them.
+    const reduceMotion =
+      typeof window !== 'undefined' &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches
     return {
-        windowWidth: window.innerWidth
+        windowWidth: window.innerWidth,
+        autoplay: reduceMotion ? 0 : 4500
     }
   },
   methods: {
