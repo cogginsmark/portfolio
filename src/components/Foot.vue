@@ -3,7 +3,7 @@
     <div>
       <p class="author">{{footer.tagline}}</p>
     </div>
-    <div class="icon-container">
+    <div v-if="!hideLinks" class="icon-container">
       <a class="icons" v-for="(link, index) in footer.links" :key="`product-desctiption-${index}`" v-bind:href="link.url" target="_blank"><i v-bind:class="link.fa"></i></a>
     </div>
   </div>
@@ -15,7 +15,10 @@ export default {
     footer: {
       tagline: String,
       links: Array
-    }
+    },
+    // The Contact page carries its links as buttons in the main
+    // stack, so its footer is the byline alone (Mark, 2026-10-30).
+    hideLinks: Boolean
   }
 }
 </script>
@@ -66,4 +69,5 @@ export default {
 .icon-container {
   display: flex;
 }
+
 </style>
