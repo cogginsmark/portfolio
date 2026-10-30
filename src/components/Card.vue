@@ -13,7 +13,10 @@
                   <img class="carousel-image" loading="lazy" v-bind:src="image"/>
                 </Slide>
                 <template #addons>
-                  <Navigation />
+                  <Navigation>
+                    <template #prev><span class="carousel-nav-icon" aria-hidden="true">chevron_left</span></template>
+                    <template #next><span class="carousel-nav-icon" aria-hidden="true">chevron_right</span></template>
+                  </Navigation>
                   <Pagination />
                 </template>
               </Carousel>
@@ -47,7 +50,10 @@
               <img class="carousel-image" loading="lazy" v-bind:src="image"/>
             </Slide>
             <template #addons>
-              <Navigation />
+              <Navigation>
+                <template #prev><span class="carousel-nav-icon" aria-hidden="true">chevron_left</span></template>
+                <template #next><span class="carousel-nav-icon" aria-hidden="true">chevron_right</span></template>
+              </Navigation>
               <Pagination />
             </template>
           </Carousel>
@@ -325,7 +331,10 @@ export default {
   --vc-pgn-border-radius: 50%;
   --vc-pgn-gap: 0.45rem;
   --vc-pgn-background-color: rgb(127 127 127 / 35%);
-  --vc-pgn-active-color: rgb(127 127 127);
+  /* The active dot is the same grey as the rest (2026-10-30):
+     its weight marks it, not its colour — see the scale rule
+     below the shell styles. */
+  --vc-pgn-active-color: rgb(127 127 127 / 35%);
   --vc-png-bottom: 0.6rem;
   /* The overlaid prev/next controls, kept subtle (Mark's call,
      2026-10-30): small dark circles, white chevrons, sitting at
@@ -346,18 +355,40 @@ export default {
 .styled-carousel :deep(.carousel__prev),
 .styled-carousel :deep(.carousel__next) {
   opacity: 0.55;
-  transition: opacity 0.2s ease, background-color 0.2s ease;
 }
-.styled-carousel:hover :deep(.carousel__prev),
-.styled-carousel:hover :deep(.carousel__next),
+/* Emphasis is the icon's variable weight, not colour (Mark's
+   call, 2026-10-30): the chevrons are Material Symbols, and
+   hovering or pressing a nav button takes its glyph from
+   wght 400 to 700 while the circle and its colour stay put.
+   Keyboard focus still surfaces the whole button. */
 .styled-carousel :deep(.carousel__prev:focus-visible),
 .styled-carousel :deep(.carousel__next:focus-visible) {
   opacity: 1;
+}
+.carousel-nav-icon {
+  font-family: 'Material Symbols Rounded';
+  font-size: 1.3rem;
+  font-style: normal;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  transition: font-variation-settings 0.25s ease;
+}
+.styled-carousel :deep(.carousel__prev:hover) .carousel-nav-icon,
+.styled-carousel :deep(.carousel__next:hover) .carousel-nav-icon,
+.styled-carousel :deep(.carousel__prev:active) .carousel-nav-icon,
+.styled-carousel :deep(.carousel__next:active) .carousel-nav-icon {
+  font-variation-settings: 'FILL' 1, 'wght' 700, 'GRAD' 0, 'opsz' 24;
 }
 .styled-carousel :deep(.carousel__viewport),
 .styled-carousel :deep(.carousel__track),
 .styled-carousel :deep(.carousel__slide) {
   height: 100%;
+  /* No hand over the carousel (Mark's call, 2026-10-30): the
+     picture area keeps the plain cursor; only the actual
+     controls carry a pointer. */
+  cursor: default;
 }
 /* The shell hugs the carousel's own box so the layer under it
    lines up exactly; the bed is the crossfade's colour layer,
@@ -375,6 +406,14 @@ export default {
   inset: 0;
   border-radius: 10px;
   background: #101216;
+}
+.styled-carousel :deep(.carousel__pagination-button) {
+  transition: transform 0.25s ease;
+}
+/* The active indicator's weight (Mark's call, 2026-10-30):
+   every dot the same grey; the current one is heavier. */
+.styled-carousel :deep(.carousel__pagination-button--active) {
+  transform: scale(1.4);
 }
 /* No pagination overrides here on purpose: the old block forced
    left: 0 / right: 0 / bottom: 0 onto the library's pagination,

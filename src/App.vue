@@ -59,6 +59,24 @@ export default {
   pointer-events: none;
 }
 
+/* On phones the layer swaps the live gradient for the
+   offline-rendered picture of it (Mark's call, 2026-10-30):
+   the CSS gradient never did manage the Safari bar, so the
+   background is a rendered image here, sized to cover, with
+   theme.js keeping the bar's own theme-color matched to the
+   gradient's end. */
+@media screen and (max-width: 40rem) {
+  .page-background {
+    background-image: url("/bg-gradient-light.png");
+    background-size: cover;
+    background-position: center;
+  }
+
+  :root[data-theme="dark"] .page-background {
+    background-image: url("/bg-gradient-dark.png");
+  }
+}
+
 /* Sticky-footer shell: the column always fills the viewport, <main>
    takes whatever height is left, and each routed page stretches to
    fill it — so on short pages the footer ends at the bottom of the

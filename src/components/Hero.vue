@@ -41,7 +41,7 @@ export default {
     // hardcoded layer, so that file is the one to wait for
     // there.
     const isLight = document.documentElement.dataset.theme === 'light'
-    let src = '/falcon-dark-minus-50-brightness2.png'
+    let src = '/falcon-dark-minus-50-brightness2.webp'
     if (!isLight) {
       const varValue = getComputedStyle(document.documentElement)
         .getPropertyValue('--hero-background-image')

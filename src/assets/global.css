@@ -85,6 +85,20 @@ html {
   background-repeat: no-repeat;
 }
 
+/* Phones get the offline-rendered background image at the root
+   too (2026-10-30), matching the shell layer's swap in App.vue. */
+@media screen and (max-width: 40rem) {
+  html {
+    background-image: url("/bg-gradient-light.png");
+    background-size: cover;
+    background-position: center;
+  }
+
+  html[data-theme="dark"] {
+    background-image: url("/bg-gradient-dark.png");
+  }
+}
+
 a {
   text-decoration: none;
   position: relative;
@@ -109,7 +123,7 @@ a {
   content: "";
   position: absolute;
   inset: 0;
-  background-image: url("/falcon-dark-minus-50-brightness2.png");
+  background-image: url("/falcon-dark-minus-50-brightness2.webp");
   background-size: cover;
   background-position: 50%;
   filter: invert(1);

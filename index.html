@@ -11,6 +11,12 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+    <!-- Safari paints its bar from this colour; theme.js keeps it
+         matched to the current theme gradient's end colour. -->
+    <meta name="theme-color" content="#dddddd">
+    <!-- The hero cover is fetched from the first page, whichever
+         it is, so arriving Home never waits on it. -->
+    <link rel="preload" as="image" href="/falcon-dark-minus-50-brightness2.webp">
     <meta name="description" content="Graphic Design portfolio">
     <meta property="og:title" content="Mark Coggins" />
     <meta property="og:description" content="Graphic Design portfolio" />

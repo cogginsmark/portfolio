@@ -221,6 +221,34 @@ export default {
     overflow-x: auto;
   }
 }
+
+/* On phones the list goes vertical (Mark's call, 2026-10-30):
+   no marquee — the marks stack in a centred column, the
+   duplicated set and the text line retire. */
+@media screen and (max-width: 40rem) {
+  .logo-container {
+    overflow: visible;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+  .logo-track {
+    display: flex;
+    flex-direction: column;
+    width: auto;
+    animation: none;
+  }
+  .logo-set {
+    flex-direction: column;
+    align-items: center;
+    gap: 1.75rem;
+  }
+  .logo-set + .logo-set {
+    display: none;
+  }
+  .logo-list-text {
+    display: none;
+  }
+}
 </style>
 
 <style>

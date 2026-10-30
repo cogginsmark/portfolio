@@ -32,6 +32,17 @@ export const adjustTheme = () => {
   document.documentElement.style.setProperty('--main-background-color', theme.color.background)
   document.documentElement.style.setProperty('--fallback-background-color', theme.color.fallbackBackground)
   document.documentElement.style.setProperty('--link-color', theme.color.link)
+  // Safari paints the strip behind its bar from theme-color, not
+  // from the page: keep it at the gradient's own end colour (the
+  // last hex in its definition) so the bar area continues the
+  // background instead of cutting it (2026-10-30).
+  const themeColorMeta = document.querySelector('meta[name="theme-color"]')
+  if (themeColorMeta) {
+    const hexes = theme.color.background.match(/#[0-9a-fA-F]{3,6}\b/g)
+    if (hexes && hexes.length) {
+      themeColorMeta.setAttribute('content', hexes[hexes.length - 1])
+    }
+  }
 }
 
 export const toggleTheme = () => {

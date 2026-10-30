@@ -1,7 +1,7 @@
 export default {
   hero: {
     background: {
-      image: "/falcon-dark-minus-50-brightness2.png",
+      image: "/falcon-dark-minus-50-brightness2.webp",
     }
   },
   color: {
