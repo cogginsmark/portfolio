@@ -6,11 +6,12 @@
           <h1 class="text-main-title">{{name}}</h1>
           <div class="medium">{{medium}}</div>
           <div class="carousel-container" v-if="windowWidth <= 980">
-            <Carousel v-if="images" class="styled-carousel" :items-to-show="1" :autoplay="autoplay" :wrap-around="true" :pause-autoplay-on-hover="true">
+            <Carousel v-if="images" class="styled-carousel" :items-to-show="1" :autoplay="autoplay" :wrap-around="true" :pause-autoplay-on-hover="true" slide-effect="fade" :transition="800">
               <Slide v-for="(image, index) in images" :key="index">
                 <img class="carousel-image" loading="lazy" v-bind:src="image"/>
               </Slide>
               <template #addons>
+                <Navigation />
                 <Pagination />
               </template>
             </Carousel>
@@ -36,11 +37,12 @@
         </div>
       </div>
       <div class="carousel-container" v-if="windowWidth > 980">
-        <Carousel v-if="images" class="styled-carousel" :items-to-show="1" :autoplay="autoplay" :wrap-around="true" :pause-autoplay-on-hover="true">
+        <Carousel v-if="images" class="styled-carousel" :items-to-show="1" :autoplay="autoplay" :wrap-around="true" :pause-autoplay-on-hover="true" slide-effect="fade" :transition="800">
           <Slide v-for="(image, index) in images" :key="index">
             <img class="carousel-image" loading="lazy" v-bind:src="image"/>
           </Slide>
           <template #addons>
+            <Navigation />
             <Pagination />
           </template>
         </Carousel>
@@ -50,7 +52,7 @@
 </template>
 
 <script>
-import { Carousel, Slide, Pagination } from 'vue3-carousel'
+import { Carousel, Slide, Pagination, Navigation } from 'vue3-carousel'
 import 'vue3-carousel/carousel.css'
 import StyledButton from './StyledButton.vue'
 
@@ -63,6 +65,7 @@ export default {
     Carousel,
     Slide,
     Pagination,
+    Navigation,
     StyledButton
   },
   props: {
@@ -85,16 +88,17 @@ export default {
   },
   data() {
     // Timed slides are back (Mark's call, 2026-10-30: the ASI and
-    // Flux carousels used to advance on their own). 4.5 seconds a
-    // slide, wrapping at the end and pausing while a pointer hovers;
-    // visitors who ask for reduced motion get the manual carousel
-    // back, so autoplay resolves to 0 for them.
+    // Flux carousels used to advance on their own). Six seconds a
+    // slide — 4.5 read as too fast — wrapping at the end and
+    // pausing while a pointer hovers; visitors who ask for
+    // reduced motion get the manual carousel back, so autoplay
+    // resolves to 0 for them.
     const reduceMotion =
       typeof window !== 'undefined' &&
       window.matchMedia('(prefers-reduced-motion: reduce)').matches
     return {
         windowWidth: window.innerWidth,
-        autoplay: reduceMotion ? 0 : 4500
+        autoplay: reduceMotion ? 0 : 6000
     }
   },
   methods: {
@@ -248,6 +252,32 @@ export default {
   --vc-pgn-background-color: rgb(127 127 127 / 35%);
   --vc-pgn-active-color: rgb(127 127 127);
   --vc-png-bottom: 0.6rem;
+  /* The overlaid prev/next controls, kept subtle (Mark's call,
+     2026-10-30): small dark circles, white chevrons, sitting at
+     half strength until the carousel is hovered or they are
+     focused. */
+  --vc-nav-width: 2rem;
+  --vc-nav-height: 2rem;
+  --vc-nav-border-radius: 50%;
+  --vc-nav-background: rgb(0 0 0 / 0.28);
+  --vc-nav-color: #fff;
+}
+.styled-carousel :deep(.carousel__prev) {
+  inset-inline-start: 0.5rem;
+}
+.styled-carousel :deep(.carousel__next) {
+  inset-inline-end: 0.5rem;
+}
+.styled-carousel :deep(.carousel__prev),
+.styled-carousel :deep(.carousel__next) {
+  opacity: 0.55;
+  transition: opacity 0.2s ease, background-color 0.2s ease;
+}
+.styled-carousel:hover :deep(.carousel__prev),
+.styled-carousel:hover :deep(.carousel__next),
+.styled-carousel :deep(.carousel__prev:focus-visible),
+.styled-carousel :deep(.carousel__next:focus-visible) {
+  opacity: 1;
 }
 .styled-carousel :deep(.carousel__viewport),
 .styled-carousel :deep(.carousel__track),

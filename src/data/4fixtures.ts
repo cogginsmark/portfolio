@@ -33,6 +33,8 @@ export default {
           title: "916 Day: Early Bird Plumbing",
           date: "September 16, 2025",
           role: "Videography",
+          software:
+            "Adobe Firefly · Adobe Express · Adobe After Effects · Adobe Illustrator",
           note: "Sacramento pride piece for 916 Day, edited for Early Bird Plumbing from Tower Bridge to the American River. Video by Mark Coggins, as credited on the original post; photos by @leo_visions_.",
           thumb: "/videos/early-bird-916.jpg",
           src: "/videos/early-bird-916.mp4",

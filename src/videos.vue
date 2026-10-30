@@ -102,6 +102,7 @@
                 <span class="video-role">{{ entry.role }}</span>
                 <span v-if="entry.date" class="video-date"> · {{ entry.date }}</span>
               </p>
+              <p v-if="entry.software" class="video-software">{{ entry.software }}</p>
               <p class="video-note">{{ entry.note }}</p>
               <p v-if="entry.src && entry.instagram" class="video-cta-row">
                 <a class="video-cta" :href="entry.instagram" target="_blank" rel="noopener">View on Instagram<i class="fas fa-play" aria-hidden="true"></i></a>
@@ -491,6 +492,17 @@ onUnmounted(() => {
 
 .video-role {
   font-weight: 700;
+}
+
+/* The tools line, in the homepage project cards' medium
+   treatment: small, light, widely tracked, sitting between the
+   byline and the note. */
+.video-software {
+  margin: 0 0 0.45rem;
+  font-size: 0.75rem;
+  font-weight: 300;
+  letter-spacing: 0.1em;
+  opacity: 0.75;
 }
 
 .video-date {

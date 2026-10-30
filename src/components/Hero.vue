@@ -117,29 +117,24 @@ export default {
 .cta-section {
   margin: 2.25rem 0;
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   justify-content: flex-start;
   gap: 1rem;
-}
-
-.cta-section {
-  /* The trio's shared width, set by its widest label — measured,
-     not guessed: Resume / CV is the widest of the three in Manrope
-     at the button's size (label, icon block, label gap and the
-     glass button's padding come to ~168px), so the token sits a
-     step above that at 9.5rem and all three buttons are that width
-     exactly. */
-  --cta-w: 9.5rem;
+  /* The row is wider than the text column it starts in (Mark's
+     call, 2026-10-30: the three buttons side-by-side). At the
+     shared token width they needed ~465px the 390px column
+     doesn't have, so the third always wrapped; the row now
+     breaks out to its own measure and the trio takes equal
+     thirds of it on one line. */
+  width: min(36rem, calc(100vw - 2.5rem));
 }
 
 .cta-section :deep(.styled-button) {
   margin-right: 0;
-  /* Equal-width trio (Mark's spec, 2026-10-30): all three buttons
-     share one width, the widest label sets it, and the third wraps
-     to land exactly under the first — a deliberate 2-over-1 stack
-     with a shared left edge. */
-  flex: 0 0 auto;
-  width: var(--cta-w);
+  /* Equal thirds of the broken-out row, labels centred, no
+     wrapping: Resume / CV, Journalism and Videos in one line. */
+  flex: 1 1 0;
+  width: auto;
   max-width: 100%;
   white-space: nowrap;
   display: flex;
@@ -155,8 +150,8 @@ export default {
    narrower than that — narrower phones, page zoom, an app
    webview — so it stacked. As columns, each button takes half
    of whatever width the hero actually has and the pair always
-   builds exactly to the right edge; the token governs desktop
-   only. The third button keeps the 2-over-1 shape, taking the
+   builds exactly to the right edge; the single row of three
+   governs wide screens. The third button keeps the 2-over-1 shape, taking the
    first column of the next row at the same width as the pair. */
 @media screen and (max-width: 61.25rem) {
   .cta-section {
