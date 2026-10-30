@@ -1,5 +1,7 @@
 <template>
   <div id="app">
+    <div class="page-background" aria-hidden="true"></div>
+    <LiquidGlassFilter />
     <a class="skip-link" href="#main">Skip to content</a>
     <SiteHeader />
     <main id="main">
@@ -14,18 +16,50 @@
 
 <script>
 import SiteHeader from './components/SiteHeader.vue'
+import LiquidGlassFilter from './components/LiquidGlassFilter.vue'
 
 // The app shell: skip link, the shared SiteHeader, and the routed page
 // inside a <main> landmark with a short fade/slide between routes.
 export default {
   name: 'App',
   components: {
-    SiteHeader
+    SiteHeader,
+    LiquidGlassFilter
+  },
+  mounted() {
+    // Liquid Glass refraction is a Chromium-only backdrop capability
+    // (the library's own canRefractBackdrop test); only there do the
+    // glass surfaces gain the SVG filter. Everywhere else they keep
+    // the frosted blur the stylesheet gives them.
+    const ua = navigator.userAgent
+    if (/Chrom(e|ium)\/|Edg\//.test(ua) && !/CriOS|FxiOS|EdgiOS/.test(ua)) {
+      document.documentElement.style.setProperty('--lg-filter', 'url(#liquid-glass-refract-3)')
+    }
   }
 }
 </script>
 
 <style scoped>
+/* The theme gradient lives on this fixed, viewport-sized layer
+   instead of on <html> (Mark's background-shift bug, 2026-10-30):
+   a gradient's geometry derives from the box it is painted on,
+   and html's box is the whole document, so the wash stretched on
+   long pages (Home) and compressed on short ones (About) and
+   visibly jumped between them. Locked to the viewport, the
+   gradient is the same size, angle and stop positions on every
+   page. It sits behind everything (negative z-index over the
+   flat fallback colour html now carries) and never takes
+   pointer events. background-attachment: fixed on html would
+   say the same thing in one line, but iOS Safari handles fixed
+   root backgrounds badly, so the layer does it instead. */
+.page-background {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: var(--main-background-color);
+  pointer-events: none;
+}
+
 /* Sticky-footer shell: the column always fills the viewport, <main>
    takes whatever height is left, and each routed page stretches to
    fill it — so on short pages the footer ends at the bottom of the

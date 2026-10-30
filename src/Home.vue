@@ -97,6 +97,13 @@ export default {
 @media screen and (max-width: 61.25rem) {
   .card-container {
     margin-top: -5.25rem;
+    /* The gutter lives on the container, not on each card
+       (2026-10-30): the fluid pass took the cards to width 100%
+       with nothing at the sides, so on a phone they ran edge to
+       edge. The site's standard 1.25rem side padding insets the
+       major cards, the minor cards and the logo strip together,
+       under their own caps. */
+    padding-inline: 1.25rem;
   }
 }
 @media screen and (max-width: 37.5rem) {
@@ -216,9 +223,13 @@ export default {
 </style>
 
 <style>
-/* Hack until createGlobalStyles comes to vue-styled-components */
+/* Hack until createGlobalStyles comes to vue-styled-components.
+   html carries only the flat fallback colour now: the theme
+   gradient moved to the shell's fixed .page-background layer
+   (App.vue), because a gradient painted on html sizes itself to
+   the whole document and shifted between pages of different
+   heights. */
 html {
-  background: var(--main-background-color);
   background-color: var(--fallback-background-color);
 }
 

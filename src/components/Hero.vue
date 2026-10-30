@@ -143,16 +143,29 @@ export default {
   text-align: center;
 }
 
-/* On mobile the pair stays side by side on one row and the third
-   wraps under the first at the same width. */
+/* On mobile the row stops being a fixed-width flex row and
+   becomes two true columns (Mark's "build out to the right",
+   2026-10-30): at the shared token width the pair plus its gap
+   is 360px of furniture, which physically cannot fit columns
+   narrower than that — narrower phones, page zoom, an app
+   webview — so it stacked. As columns, each button takes half
+   of whatever width the hero actually has and the pair always
+   builds exactly to the right edge; the token governs desktop
+   only. The third button keeps the 2-over-1 shape, taking the
+   first column of the next row at the same width as the pair. */
 @media screen and (max-width: 61.25rem) {
   .cta-section {
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .cta-section :deep(.styled-button) {
-    padding-left: 1rem;
-    padding-right: 1rem;
+    width: auto;
+    max-width: none;
+  }
+
+  .cta-section :deep(.styled-button:nth-child(3)) {
+    grid-column: 1;
   }
 }
 
