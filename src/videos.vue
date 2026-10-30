@@ -46,7 +46,13 @@
             </p>
           </article>
 
-          <div class="video-grid">
+          <div
+            class="video-grid"
+            :class="{
+              'video-grid--single':
+                section.entries.filter((e) => !e.feature).length === 1
+            }"
+          >
             <article
               class="video-card"
               v-for="entry in section.entries.filter((e) => !e.feature)"
@@ -59,11 +65,10 @@
                   :src="entry.src"
                   :poster="entry.thumb"
                   :title="entry.title"
-                  autoplay
                   loop
                   muted
                   playsinline
-                  preload="auto"
+                  preload="none"
                   @click="toggleSound"
                 ></video>
                 <button
@@ -110,7 +115,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue'
+import { onMounted, onUnmounted, ref } from 'vue'
 import Foot from './components/Foot.vue'
 import ThemeRoot from './components/ThemeRoot.vue'
 import { useReveal } from './composables/useReveal.js'
@@ -129,8 +134,11 @@ import baseData from './data/4fixtures.ts'
 // (2026-10-30) is on-page, unmuted, looping. Browsers refuse
 // autoplay with sound, so the player starts muted and the first
 // tap — on the video or its sound pill — unmutes it; it loops
-// throughout. Reduced-motion visitors get a paused player they
-// can start themselves.
+// throughout. The player is lazy (also his call): nothing of the
+// video file loads with the page — playback starts when the
+// player nears the viewport, so the page itself loads fast and
+// only the poster frame shows until then. Reduced-motion
+// visitors get an unloaded player they can start with a tap.
 const { author, intro, sections, footer } = baseData
 
 const root = ref(null)
@@ -138,6 +146,7 @@ useReveal(root)
 
 const nativeVideo = ref(null)
 const soundOn = ref(false)
+let playerObserver = null
 
 function playerEl() {
   const v = nativeVideo.value
@@ -156,12 +165,33 @@ onMounted(() => {
   const v = playerEl()
   if (!v) return
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    v.removeAttribute('autoplay')
-    v.pause()
     return
   }
   v.muted = true
-  v.play().catch(() => {})
+  if (!('IntersectionObserver' in window)) {
+    v.play().catch(() => {})
+    return
+  }
+  playerObserver = new IntersectionObserver(
+    (entries) => {
+      for (const entry of entries) {
+        if (entry.isIntersecting) {
+          v.play().catch(() => {})
+          playerObserver.disconnect()
+          playerObserver = null
+        }
+      }
+    },
+    { rootMargin: '200px' }
+  )
+  playerObserver.observe(v)
+})
+
+onUnmounted(() => {
+  if (playerObserver) {
+    playerObserver.disconnect()
+    playerObserver = null
+  }
 })
 </script>
 
@@ -235,6 +265,23 @@ onMounted(() => {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
   gap: 2rem 1.5rem;
+}
+
+/* A section with a single card centres it (Mark's call for Client
+   Work while it holds one piece, 2026-10-30); the moment a second
+   entry joins the section, the normal grid flow takes over again. */
+.video-grid--single {
+  grid-template-columns: 1fr;
+  justify-items: center;
+}
+
+.video-grid--single .video-card {
+  max-width: 340px;
+  text-align: center;
+}
+
+.video-grid--single .video-player {
+  margin-inline: auto;
 }
 
 .video-player {
