@@ -21,6 +21,7 @@
         v-bind:copy="product.copy"
         v-bind:links="product.links"
         v-bind:images="product.images"
+        v-bind:autoplay-ms="product.autoplayMs"
       />
       <div class="minor-card-container">
         <minor-card

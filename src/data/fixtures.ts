@@ -40,6 +40,7 @@ export default {
       },
       {
         name: "Flux",
+        autoplayMs: 8000,
         medium: "Photoshop · Illustrator · Premiere Pro",
         summary: "Brand creation.",
         copy: [

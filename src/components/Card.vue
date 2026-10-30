@@ -84,7 +84,12 @@ export default {
         url: String
       }
     },
-    images: Array
+    images: Array,
+    // Optional per-card autoplay period. The ASI and Flux
+    // carousels run asynchronously (Mark's call, 2026-10-30):
+    // different periods — 6s here by default, 8s for Flux in the
+    // data — so their fades never lock into step.
+    autoplayMs: Number
   },
   data() {
     // Timed slides are back (Mark's call, 2026-10-30: the ASI and
@@ -98,7 +103,7 @@ export default {
       window.matchMedia('(prefers-reduced-motion: reduce)').matches
     return {
         windowWidth: window.innerWidth,
-        autoplay: reduceMotion ? 0 : 6000
+        autoplay: reduceMotion ? 0 : (this.autoplayMs || 6000)
     }
   },
   methods: {
