@@ -25,27 +25,22 @@ export default {
 
 <style scoped>
 .app-footer {
-  width: 884px;
-  /* margin-top: auto is the sticky-footer half of the shell in
+  /* The footer takes the shell's measure (Mark's alignment pass,
+     2026-10-30): full fluid width up to the header's 1180px, with
+     the header's own side padding, so its edges agree with the bar
+     above on every page. The old fixed steps (884/560/320px)
+     matched nothing on the site and are gone.
+     margin-top: auto is the sticky-footer half of the shell in
      App.vue: on short pages it pushes the footer to the bottom of
      the viewport; the padding keeps its breathing room on tall ones. */
+  width: 100%;
+  max-width: 1180px;
   margin: 0 auto;
   margin-top: auto;
-  padding: 4rem 3rem;
+  padding: 4rem 1.25rem;
   display: flex;
   font-weight: bold;
   flex-direction: column;
-}
-@media screen and (max-width: 61.25rem) {
-  .app-footer {
-    padding: 4rem 1.25rem;
-    width: 560px;
-  }
-}
-@media screen and (max-width: 37.5rem) {
-  .app-footer {
-    width: 320px;
-  }
 }
 
 .author {
