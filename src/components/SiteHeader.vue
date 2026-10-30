@@ -5,15 +5,21 @@
         <span class="brand-name">Mark Coggins</span>
       </router-link>
 
-      <button
-        type="button"
-        class="nav-toggle"
-        :aria-expanded="open ? 'true' : 'false'"
-        aria-controls="theme-switch"
-        @click="open = !open"
-      >
-        <span class="nav-toggle-label">{{ open ? 'Close' : 'Menu' }}</span>
-      </button>
+      <div class="mobile-menu-wrap">
+        <button
+          type="button"
+          class="nav-toggle"
+          :aria-expanded="open ? 'true' : 'false'"
+          aria-controls="theme-switch"
+          @click="open = !open"
+        >
+          <span class="nav-toggle-label">{{ open ? 'Close' : 'Menu' }}</span>
+        </button>
+
+        <div id="theme-switch" class="switch-wrap" :class="{ 'is-open': open }">
+          <LightToggle><span class="theme-toggle-label">{{ isDark ? 'Dark' : 'Light' }} mode</span></LightToggle>
+        </div>
+      </div>
 
       <nav id="primary-nav" class="primary-nav" aria-label="Primary">
         <router-link class="nav-link" to="/"><span class="nav-text" data-text="Home">Home</span></router-link>
@@ -21,10 +27,6 @@
         <router-link class="nav-link" to="/videos"><span class="nav-text" data-text="Videos">Videos</span></router-link>
         <router-link class="nav-link" to="/contact"><span class="nav-text" data-text="Contact">Contact</span></router-link>
       </nav>
-
-      <div id="theme-switch" class="switch-wrap" :class="{ 'is-open': open }">
-        <LightToggle><span class="theme-toggle-label">{{ isDark ? 'Dark' : 'Light' }} mode</span></LightToggle>
-      </div>
     </div>
   </header>
 </template>
@@ -187,6 +189,18 @@ export default {
   box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--main-color) 30%, transparent);
 }
 
+/* The Menu button and the theme switch share a wrapper so the
+   mobile dropdown can hook to the button itself (2026-10-30):
+   the wrapper is ordered after the nav on desktop (where the
+   button is hidden and the switch sits in the bar) and before
+   it on mobile, where it carries the positioning the panel
+   anchors to. */
+.mobile-menu-wrap {
+  display: flex;
+  align-items: center;
+  order: 2;
+}
+
 /* The theme toggle lives in the header now; undo the sticky/float
    positioning it needed when it sat at the bottom of each view. On
    desktop the switch sits in the bar right after the nav; on mobile
@@ -292,9 +306,15 @@ export default {
     transition: background-color 0.25s ease, box-shadow 0.25s ease, color 0.2s ease;
   }
 
+  /* On mobile the wrapper takes the bar's first slot and the
+     positioning hook; the button just fills it. */
+  .mobile-menu-wrap {
+    order: 0;
+    position: relative;
+  }
+
   .nav-toggle {
     display: inline-flex;
-    order: 0;
     /* The mobile links' own sizes, at their full hitbox: the
        Menu button is always a visible button, so it holds the
        padding the links grow into on hover. */
@@ -317,13 +337,18 @@ export default {
   .switch-wrap {
     display: none;
     position: absolute;
-    /* A floating rounded card (Mark's call, 2026-10-30): inset
-       from the bar's corner, one border all around, and a solid
-       surface — the theme's fallback colour — with no gradient
-       in it. It still drops from under the Menu button on the
-       left. */
-    top: calc(100% + 0.5rem);
-    left: 0.5rem;
+    /* A floating card with complete rounded corners, hooked to
+       the Menu button (Mark's calls, 2026-10-30): it anchors to
+       the button's own wrapper, so it drops from directly under
+       the button — its left edge on the button's left edge —
+       wherever the centred bar places them, instead of floating
+       loose in the header. One border all around, a solid
+       surface — the theme's fallback colour — no gradient. The
+       drop clears the bar by the same half rem as before: the
+       extra .65 is the bar's own bottom padding, which the
+       wrapper does not span. */
+    top: calc(100% + 0.5rem + 0.65rem);
+    left: 0;
     margin: 0;
     padding: 0.6rem 1rem 0.8rem;
     background: var(--fallback-background-color);
