@@ -126,11 +126,17 @@ export default {
   align-items: center;
   justify-content: center;
   color: var(--main-color);
-  padding: 0.45rem 0.9rem;
+  /* At rest the links are spaced by their text: a whisper of
+     inline padding and the row reads as words, not buttons.
+     When a link is hovered, focused or current, its pill grows
+     to the full hitbox padding and the row shifts to make room
+     (Mark's feature, 2026-10-30) — the padding transition below
+     is what makes the shift glide instead of jump. */
+  padding: 0.45rem 0.25rem;
   border-radius: 999px;
   font-size: 0.95rem;
   line-height: 1.25;
-  transition: background-color 0.2s ease, color 0.2s ease;
+  transition: background-color 0.2s ease, color 0.2s ease, padding 0.25s ease;
 }
 
 /* The label carries a hidden bold twin (::after, height 0) so every
@@ -156,6 +162,15 @@ export default {
   background: color-mix(in srgb, var(--main-color) 8%, transparent);
 }
 
+/* The hitbox states: hover and keyboard focus grow the pill to
+   its full width, and the current page's link — whose button is
+   always showing — holds the full hitbox at rest too. */
+.nav-link:hover,
+.nav-link:focus-visible,
+.nav-link.router-link-exact-active {
+  padding-inline: 0.9rem;
+}
+
 /* The current page is carried by the bold text. The pill itself sits
    faded and only comes fully forward on hover or press. */
 .nav-link.router-link-exact-active {
@@ -163,7 +178,7 @@ export default {
   color: var(--main-color);
   font-weight: 700;
   box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--main-color) 12%, transparent);
-  transition: background-color 0.25s ease, box-shadow 0.25s ease, color 0.2s ease;
+  transition: background-color 0.25s ease, box-shadow 0.25s ease, color 0.2s ease, padding 0.25s ease;
 }
 
 .nav-link.router-link-exact-active:hover,
@@ -232,8 +247,14 @@ export default {
   }
 
   .nav-link {
-    padding: 0.4rem 0.5rem;
+    padding: 0.4rem 0.15rem;
     font-size: 0.88rem;
+  }
+
+  .nav-link:hover,
+  .nav-link:focus-visible,
+  .nav-link.router-link-exact-active {
+    padding-inline: 0.5rem;
   }
 
   .nav-toggle {
