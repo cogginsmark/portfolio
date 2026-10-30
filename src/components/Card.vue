@@ -6,15 +6,18 @@
           <h1 class="text-main-title">{{name}}</h1>
           <div class="medium">{{medium}}</div>
           <div class="carousel-container" v-if="windowWidth <= 980">
-            <Carousel v-if="images" class="styled-carousel" :items-to-show="1" :autoplay="autoplay" :wrap-around="true" :pause-autoplay-on-hover="true" slide-effect="fade" :transition="1200">
-              <Slide v-for="(image, index) in images" :key="index">
-                <img class="carousel-image" loading="lazy" v-bind:src="image"/>
-              </Slide>
-              <template #addons>
-                <Navigation />
-                <Pagination />
-              </template>
-            </Carousel>
+            <div v-if="images" class="carousel-shell" @pointerdown.capture="onNavPress">
+              <div class="carousel-bed" :style="{ backgroundColor: bedColor }" aria-hidden="true"></div>
+              <Carousel class="styled-carousel" :items-to-show="1" :autoplay="autoplay" :wrap-around="true" :pause-autoplay-on-hover="true" :slide-effect="navEffect" :transition="navEffect === 'fade' ? 1200 : 450" @slide-end="onSlideEnd">
+                <Slide v-for="(image, index) in images" :key="index">
+                  <img class="carousel-image" loading="lazy" v-bind:src="image"/>
+                </Slide>
+                <template #addons>
+                  <Navigation />
+                  <Pagination />
+                </template>
+              </Carousel>
+            </div>
           </div>
           <p class="text-paragraph text-subtitle">{{summary}}</p>
           <p class="text-paragraph" v-for="(text, index) in copy" :key="index">{{text}}</p>
@@ -37,15 +40,18 @@
         </div>
       </div>
       <div class="carousel-container" v-if="windowWidth > 980">
-        <Carousel v-if="images" class="styled-carousel" :items-to-show="1" :autoplay="autoplay" :wrap-around="true" :pause-autoplay-on-hover="true" slide-effect="fade" :transition="1200">
-          <Slide v-for="(image, index) in images" :key="index">
-            <img class="carousel-image" loading="lazy" v-bind:src="image"/>
-          </Slide>
-          <template #addons>
-            <Navigation />
-            <Pagination />
-          </template>
-        </Carousel>
+        <div v-if="images" class="carousel-shell" @pointerdown.capture="onNavPress">
+          <div class="carousel-bed" :style="{ backgroundColor: bedColor }" aria-hidden="true"></div>
+          <Carousel class="styled-carousel" :items-to-show="1" :autoplay="autoplay" :wrap-around="true" :pause-autoplay-on-hover="true" :slide-effect="navEffect" :transition="navEffect === 'fade' ? 1200 : 450" @slide-end="onSlideEnd">
+            <Slide v-for="(image, index) in images" :key="index">
+              <img class="carousel-image" loading="lazy" v-bind:src="image"/>
+            </Slide>
+            <template #addons>
+              <Navigation />
+              <Pagination />
+            </template>
+          </Carousel>
+        </div>
       </div>
     </div>
   </div>
@@ -103,16 +109,80 @@ export default {
       window.matchMedia('(prefers-reduced-motion: reduce)').matches
     return {
         windowWidth: window.innerWidth,
-        autoplay: reduceMotion ? 0 : (this.autoplayMs || 6000)
+        autoplay: reduceMotion ? 0 : (this.autoplayMs || 6000),
+        // Autoplay crossfades; a person navigating gets a slide
+        // (Mark's call, 2026-10-30). navEffect flips to 'slide'
+        // on a press of the arrows or dots and back to 'fade'
+        // when that move settles.
+        navEffect: 'fade',
+        // The colour layer under the crossfade: the average
+        // colour of the slide that was showing before the
+        // current one (Mark's call, 2026-10-30), computed from
+        // the images themselves below. The dark value is the
+        // fallback until they are measured, or if one cannot be.
+        bedColor: '#101216',
+        avgColors: [],
+        currentSlide: 0
     }
   },
   methods: {
     onResize() {
       this.windowWidth = window.innerWidth
+    },
+    onNavPress(e) {
+      if (e.target.closest('.carousel__prev, .carousel__next, .carousel__pagination-button')) {
+        this.navEffect = 'slide'
+      }
+    },
+    onSlideEnd(payload) {
+      const len = (this.images || []).length
+      if (len) {
+        const raw = payload && (payload.currentSlideIndex ?? payload.currentSlide ?? 0)
+        const idx = ((raw % len) + len) % len
+        this.currentSlide = idx
+        if (this.avgColors[idx]) {
+          this.bedColor = this.avgColors[idx]
+        }
+      }
+      if (this.navEffect === 'slide') {
+        setTimeout(() => { this.navEffect = 'fade' }, 60)
+      }
+    },
+    measureBedColors() {
+      ;(this.images || []).forEach((src, i) => {
+        const img = new Image()
+        img.onload = () => {
+          try {
+            const s = 12
+            const c = document.createElement('canvas')
+            c.width = s
+            c.height = s
+            const ctx = c.getContext('2d')
+            ctx.drawImage(img, 0, 0, s, s)
+            const d = ctx.getImageData(0, 0, s, s).data
+            let r = 0, g = 0, b = 0, n = 0
+            for (let p = 0; p < d.length; p += 4) {
+              r += d[p]
+              g += d[p + 1]
+              b += d[p + 2]
+              n++
+            }
+            const col = `rgb(${Math.round(r / n)}, ${Math.round(g / n)}, ${Math.round(b / n)})`
+            this.avgColors[i] = col
+            if (i === this.currentSlide) {
+              this.bedColor = col
+            }
+          } catch (err) {
+            // A colour that cannot be measured keeps the fallback.
+          }
+        }
+        img.src = src
+      })
     }
   },
   mounted() {
     window.addEventListener('resize', this.onResize)
+    this.measureBedColors()
   },
   // Vue 3 rename of beforeDestroy; also now actually removes the listener
   // (the original passed a fresh anonymous function, so removal was a no-op).
@@ -245,12 +315,6 @@ export default {
   box-shadow: var(--card-carousel-box-shadow);
   border-radius: 10px;
   overflow: hidden;
-  /* A dark bed under the fade (2026-10-30): midway through a
-     crossfade the two images' opacities dip, and what shows in
-     the dip decides whether the fade reads as a dissolve or a
-     flash. Over the page background it flashed; over this it
-     fades through dark, deliberately. */
-  background: #101216;
   height: 275px;
   width: 500px;
   /* The slide indicators, through the library's own variables:
@@ -295,6 +359,23 @@ export default {
 .styled-carousel :deep(.carousel__slide) {
   height: 100%;
 }
+/* The shell hugs the carousel's own box so the layer under it
+   lines up exactly; the bed is the crossfade's colour layer,
+   holding the previous slide's average colour (script above),
+   so a fade passes through the outgoing picture's own colour
+   instead of a dip to black or a flash of page. */
+.carousel-shell {
+  position: relative;
+  width: fit-content;
+  max-width: 100%;
+  margin-inline: auto;
+}
+.carousel-bed {
+  position: absolute;
+  inset: 0;
+  border-radius: 10px;
+  background: #101216;
+}
 /* No pagination overrides here on purpose: the old block forced
    left: 0 / right: 0 / bottom: 0 onto the library's pagination,
    which centres itself with left: 50% and translateX(-50%) — a
@@ -312,7 +393,12 @@ export default {
        second fixed step. */
     aspect-ratio: 560 / 308;
     height: auto;
-    margin: 20px 0px;
+    margin: 0;
+  }
+  /* The unit's outer margin lives on the shell, so the colour
+     bed inside it stays flush with the carousel's box. */
+  .carousel-shell {
+    margin: 20px 0;
   }
 }
 @media screen and (max-width: 600px) {

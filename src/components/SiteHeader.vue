@@ -254,9 +254,9 @@ export default {
   .primary-nav {
     order: 1;
     gap: 0.1rem;
-    /* The Menu button takes the lefthand side (Mark's call,
-       2026-10-30), so the links shift to the right end. */
-    margin-left: auto;
+    /* Right of the Menu button in the bar's own flow (Mark's
+       correction, 2026-10-30): the links sit beside the Menu,
+       not pushed out to the site's right edge. */
   }
 
   .nav-link {

@@ -192,12 +192,16 @@ export default {
 }
 
 @media screen and (max-width: 40rem) {
-  /* Smaller trio on phones (Mark's call, 2026-10-30): the glass
-     buttons take a shorter height through the library's own
-     --lg-h and a step smaller label and icon. */
+  /* Smaller trio on phones (Mark's call, 2026-10-30). The
+     buttons' real metrics are the .styled-button's own —
+     .66rem uppercase type on a 40px line inside .75rem/1.5rem
+     padding; the first pass at this set font-size: .88rem,
+     which overrode the .66rem and made them larger (Mark's
+     report). This steps every metric down instead. */
   .cta-section :deep(.styled-button) {
-    --lg-h: 2.3rem;
-    font-size: 0.88rem;
+    font-size: 0.6rem;
+    line-height: 1.6rem;
+    padding: 0.55rem 0.9rem;
   }
 
   .cta-section .journalism-icon {

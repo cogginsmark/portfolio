@@ -408,13 +408,15 @@ onUnmounted(() => {
   margin-top: 0.5rem;
 }
 
-/* The 916 text justifies to the right margin (Mark's call,
-   2026-10-30): in the side layout the whole column — title,
-   byline, tools, note and credit — aligns to its right edge,
-   and the Instagram pill, inline in its row, ends the block at
-   the same edge. The stacked layout keeps its left alignment. */
-.video-grid--side .video-card-text {
-  text-align: right;
+/* The 916 description justifies to both margins (Mark's
+   correction, 2026-10-30 — full justification, not a right
+   alignment): in the side layout the note's left edge is set
+   by the player beside it and its right edge is the
+   container's own width, and the text fills that measure
+   flush on both sides. Everything else in the column keeps
+   its left alignment. */
+.video-grid--side .video-note {
+  text-align: justify;
 }
 
 @media screen and (max-width: 40rem) {
