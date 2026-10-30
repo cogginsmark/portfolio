@@ -8,89 +8,107 @@
         </header>
 
         <section
-          class="timeline-group"
+          class="videos-section"
           data-reveal
-          v-for="group in timeline"
-          :key="group.label"
-          :aria-label="group.label"
+          v-for="section in sections"
+          :key="section.heading"
+          :aria-label="section.heading"
         >
-          <h2 class="timeline-year">{{ group.label }}</h2>
-          <div class="timeline-list">
+          <h2 class="videos-section-title">{{ section.heading }}</h2>
+          <p class="videos-section-note">{{ section.note }}</p>
+
+          <article
+            class="video-feature"
+            v-for="entry in section.entries.filter((e) => e.feature)"
+            :key="entry.videoId"
+          >
+            <div class="video-embed">
+              <iframe
+                :src="`https://www.youtube-nocookie.com/embed/${entry.videoId}`"
+                :title="entry.title"
+                loading="lazy"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowfullscreen
+                referrerpolicy="strict-origin-when-cross-origin"
+              ></iframe>
+            </div>
+            <h3 class="video-title">{{ entry.title }}</h3>
+            <p class="video-meta">
+              <span class="video-role">{{ entry.role }}</span>
+              <span v-if="entry.date" class="video-date"> · {{ entry.date }}</span>
+            </p>
+            <p class="video-note">{{ entry.note }}</p>
+            <p class="video-links">
+              <a :href="entry.youtube" target="_blank" rel="noopener">Watch on YouTube</a>
+              <template v-if="entry.article">
+                · <a :href="entry.article" target="_blank" rel="noopener">Read the article</a>
+              </template>
+            </p>
+          </article>
+
+          <div
+            class="video-grid"
+            :class="{
+              'video-grid--single':
+                section.entries.filter((e) => !e.feature).length === 1
+            }"
+          >
             <article
-              class="timeline-entry"
-              v-for="item in group.entries"
-              :key="item.entry.videoId || item.entry.title"
+              class="video-card"
+              v-for="entry in section.entries.filter((e) => !e.feature)"
+              :key="entry.videoId || entry.title"
             >
-              <p class="timeline-date">
-                <template v-if="item.month">
-                  <span class="timeline-month">{{ item.month }}</span>
-                  <span class="timeline-day">{{ item.day }}</span>
-                </template>
-                <span v-else class="timeline-undated">Date not listed</span>
-              </p>
-              <div class="timeline-card">
-                <div v-if="item.entry.src" class="video-player">
-                  <video
-                    ref="nativeVideo"
-                    class="video-native"
-                    :src="item.entry.src"
-                    :poster="item.entry.thumb"
-                    :title="item.entry.title"
-                    loop
-                    muted
-                    playsinline
-                    preload="none"
-                    @click="toggleSound"
-                    @timeupdate="onTimeUpdate"
-                  ></video>
-                  <button
-                    type="button"
-                    class="video-sound"
-                    :aria-pressed="soundOn"
-                    @click="toggleSound"
-                  >
-                    <i
-                      :class="soundOn ? 'fas fa-volume-up' : 'fas fa-volume-off'"
-                      aria-hidden="true"
-                    ></i>
-                    {{ soundOn ? 'Sound on' : 'Tap for sound' }}
-                  </button>
-                </div>
-                <div v-else-if="item.entry.feature" class="video-embed">
-                  <iframe
-                    :src="`https://www.youtube-nocookie.com/embed/${item.entry.videoId}`"
-                    :title="item.entry.title"
-                    loading="lazy"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    allowfullscreen
-                    referrerpolicy="strict-origin-when-cross-origin"
-                  ></iframe>
-                </div>
-                <a v-else class="video-thumb" :href="item.entry.youtube || item.entry.instagram" target="_blank" rel="noopener" :aria-label="`Watch: ${item.entry.title}`">
-                  <img
-                    :src="item.entry.thumb || `https://i.ytimg.com/vi/${item.entry.videoId}/hqdefault.jpg`"
-                    :alt="item.entry.title"
-                    loading="lazy"
-                  />
-                  <span class="video-play" aria-hidden="true"><i class="fas fa-play"></i></span>
-                </a>
-                <p class="video-source">{{ item.section }}</p>
-                <h3 class="video-title">{{ item.entry.title }}</h3>
-                <p class="video-meta">
-                  <span class="video-role">{{ item.entry.role }}</span>
-                </p>
-                <p class="video-note">{{ item.entry.note }}</p>
-                <p v-if="item.entry.src && item.entry.instagram" class="video-cta-row">
-                  <a class="video-cta" :href="item.entry.instagram" target="_blank" rel="noopener">View on Instagram<i class="fas fa-play" aria-hidden="true"></i></a>
-                </p>
-                <p v-else class="video-links">
-                  <a v-if="item.entry.youtube" :href="item.entry.youtube" target="_blank" rel="noopener">Watch on YouTube</a>
-                  <a v-else-if="item.entry.instagram" :href="item.entry.instagram" target="_blank" rel="noopener">View on Instagram</a>
-                  <template v-if="item.entry.article">
-                    <span v-if="item.entry.youtube || item.entry.instagram" aria-hidden="true"> · </span><a :href="item.entry.article" target="_blank" rel="noopener">Read the article</a>
-                  </template>
-                </p>
+              <div v-if="entry.src" class="video-player">
+                <video
+                  ref="nativeVideo"
+                  class="video-native"
+                  :src="entry.src"
+                  :poster="entry.thumb"
+                  :title="entry.title"
+                  loop
+                  muted
+                  playsinline
+                  preload="none"
+                  @click="toggleSound"
+                  @timeupdate="onTimeUpdate"
+                ></video>
+                <button
+                  type="button"
+                  class="video-sound"
+                  :aria-pressed="soundOn"
+                  @click="toggleSound"
+                >
+                  <i
+                    :class="soundOn ? 'fas fa-volume-up' : 'fas fa-volume-off'"
+                    aria-hidden="true"
+                  ></i>
+                  {{ soundOn ? 'Sound on' : 'Tap for sound' }}
+                </button>
               </div>
+              <a v-else class="video-thumb" :href="entry.youtube || entry.instagram" target="_blank" rel="noopener" :aria-label="`Watch: ${entry.title}`">
+                <img
+                  :src="entry.thumb || `https://i.ytimg.com/vi/${entry.videoId}/hqdefault.jpg`"
+                  :alt="entry.title"
+                  loading="lazy"
+                />
+                <span class="video-play" aria-hidden="true"><i class="fas fa-play"></i></span>
+              </a>
+              <h3 class="video-title">{{ entry.title }}</h3>
+              <p class="video-meta">
+                <span class="video-role">{{ entry.role }}</span>
+                <span v-if="entry.date" class="video-date"> · {{ entry.date }}</span>
+              </p>
+              <p class="video-note">{{ entry.note }}</p>
+              <p v-if="entry.src && entry.instagram" class="video-cta-row">
+                <a class="video-cta" :href="entry.instagram" target="_blank" rel="noopener">View on Instagram<i class="fas fa-play" aria-hidden="true"></i></a>
+              </p>
+              <p v-else class="video-links">
+                <a v-if="entry.youtube" :href="entry.youtube" target="_blank" rel="noopener">Watch on YouTube</a>
+                <a v-else-if="entry.instagram" :href="entry.instagram" target="_blank" rel="noopener">View on Instagram</a>
+                <template v-if="entry.article">
+                  · <a :href="entry.article" target="_blank" rel="noopener">Read the article</a>
+                </template>
+              </p>
             </article>
           </div>
         </section>
@@ -110,20 +128,10 @@ import baseData from './data/4fixtures.ts'
 
 // The Videos page (Mark's direction after the Flory interview,
 // 2026-10-29): one shareable link for the video work Danny Thomas
-// asked about. Presentation was his hybrid pick: the first piece
-// is an embedded player, everything else is a thumbnail card
-// linking out — the same card the Instagram pieces use, since IG
-// embeds are unreliable.
-//
-// Since 2026-10-30 the page is organised as a timeline (also his
-// call): every entry from every section runs in one reverse-
-// chronological stream, grouped by year, with the date pulled
-// out of the byline into its own rail. A date in a fixed column
-// cannot wrap the way the tracked-out byline dates did, which
-// settles the wrapping complaints; the outlet survives as each
-// entry's source line, so the Signal / Bay Valley Tech / Client
-// Work context is not lost. The featured Signal piece keeps its
-// embedded player inside its timeline entry.
+// asked about. Hybrid presentation, his pick: the first piece is an
+// embedded player, everything else is a thumbnail card linking out —
+// the same card the Instagram pieces will use when the ASI section
+// lands, since IG embeds are unreliable.
 //
 // Self-hosted entries (a `src` field in the data) play directly on
 // the page instead: Mark's direction for the Early Bird reel
@@ -138,39 +146,6 @@ import baseData from './data/4fixtures.ts'
 // When sound is on, it fades back to mute into the loop point
 // (see onTimeUpdate below).
 const { author, intro, sections, footer } = baseData
-
-// Flatten the sections into the timeline: newest first, grouped
-// by year. An entry without a date in the data is never given
-// one — undated entries collect in their own group at the end.
-const timeline = (() => {
-  const flat = sections.flatMap((section) =>
-    section.entries.map((entry) => {
-      const time = Date.parse(entry.date || '')
-      const parsed = Number.isNaN(time) ? null : new Date(time)
-      return {
-        entry,
-        section: section.heading,
-        time: parsed ? time : null,
-        year: parsed ? String(parsed.getFullYear()) : 'Date not listed',
-        month: parsed
-          ? parsed.toLocaleDateString('en-US', { month: 'short' })
-          : null,
-        day: parsed ? String(parsed.getDate()) : null
-      }
-    })
-  )
-  flat.sort((a, b) => (b.time ?? -Infinity) - (a.time ?? -Infinity))
-  const groups = []
-  for (const item of flat) {
-    const group = groups.find((g) => g.label === item.year)
-    if (group) {
-      group.entries.push(item)
-    } else {
-      groups.push({ label: item.year, entries: [item] })
-    }
-  }
-  return groups
-})()
 
 const root = ref(null)
 useReveal(root)
@@ -260,7 +235,8 @@ onUnmounted(() => {
    tracking, px reserved for hairline borders. */
 .videos-wrap {
   /* Widened to 1180 and reverted the same day on Mark's word
-     (2026-10-30): the page keeps its 980 measure. */
+     (2026-10-30): the page keeps its 980 measure; the byline fix
+     (unbreakable date, smaller size) carries the desktop layout. */
   max-width: 980px;
   margin: 0 auto;
   padding: 3rem 1.25rem 1rem;
@@ -285,110 +261,27 @@ onUnmounted(() => {
   max-width: 38rem;
 }
 
-/* The timeline: one group per year under a ruled year marker,
-   entries running down a spine. The date sits in its own fixed
-   rail column — month over day, right-aligned to the spine — so
-   a date never shares a line with the tracked-out role text and
-   cannot wrap or split the way the old byline dates did. */
-.timeline-group {
+.videos-section {
   margin-bottom: 3rem;
 }
 
-.timeline-year {
-  font-size: 1.5rem;
+.videos-section-title {
+  font-size: 1.35rem;
   font-weight: 700;
   letter-spacing: -0.01em;
-  margin: 0 0 1.5rem;
+  margin: 0 0 0.35rem;
   padding-bottom: 0.55rem;
   border-bottom: 1px solid color-mix(in srgb, var(--main-color) 14%, transparent);
 }
 
-.timeline-list {
-  position: relative;
+.videos-section-note {
+  margin: 0 0 1.5rem;
+  font-size: 0.95rem;
+  opacity: 0.7;
 }
 
-/* The spine runs through the middle of the gap between the date
-   rail (5rem) and the entry column (2rem gap): 5 + 1 = 6rem. */
-.timeline-list::before {
-  content: "";
-  position: absolute;
-  top: 0.35rem;
-  bottom: 0;
-  left: calc(6rem - 0.5px);
-  width: 1px;
-  background: color-mix(in srgb, var(--main-color) 16%, transparent);
-}
-
-.timeline-entry {
-  position: relative;
-  display: grid;
-  grid-template-columns: 5rem minmax(0, 1fr);
-  gap: 2rem;
-  padding-bottom: 2.5rem;
-}
-
-.timeline-entry:last-child {
-  padding-bottom: 0.5rem;
-}
-
-.timeline-entry::before {
-  content: "";
-  position: absolute;
-  left: 6rem;
-  top: 0.45rem;
-  width: 0.6rem;
-  height: 0.6rem;
-  border-radius: 50%;
-  transform: translateX(-50%);
-  background: var(--main-color);
-}
-
-.timeline-date {
-  margin: 0;
-  padding-top: 0.3rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.15rem;
-  text-align: right;
-  white-space: nowrap;
-}
-
-.timeline-month {
-  font-size: 0.8rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  opacity: 0.65;
-}
-
-.timeline-day {
-  font-size: 1.75rem;
-  font-weight: 700;
-  line-height: 1;
-  letter-spacing: -0.01em;
-}
-
-.timeline-undated {
-  font-size: 0.8rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  opacity: 0.65;
-}
-
-.timeline-card {
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-}
-
-.video-source {
-  margin: 0 0 0.35rem;
-  font-size: 0.75rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  opacity: 0.6;
+.video-feature {
+  margin-bottom: 2.5rem;
 }
 
 .video-embed {
@@ -404,6 +297,35 @@ onUnmounted(() => {
   width: 100%;
   height: 100%;
   border: 0;
+}
+
+.video-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
+  gap: 2rem 1.5rem;
+}
+
+/* Cards are columns so the links row can pin to the foot (below):
+   notes vary in length, links should not. */
+.video-card {
+  display: flex;
+  flex-direction: column;
+}
+
+/* A section with a single card centres it (Mark's call for Client
+   Work while it holds one piece, 2026-10-30); the moment a second
+   entry joins the section, the normal grid flow takes over again. */
+.video-grid--single {
+  grid-template-columns: 1fr;
+  justify-items: center;
+}
+
+.video-grid--single .video-card {
+  max-width: 340px;
+}
+
+.video-grid--single .video-player {
+  margin-inline: auto;
 }
 
 .video-player {
@@ -428,7 +350,7 @@ onUnmounted(() => {
   bottom: 0.6rem;
   display: inline-flex;
   align-items: center;
-  gap: var(--pill-icon-gap);
+  gap: 0.4rem;
   padding: 0.45rem 0.8rem;
   border: 0;
   border-radius: 999px;
@@ -512,6 +434,13 @@ onUnmounted(() => {
   font-weight: 700;
 }
 
+.video-date {
+  opacity: 0.65;
+  /* A date wraps as one piece or not at all (2026-10-30): no more
+     DECEMBER / 9, 2022 split across lines by the wide tracking. */
+  white-space: nowrap;
+}
+
 .video-note {
   margin: 0 0 0.5rem;
   font-size: 0.95rem;
@@ -520,7 +449,10 @@ onUnmounted(() => {
 }
 
 .video-links {
+  /* Pinned to the card's foot: cards in a row share one link
+     baseline regardless of how long their notes run. */
   margin: 0;
+  margin-top: auto;
   font-size: 0.9rem;
   font-weight: 600;
 }
@@ -532,12 +464,13 @@ onUnmounted(() => {
    is the button there. */
 .video-cta-row {
   margin: 0;
+  margin-top: auto;
 }
 
 .video-cta {
   display: inline-flex;
   align-items: center;
-  gap: var(--pill-icon-gap);
+  gap: 0.45rem;
   padding: 0.6rem 1.1rem;
   border: 1px solid color-mix(in srgb, var(--main-color) 25%, transparent);
   border-radius: 999px;
@@ -555,37 +488,6 @@ onUnmounted(() => {
 
 .video-cta i {
   font-size: 0.8em;
-}
-
-/* Small screens: the rail folds away and the date becomes one
-   short line above its entry ("Sep 16") — still its own line,
-   still incapable of wrapping into the byline. */
-@media screen and (max-width: 40rem) {
-  .timeline-entry {
-    grid-template-columns: 1fr;
-    gap: 0.6rem;
-  }
-
-  .timeline-list::before,
-  .timeline-entry::before {
-    display: none;
-  }
-
-  .timeline-date {
-    flex-direction: row;
-    align-items: baseline;
-    gap: 0.4rem;
-    text-align: left;
-    padding-top: 0;
-  }
-
-  .timeline-month {
-    font-size: 0.85rem;
-  }
-
-  .timeline-day {
-    font-size: 1.05rem;
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {
