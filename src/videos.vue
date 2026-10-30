@@ -100,7 +100,7 @@
               </p>
               <p class="video-note">{{ entry.note }}</p>
               <p v-if="entry.src && entry.instagram" class="video-cta-row">
-                <a class="video-cta" :href="entry.instagram" target="_blank" rel="noopener">View on Instagram<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+                <a class="video-cta" :href="entry.instagram" target="_blank" rel="noopener">View on Instagram<i class="fas fa-play" aria-hidden="true"></i></a>
               </p>
               <p v-else class="video-links">
                 <a v-if="entry.youtube" :href="entry.youtube" target="_blank" rel="noopener">Watch on YouTube</a>
