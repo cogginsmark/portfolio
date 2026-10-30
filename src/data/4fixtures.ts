@@ -10,11 +10,31 @@
 // renders as a thumbnail card linking out. An ASI Stan State section
 // joins these when its entries finish sourcing — no award years are
 // printed anywhere until Mark confirms them.
+//
+// Client Work was added the same night (Mark's "yes for 9/16"): the
+// Early Bird Plumbing reel is his credited videography, sourced from
+// the live grid after the search index missed it. It renders as a
+// card linking to the original post; its thumbnail is a frame from
+// the video, hosted here, because the CDN cover frame is blank.
 export default {
   author: "Videos",
   intro:
     "Video work across news, teaching, and campus media — editing, short-form, and motion graphics.",
   sections: [
+    {
+      heading: "Client Work",
+      note: "Video produced for a Sacramento business's social channels.",
+      entries: [
+        {
+          title: "916 Day — Early Bird Plumbing",
+          date: "September 16, 2025",
+          role: "Videography",
+          note: "Sacramento pride piece for 916 Day — Tower Bridge to the American River — shot for Early Bird Plumbing. Video by Mark Coggins, as credited on the original post; photos by @leo_visions_.",
+          thumb: "/videos/early-bird-916.jpg",
+          instagram: "https://www.instagram.com/p/DOq20ApEh9T/"
+        }
+      ]
+    },
     {
       heading: "The Signal",
       note: "Video packages for the CSU Stanislaus student newspaper.",

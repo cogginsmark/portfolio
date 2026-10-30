@@ -50,11 +50,11 @@
             <article
               class="video-card"
               v-for="entry in section.entries.filter((e) => !e.feature)"
-              :key="entry.videoId"
+              :key="entry.videoId || entry.title"
             >
-              <a class="video-thumb" :href="entry.youtube" target="_blank" rel="noopener" :aria-label="`Watch: ${entry.title}`">
+              <a class="video-thumb" :href="entry.youtube || entry.instagram" target="_blank" rel="noopener" :aria-label="`Watch: ${entry.title}`">
                 <img
-                  :src="`https://i.ytimg.com/vi/${entry.videoId}/hqdefault.jpg`"
+                  :src="entry.thumb || `https://i.ytimg.com/vi/${entry.videoId}/hqdefault.jpg`"
                   :alt="entry.title"
                   loading="lazy"
                 />
@@ -67,7 +67,8 @@
               </p>
               <p class="video-note">{{ entry.note }}</p>
               <p class="video-links">
-                <a :href="entry.youtube" target="_blank" rel="noopener">Watch on YouTube</a>
+                <a v-if="entry.youtube" :href="entry.youtube" target="_blank" rel="noopener">Watch on YouTube</a>
+                <a v-else-if="entry.instagram" :href="entry.instagram" target="_blank" rel="noopener">View on Instagram</a>
                 <template v-if="entry.article">
                   · <a :href="entry.article" target="_blank" rel="noopener">Read the article</a>
                 </template>
