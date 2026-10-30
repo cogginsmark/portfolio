@@ -9,19 +9,22 @@
         type="button"
         class="nav-toggle"
         :aria-expanded="open ? 'true' : 'false'"
-        aria-controls="primary-nav"
+        aria-controls="theme-switch"
         @click="open = !open"
       >
         <span class="nav-toggle-label">{{ open ? 'Close' : 'Menu' }}</span>
       </button>
 
-      <nav id="primary-nav" class="primary-nav" :class="{ 'is-open': open }" aria-label="Primary">
-        <router-link class="nav-link" to="/" @click="open = false"><span class="nav-text" data-text="Home">Home</span></router-link>
-        <router-link class="nav-link" to="/about" @click="open = false"><span class="nav-text" data-text="About">About</span></router-link>
-        <router-link class="nav-link" to="/videos" @click="open = false"><span class="nav-text" data-text="Videos">Videos</span></router-link>
-        <router-link class="nav-link" to="/contact" @click="open = false"><span class="nav-text" data-text="Contact">Contact</span></router-link>
-        <LightToggle><span class="theme-toggle-label">{{ isDark ? 'Dark' : 'Light' }} mode</span></LightToggle>
+      <nav id="primary-nav" class="primary-nav" aria-label="Primary">
+        <router-link class="nav-link" to="/"><span class="nav-text" data-text="Home">Home</span></router-link>
+        <router-link class="nav-link" to="/about"><span class="nav-text" data-text="About">About</span></router-link>
+        <router-link class="nav-link" to="/videos"><span class="nav-text" data-text="Videos">Videos</span></router-link>
+        <router-link class="nav-link" to="/contact"><span class="nav-text" data-text="Contact">Contact</span></router-link>
       </nav>
+
+      <div id="theme-switch" class="switch-wrap" :class="{ 'is-open': open }">
+        <LightToggle><span class="theme-toggle-label">{{ isDark ? 'Dark' : 'Light' }} mode</span></LightToggle>
+      </div>
     </div>
   </header>
 </template>
@@ -32,11 +35,13 @@ import LightToggle from './LightToggle.vue'
 
 // The site header. Replaces the three bare router-links that App.vue
 // used to render: a real <header> landmark with the brand, the primary
-// nav (active route shown as a pill via router-link-exact-active), the
-// theme toggle that used to float at the bottom of every view, and a
-// disclosure button for small screens. Sticky, with a translucent
-// backdrop blur over the theme background colour and a hairline shadow
-// once the page has scrolled.
+// nav (active route shown as a pill via router-link-exact-active), and
+// the theme toggle that used to float at the bottom of every view.
+// Sticky, with a translucent backdrop blur over the theme background
+// colour and a hairline shadow once the page has scrolled. On small
+// screens the brand leaves the bar (the name is on the pages anyway),
+// the full nav sits inline, and the Menu text button discloses the
+// theme switch instead (Mark, 2026-10-30).
 export default {
   name: 'SiteHeader',
   components: {
@@ -168,9 +173,17 @@ export default {
 }
 
 /* The theme toggle lives in the header now; undo the sticky/float
-   positioning it needed when it sat at the bottom of each view. */
-.primary-nav :deep(.light-toggle) {
-  margin: 0 0 0 0.35rem;
+   positioning it needed when it sat at the bottom of each view. On
+   desktop the switch sits in the bar right after the nav; on mobile
+   the same wrapper becomes the Menu button's dropdown panel. */
+.switch-wrap {
+  display: flex;
+  align-items: center;
+  margin-left: 0.35rem;
+}
+
+.switch-wrap :deep(.light-toggle) {
+  margin: 0;
 }
 
 /* No hamburger iconography: on mobile the menu is a labelled pill
@@ -201,8 +214,32 @@ export default {
 }
 
 @media (max-width: 40rem) {
+  /* The brand leaves the mobile bar — the name is on the pages
+     anyway — so the full nav can sit inline, with the Menu text
+     button at the right end for the theme switch (Mark, 2026-10-30). */
+  .brand {
+    display: none;
+  }
+
+  .header-inner {
+    padding-inline: 0.9rem;
+    gap: 0.5rem;
+  }
+
+  .primary-nav {
+    order: 1;
+    gap: 0.1rem;
+  }
+
+  .nav-link {
+    padding: 0.4rem 0.5rem;
+    font-size: 0.88rem;
+  }
+
   .nav-toggle {
     display: inline-flex;
+    order: 2;
+    margin-left: auto;
   }
 
   .theme-toggle-label {
@@ -213,37 +250,26 @@ export default {
     letter-spacing: 0.01em;
   }
 
-  .primary-nav {
+  /* The Menu panel holds only the switch now. It stays opaque like
+     the old nav panel: it drops over scrolling content, and the
+     translucent glass read as a transparency bug there (Mark,
+     2026-10-29). The header bar above it keeps the light frost. */
+  .switch-wrap {
     display: none;
     position: absolute;
     top: 100%;
-    left: 0;
     right: 0;
-    flex-direction: column;
-    align-items: stretch;
-    gap: 0.15rem;
-    padding: 0.6rem 1rem 0.9rem;
-    /* The open panel is opaque on mobile: it drops over scrolling
-       content, and the translucent glass it had before read as a
-       transparency bug there (Mark, 2026-10-29). The header bar above
-       it keeps the light frost. */
+    margin: 0;
+    padding: 0.6rem 1rem 0.8rem;
     background: var(--main-background-color);
     border-bottom: 1px solid color-mix(in srgb, var(--main-color) 10%, transparent);
+    border-left: 1px solid color-mix(in srgb, var(--main-color) 10%, transparent);
     box-shadow: 0 1rem 1.5rem rgb(0 0 0 / 0.12);
   }
 
-  .primary-nav.is-open {
+  .switch-wrap.is-open {
     display: flex;
-  }
-
-  .nav-link {
-    padding: 0.7rem 0.9rem;
-  }
-
-  /* The switch sits centred in the mobile menu list. */
-  .primary-nav :deep(.light-toggle) {
-    align-self: center;
-    margin: 0.45rem auto 0.2rem;
+    justify-content: center;
   }
 }
 
