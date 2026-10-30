@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from './Home.vue'
 import About from './about.vue'
+import Videos from './videos.vue'
 import Contact from './contact.vue'
 
 // Was vue-router 3 `new Router({ mode: 'history', ... })` — history mode preserved.
@@ -27,6 +28,11 @@ export default createRouter({
       path: '/about',
       name: 'about',
       component: About
+    },
+    {
+      path: '/videos',
+      name: 'videos',
+      component: Videos
     },
     {
       path: '/contact',
