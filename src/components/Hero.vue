@@ -1,5 +1,5 @@
 <template>
-  <div class="hero-background">
+  <div class="hero-background" :class="{ 'bg-ready': bgReady }">
     <div class="hero-container">
       <div class="hero-text-container">
         <h1 class="hero-heading">{{author}}</h1>
@@ -25,6 +25,40 @@ export default {
   components: {
     StyledButton
   },
+  data() {
+    return {
+      bgReady: false
+    }
+  },
+  mounted() {
+    // The cover fades in when the image itself is ready
+    // (Mark's bug report, 2026-10-30): navigating Home mounts
+    // this component before the photograph has downloaded, and
+    // as the element's own background it simply appeared the
+    // moment the file landed. Preload it, then let the CSS
+    // transition on the ::before layer do the fade. The light
+    // theme paints the same photograph inverted from its own
+    // hardcoded layer, so that file is the one to wait for
+    // there.
+    const isLight = document.documentElement.dataset.theme === 'light'
+    let src = '/falcon-dark-minus-50-brightness2.png'
+    if (!isLight) {
+      const varValue = getComputedStyle(document.documentElement)
+        .getPropertyValue('--hero-background-image')
+      const match = varValue.match(/url\(["']?(.*?)["']?\)/)
+      if (match) {
+        src = match[1]
+      }
+    }
+    const img = new Image()
+    img.onload = () => {
+      this.bgReady = true
+    }
+    img.onerror = () => {
+      this.bgReady = true
+    }
+    img.src = src
+  },
   props: {
     author: String,
     cta: String,
@@ -41,9 +75,7 @@ export default {
 
 <style scoped>
 .hero-background {
-  background: var(--hero-background-image);
-  background-size: cover;
-  background-position: 50%;
+  position: relative;
   height: 800px;
   width: 100%;
   /* No fixed floor under the width (2026-10-30): this used to
@@ -59,14 +91,46 @@ export default {
   min-height: 600px;
   max-height: 1035px;
 }
+
+/* The cover lives on this layer and fades in once the image
+   has loaded (the script sets .bg-ready from the preload):
+   as the element's own background it appeared the instant the
+   download finished, mid-navigation, with no fade at all
+   (Mark's bug report, 2026-10-30). The light theme's inverted
+   cover in global.css is this same pseudo-element — it
+   supplies its own image and filter there and inherits this
+   fade. */
+.hero-background::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: var(--hero-background-image);
+  background-size: cover;
+  background-position: 50%;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+
+.hero-background.bg-ready::before {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-background::before {
+    transition: none;
+  }
+}
+
 @media screen and (max-width: 980px) {
-  .hero-background {
+  .hero-background::before {
     background-position: 60% -45px;
     background-size: inherit;
   }
 }
 
 .hero-container {
+  position: relative;
+  z-index: 1;
   max-width: 980px;
   margin: auto;
   /* padding-top: 180px; */
@@ -192,18 +256,10 @@ export default {
 }
 
 @media screen and (max-width: 40rem) {
-  /* Smaller trio on phones (Mark's call, 2026-10-30). The
-     buttons' real metrics are the .styled-button's own —
-     .66rem uppercase type on a 40px line inside .75rem/1.5rem
-     padding; the first pass at this set font-size: .88rem,
-     which overrode the .66rem and made them larger (Mark's
-     report). This steps every metric down instead. */
-  .cta-section :deep(.styled-button) {
-    font-size: 0.6rem;
-    line-height: 1.6rem;
-    padding: 0.55rem 0.9rem;
-  }
-
+  /* The trio's smaller phone size now lives in StyledButton
+     itself, applied to every button the site makes (2026-10-30);
+     what remains here is the Journalism icon, which is sized in
+     rem of its own and steps down with them. */
   .cta-section .journalism-icon {
     font-size: 1.02rem;
   }

@@ -35,7 +35,7 @@ export default {
           role: "Videography",
           software:
             "Adobe Firefly · Adobe Express · Adobe After Effects · Adobe Illustrator",
-          note: "Sacramento pride piece for 916 Day, edited for Early Bird Plumbing from Tower Bridge to the American River.",
+          note: "Early Bird Plumbing is a Sacramento local, and their ask was a 916 Day ad: a pride piece for the city's own holiday (9/16, named for the 916 area code) tying their name to the hometown landmarks from Tower Bridge to the American River. Edited for Early Bird Plumbing.",
           credit:
             "Video by Mark Coggins, as credited on the original post; photos by @leo_visions_.",
           thumb: "/videos/early-bird-916.jpg",

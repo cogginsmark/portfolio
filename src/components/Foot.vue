@@ -41,7 +41,7 @@ export default {
   box-sizing: border-box;
   margin: 0 auto;
   margin-top: auto;
-  padding: 4rem 1.25rem;
+  padding: 3rem 1.25rem 1.5rem;
   display: flex;
   font-weight: bold;
   flex-direction: column;

@@ -249,6 +249,9 @@ export default {
   .header-inner {
     padding-inline: 0.9rem;
     gap: 0.5rem;
+    /* The mobile bar centres its cluster — Menu and links
+       together (Mark's call, 2026-10-30). */
+    justify-content: center;
   }
 
   .primary-nav {
@@ -278,6 +281,15 @@ export default {
      motion is pure padding and weight. */
   .nav-link.router-link-exact-active {
     animation: nav-active-in 0.3s ease;
+    /* The keyframes own the padding and the weight while the
+       tab becomes current. The general transitions stay out of
+       those two properties here: run together, the animation
+       and the transition recalculated the hitbox against each
+       other and the growth stuttered (Mark's report,
+       2026-10-30). The spacing itself is weight-proof — the
+       hidden bold twin sizes every link at the active weight
+       from the start. */
+    transition: background-color 0.25s ease, box-shadow 0.25s ease, color 0.2s ease;
   }
 
   .nav-toggle {

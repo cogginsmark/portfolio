@@ -10,7 +10,7 @@
    a brief self-hosting detour the same evening was reversed on his
    word. The static self-hosted "SF Pro Display" TTFs remain in
    public/fonts/ but are not referenced. */
-@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=block");
 
 /* Leading and spacing are solved from the variable stack itself:
    optical sizing is automatic, the leading scale below is the single
@@ -70,6 +70,19 @@ body {
 
 html {
   scroll-behavior: smooth;
+  /* The root carries the theme gradient as well, sized to the
+     viewport and not repeated (2026-10-30): iOS Safari extends
+     the ROOT background into the places the fixed layer cannot
+     reach — behind its bars, into overscroll — so those areas
+     show this same gradient at this same size, the whole
+     viewport, instead of cutting off at the safe area. The
+     flat fallback colour sits underneath for anywhere the
+     image does not cover. */
+  background-color: var(--fallback-background-color);
+  background-image: var(--main-background-color);
+  background-size: 100% 100vh;
+  background-size: 100% 100lvh;
+  background-repeat: no-repeat;
 }
 
 a {

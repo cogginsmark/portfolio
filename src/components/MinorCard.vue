@@ -90,6 +90,8 @@ export default {
   font-weight: bold;
   margin-right: 1.25rem;
   line-height: 2.5rem;
+  /* (Its phone step-down sits with the other mobile sizing at
+     the end of this style block.) */
   color: var(--theme-text);
   transform: translateY(0px);
   transition: 0.3s all ease-out;
@@ -100,5 +102,14 @@ export default {
 .minor-button:hover {
   transform: translateX(2px);
   transition: 0.2s all ease-out;
+}
+
+@media screen and (max-width: 40rem) {
+  /* The minor buttons take the same phone step-down as the
+     site's other buttons (2026-10-30): their tall line steps
+     down with the rest. */
+  .minor-button {
+    line-height: 2rem;
+  }
 }
 </style>

@@ -441,11 +441,13 @@ onUnmounted(() => {
   position: relative;
   max-width: 340px;
   margin-bottom: 0.85rem;
-  /* The darker placeholder space the piece fades onto
-     (Mark's call, 2026-10-30): before the video arrives, this
-     is what fills its 9/16 frame. */
-  background: #101216;
+  /* The placeholder space the piece fades onto (Mark's call,
+     2026-10-30): white, at his word — before the video arrives,
+     this is what fills its 9/16 frame. Overflow hidden is what
+     the on-site crop below clips against. */
+  background: #fff;
   border-radius: 12px;
+  overflow: hidden;
 }
 
 .video-native {
@@ -458,6 +460,11 @@ onUnmounted(() => {
   cursor: pointer;
   opacity: 0;
   transition: opacity 0.5s ease;
+  /* Cropped in 1% on all sides, on-site (Mark's call,
+     2026-10-30 — the file itself is untouched): scaling by
+     1/(1 − 2%) pushes 1% of the frame past each edge, where
+     the player's overflow clips it. */
+  transform: scale(1.0204);
 }
 
 .video-native.is-on {
@@ -467,6 +474,21 @@ onUnmounted(() => {
 @media (prefers-reduced-motion: reduce) {
   .video-native {
     transition: none;
+  }
+}
+
+@media screen and (max-width: 40rem) {
+  /* The page's pills take the same phone step-down as the
+     site's other buttons (2026-10-30): a step smaller type
+     and padding. */
+  .video-cta {
+    font-size: 0.82rem;
+    padding: 0.5rem 0.95rem;
+  }
+
+  .video-sound {
+    font-size: 0.8rem;
+    padding: 0.4rem 0.7rem;
   }
 }
 

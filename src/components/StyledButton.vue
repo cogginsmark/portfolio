@@ -67,4 +67,17 @@ export default {
   opacity: var(--card-button-hover-intensity);
   transition: 0.3s opacity ease-in-out, 0.3s background;
 }
+
+@media screen and (max-width: 40rem) {
+  /* The mobile step-down (Mark's call, 2026-10-30), in the one
+     place every button the site makes shares: every metric
+     down from the button's own values — type, line, padding —
+     the same approach the hero trio's fix established, now
+     applied site-wide instead of only there. */
+  .styled-button {
+    font-size: 0.6rem;
+    line-height: 1.6rem;
+    padding: 0.55rem 0.9rem;
+  }
+}
 </style>
