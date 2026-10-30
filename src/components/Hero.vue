@@ -8,7 +8,7 @@
         <div class="cta-section">
           <StyledButton glass secondary :color="'#363636'" v-bind:href="ctaUrl || '/resume.pdf'"><span class="text-button-text">{{cta}}</span><i class="fas fa-arrow-down"></i></StyledButton>
           <StyledButton glass v-if="cta2" secondary :color="'#363636'" v-bind:href="cta2Url" target="_blank" rel="noopener"><span class="text-button-text">{{cta2}}</span><span class="journalism-icon" aria-hidden="true">history_edu</span></StyledButton>
-          <StyledButton glass v-if="cta3" secondary :color="'#363636'" v-bind:href="cta3Url"><span class="text-button-text">{{cta3}}</span><i class="fas fa-play"></i></StyledButton>
+          <router-link v-if="cta3" :to="cta3Url" class="cta-nav-link"><StyledButton glass secondary :color="'#363636'"><span class="text-button-text">{{cta3}}</span><i class="fas fa-play"></i></StyledButton></router-link>
         </div>
       </div>
     </div>
@@ -143,6 +143,22 @@ export default {
   text-align: center;
 }
 
+/* Videos travels by the router, not a hard link (Mark's call,
+   2026-10-30): its wrapper is the row's third, laid out exactly
+   like the buttons it sits between, and the button inside fills
+   it — so the trio's geometry is unchanged by the swap. */
+.cta-nav-link {
+  flex: 1 1 0;
+  display: flex;
+  min-width: 0;
+  color: inherit;
+  text-decoration: none;
+}
+
+.cta-nav-link :deep(.styled-button) {
+  flex: 1 1 auto;
+}
+
 /* On mobile the row stops being a fixed-width flex row and
    becomes two true columns (Mark's "build out to the right",
    2026-10-30): at the shared token width the pair plus its gap
@@ -165,6 +181,12 @@ export default {
   }
 
   .cta-section :deep(.styled-button:nth-child(3)) {
+    grid-column: 1;
+  }
+
+  /* The Videos wrapper is the grid's third item now; pin it to
+     the first column like the button it replaced. */
+  .cta-section > .cta-nav-link {
     grid-column: 1;
   }
 }

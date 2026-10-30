@@ -104,6 +104,7 @@
               </p>
               <p v-if="entry.software" class="video-software">{{ entry.software }}</p>
               <p class="video-note">{{ entry.note }}</p>
+              <p v-if="entry.credit" class="video-credit">{{ entry.credit }}</p>
               <p v-if="entry.src && entry.instagram" class="video-cta-row">
                 <a class="video-cta" :href="entry.instagram" target="_blank" rel="noopener">View on Instagram<i class="fas fa-play" aria-hidden="true"></i></a>
               </p>
@@ -368,6 +369,21 @@ onUnmounted(() => {
   flex-direction: column;
   flex: 1;
   min-width: 0;
+}
+
+/* The credit line gets its own paragraph under the note; in the
+   side layout it also takes an auto top margin, so it and the
+   CTA row split the column's spare height between them — the
+   content makes up the player's vertical space instead of
+   huddling at the top (Mark's call, 2026-10-30). */
+.video-credit {
+  margin: 0 0 0.85rem;
+  font-size: 0.85rem;
+  opacity: 0.75;
+}
+
+.video-grid--side .video-credit {
+  margin-top: auto;
 }
 
 @media screen and (max-width: 40rem) {

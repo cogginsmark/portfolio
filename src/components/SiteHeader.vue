@@ -207,19 +207,29 @@ export default {
   display: none;
   align-items: center;
   padding: 0.45rem 0.95rem;
-  border: 1px solid color-mix(in srgb, var(--main-color) 22%, transparent);
+  border: 0;
   border-radius: 999px;
   background: transparent;
   color: var(--main-color);
   font: inherit;
   font-size: 0.95rem;
-  font-weight: 600;
+  font-weight: 500;
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  transition: background-color 0.2s ease, box-shadow 0.25s ease;
 }
 
 .nav-toggle:hover {
   background: color-mix(in srgb, var(--main-color) 8%, transparent);
+}
+
+/* Built like the nav links it sits beside (Mark's call,
+   2026-10-30: the outlined text button read as a leftover next
+   to the new pills): no border, the links' hover fill, and while
+   its panel is open it wears the current link's treatment — the
+   soft fill with the inset ring. */
+.nav-toggle[aria-expanded="true"] {
+  background: color-mix(in srgb, var(--main-color) 6%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--main-color) 12%, transparent);
 }
 
 /* The light/dark switch is labelled on mobile only; on desktop the
@@ -261,6 +271,11 @@ export default {
     display: inline-flex;
     order: 2;
     margin-left: auto;
+    /* The mobile links' own sizes, at their full hitbox: the
+       Menu button is always a visible button, so it holds the
+       padding the links grow into on hover. */
+    padding: 0.4rem 0.5rem;
+    font-size: 0.88rem;
   }
 
   .theme-toggle-label {

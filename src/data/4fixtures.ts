@@ -35,7 +35,9 @@ export default {
           role: "Videography",
           software:
             "Adobe Firefly · Adobe Express · Adobe After Effects · Adobe Illustrator",
-          note: "Sacramento pride piece for 916 Day, edited for Early Bird Plumbing from Tower Bridge to the American River. Video by Mark Coggins, as credited on the original post; photos by @leo_visions_.",
+          note: "Sacramento pride piece for 916 Day, edited for Early Bird Plumbing from Tower Bridge to the American River.",
+          credit:
+            "Video by Mark Coggins, as credited on the original post; photos by @leo_visions_.",
           thumb: "/videos/early-bird-916.jpg",
           src: "/videos/early-bird-916.mp4",
           instagram: "https://www.instagram.com/p/DOq20ApEh9T/"

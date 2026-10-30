@@ -41,7 +41,19 @@ export default {
    root backgrounds badly, so the layer does it instead. */
 .page-background {
   position: fixed;
-  inset: 0;
+  top: 0;
+  left: 0;
+  width: 100%;
+  /* Sized once to the LARGE viewport instead of inset: 0
+     (2026-10-30, Mark's report): tied to the visual viewport, the
+     layer resized and repainted as iOS Safari's bars came and
+     went, so the gradient chased the scroll — and the strip
+     behind Safari's bar fell outside the layer entirely. 100lvh
+     is the stable maximum viewport, bars hidden, so the layer
+     keeps one size while scrolling and the gradient runs behind
+     the bars. The 100vh line is the fallback for older engines. */
+  height: 100vh;
+  height: 100lvh;
   z-index: -1;
   background: var(--main-background-color);
   pointer-events: none;
