@@ -70,6 +70,7 @@
                   playsinline
                   preload="none"
                   @click="toggleSound"
+                  @timeupdate="onTimeUpdate"
                 ></video>
                 <button
                   type="button"
@@ -139,6 +140,8 @@ import baseData from './data/4fixtures.ts'
 // player nears the viewport, so the page itself loads fast and
 // only the poster frame shows until then. Reduced-motion
 // visitors get an unloaded player they can start with a tap.
+// When sound is on, it fades back to mute into the loop point
+// (see onTimeUpdate below).
 const { author, intro, sections, footer } = baseData
 
 const root = ref(null)
@@ -158,7 +161,36 @@ function toggleSound() {
   if (!v) return
   v.muted = !v.muted
   soundOn.value = !v.muted
-  if (!v.muted) v.play().catch(() => {})
+  if (!v.muted) {
+    v.volume = 1
+    v.play().catch(() => {})
+  }
+}
+
+// Mark's fade (2026-10-30): once a visitor has tapped for sound,
+// the audio doesn't run into the loop point at full volume — it
+// fades out over the last stretch of the 30-second piece and the
+// player lands back on mute as the loop restarts, with the
+// Tap for sound pill back in place. FADE_SECONDS is that stretch.
+const FADE_SECONDS = 2.5
+let lastTime = 0
+
+function onTimeUpdate() {
+  const v = playerEl()
+  if (!v || !soundOn.value || !Number.isFinite(v.duration)) return
+  const remaining = v.duration - v.currentTime
+  if (v.currentTime < lastTime - 1) {
+    // The loop just wrapped: settle back into mute at full volume
+    // under the mute, ready for the next tap.
+    v.muted = true
+    v.volume = 1
+    soundOn.value = false
+  } else if (remaining <= FADE_SECONDS) {
+    v.volume = Math.max(remaining / FADE_SECONDS, 0)
+  } else if (v.volume !== 1) {
+    v.volume = 1
+  }
+  lastTime = v.currentTime
 }
 
 onMounted(() => {
