@@ -29,6 +29,17 @@
             </div>
           </dl>
         </section>
+
+        <section class="about-section" data-reveal aria-labelledby="awards-heading">
+          <h2 id="awards-heading" class="about-section-title">Awards</h2>
+          <dl class="experience-list">
+            <div class="experience-item" v-for="item in awards" :key="item.label">
+              <dt>{{ item.label }}</dt>
+              <dd>{{ item.value }}</dd>
+            </div>
+          </dl>
+          <p class="awards-note">{{ awardsNote }} <a v-bind:href="awardsSource.url" target="_blank" rel="noopener">{{ awardsSource.label }}</a></p>
+        </section>
       </div>
       <foot v-bind:author="author" v-bind:footer="footer" />
     </ThemeRoot>
@@ -48,7 +59,7 @@ import baseData from './data/2fixtures.ts'
 // intro with the portrait, a facts grid, and an experience list, all
 // from the structured data in 2fixtures.ts. The theme toggle that used
 // to be pasted into this view lives in the SiteHeader now.
-const { author, role, facts, experience, footer } = baseData
+const { author, role, facts, experience, awards, awardsNote, awardsSource, footer } = baseData
 
 const root = ref(null)
 useReveal(root)
@@ -165,6 +176,12 @@ a {
 
 .experience-item {
   padding: 0;
+}
+
+.awards-note {
+  margin: 1.1rem 0 0;
+  line-height: 1.55;
+  opacity: 0.8;
 }
 
 [data-reveal] {
