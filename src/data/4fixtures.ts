@@ -23,17 +23,17 @@
 export default {
   author: "Videos",
   intro:
-    "Video work across news, teaching, and campus media — editing, short-form, and motion graphics.",
+    "Video work across news, teaching, and campus media: editing, short-form, and motion graphics.",
   sections: [
     {
       heading: "Client Work",
       note: "Video produced for a Sacramento business's social channels.",
       entries: [
         {
-          title: "916 Day — Early Bird Plumbing",
+          title: "916 Day: Early Bird Plumbing",
           date: "September 16, 2025",
           role: "Videography",
-          note: "Sacramento pride piece for 916 Day — Tower Bridge to the American River — shot for Early Bird Plumbing. Video by Mark Coggins, as credited on the original post; photos by @leo_visions_.",
+          note: "Sacramento pride piece for 916 Day, shot for Early Bird Plumbing from Tower Bridge to the American River. Video by Mark Coggins, as credited on the original post; photos by @leo_visions_.",
           thumb: "/videos/early-bird-916.jpg",
           src: "/videos/early-bird-916.mp4",
           instagram: "https://www.instagram.com/p/DOq20ApEh9T/"
@@ -60,7 +60,7 @@ export default {
           title: "Recreation on Vacation: What to do in Turlock",
           date: "December 9, 2022",
           role: "Camera · Co-author",
-          note: "Location piece on getting out in Turlock — the Historical Society Museum, Donnelly Park, and Fields of Ice.",
+          note: "Location piece on getting out in Turlock: the Historical Society Museum, Donnelly Park, and Fields of Ice.",
           youtube: "https://youtu.be/Obmk9eMusk8",
           videoId: "Obmk9eMusk8",
           article: "https://csusignal.com/7895"
@@ -84,7 +84,7 @@ export default {
         {
           title: "Photoshop, Photopea & Wix.com | Digital Skills Crash Course",
           role: "Instructor",
-          note: "Chaptered crash course for new interns — Photopea editing, layer masks and styles, Wix, and Figma.",
+          note: "Chaptered crash course for new interns: Photopea editing, layer masks and styles, Wix, and Figma.",
           youtube: "https://youtu.be/raGk58za1ms",
           videoId: "raGk58za1ms"
         },
@@ -108,7 +108,7 @@ export default {
     }
   ],
   footer: {
-    tagline: "Mark Coggins — Modesto, California",
+    tagline: "Mark Coggins · Modesto, California",
     links: [
       {
         name: "Medium",
