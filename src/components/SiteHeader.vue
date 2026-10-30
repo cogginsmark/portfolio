@@ -136,7 +136,7 @@ export default {
   border-radius: 999px;
   font-size: 0.95rem;
   line-height: 1.25;
-  transition: background-color 0.2s ease, color 0.2s ease, padding 0.25s ease;
+  transition: background-color 0.2s ease, color 0.2s ease, padding 0.25s ease, font-weight 0.25s ease;
 }
 
 /* The label carries a hidden bold twin (::after, height 0) so every
@@ -178,7 +178,7 @@ export default {
   color: var(--main-color);
   font-weight: 700;
   box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--main-color) 12%, transparent);
-  transition: background-color 0.25s ease, box-shadow 0.25s ease, color 0.2s ease, padding 0.25s ease;
+  transition: background-color 0.25s ease, box-shadow 0.25s ease, color 0.2s ease, padding 0.25s ease, font-weight 0.25s ease;
 }
 
 .nav-link.router-link-exact-active:hover,
@@ -270,6 +270,16 @@ export default {
     padding-inline: 0.5rem;
   }
 
+  /* No hover on a phone (Mark's call, 2026-10-30): the active
+     tab makes its change as one animation when it becomes
+     current — the variable font's weight and the hitbox growth
+     running together — instead of arriving pre-grown. The
+     hidden bold twin already holds the text's width, so the
+     motion is pure padding and weight. */
+  .nav-link.router-link-exact-active {
+    animation: nav-active-in 0.3s ease;
+  }
+
   .nav-toggle {
     display: inline-flex;
     order: 0;
@@ -295,16 +305,18 @@ export default {
   .switch-wrap {
     display: none;
     position: absolute;
-    top: 100%;
-    /* Drops from under the Menu button, which sits on the left
-       now, so the panel anchors left and its bordered edge is
-       the right one. */
-    left: 0;
+    /* A floating rounded card (Mark's call, 2026-10-30): inset
+       from the bar's corner, one border all around, and a solid
+       surface — the theme's fallback colour — with no gradient
+       in it. It still drops from under the Menu button on the
+       left. */
+    top: calc(100% + 0.5rem);
+    left: 0.5rem;
     margin: 0;
     padding: 0.6rem 1rem 0.8rem;
-    background: var(--main-background-color);
-    border-bottom: 1px solid color-mix(in srgb, var(--main-color) 10%, transparent);
-    border-right: 1px solid color-mix(in srgb, var(--main-color) 10%, transparent);
+    background: var(--fallback-background-color);
+    border: 1px solid color-mix(in srgb, var(--main-color) 10%, transparent);
+    border-radius: 1rem;
     box-shadow: 0 1rem 1.5rem rgb(0 0 0 / 0.12);
   }
 
@@ -314,11 +326,26 @@ export default {
   }
 }
 
+@keyframes nav-active-in {
+  from {
+    padding-inline: 0.15rem;
+    font-weight: 400;
+  }
+  to {
+    padding-inline: 0.5rem;
+    font-weight: 700;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .site-header,
   .nav-link,
   .nav-toggle {
     transition: none;
+  }
+
+  .nav-link.router-link-exact-active {
+    animation: none;
   }
 }
 </style>
