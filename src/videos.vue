@@ -39,9 +39,9 @@
             </p>
             <p class="video-note">{{ entry.note }}</p>
             <p class="video-links">
-              <a :href="entry.youtube" target="_blank" rel="noopener">Watch on YouTube<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+              <a :href="entry.youtube" target="_blank" rel="noopener">Watch on YouTube</a>
               <template v-if="entry.article">
-                · <a :href="entry.article" target="_blank" rel="noopener">Read the article<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+                · <a :href="entry.article" target="_blank" rel="noopener">Read the article</a>
               </template>
             </p>
           </article>
@@ -99,11 +99,14 @@
                 <span v-if="entry.date" class="video-date"> · {{ entry.date }}</span>
               </p>
               <p class="video-note">{{ entry.note }}</p>
-              <p class="video-links">
-                <a v-if="entry.youtube" :href="entry.youtube" target="_blank" rel="noopener">Watch on YouTube<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
-                <a v-else-if="entry.instagram" :href="entry.instagram" target="_blank" rel="noopener">View on Instagram<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+              <p v-if="entry.src && entry.instagram" class="video-cta-row">
+                <a class="video-cta" :href="entry.instagram" target="_blank" rel="noopener">View on Instagram<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+              </p>
+              <p v-else class="video-links">
+                <a v-if="entry.youtube" :href="entry.youtube" target="_blank" rel="noopener">Watch on YouTube</a>
+                <a v-else-if="entry.instagram" :href="entry.instagram" target="_blank" rel="noopener">View on Instagram</a>
                 <template v-if="entry.article">
-                  · <a :href="entry.article" target="_blank" rel="noopener">Read the article<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+                  · <a :href="entry.article" target="_blank" rel="noopener">Read the article</a>
                 </template>
               </p>
             </article>
@@ -438,17 +441,43 @@ onUnmounted(() => {
   font-weight: 600;
 }
 
-/* Outbound links carry the same trailing arrow as Home's outbound
-   links (the minor-card buttons there) — Mark's call, 2026-10-30. */
-.video-links i {
-  margin-left: 0.3rem;
-  font-size: 0.75em;
+/* A self-hosted entry's preview is the player itself, not a link —
+   so its way out to the original post is a real CTA button rather
+   than a text link (Mark's call, 2026-10-30). Card entries whose
+   thumbnails link out keep the plain text links: the preview image
+   is the button there. */
+.video-cta-row {
+  margin: 0;
+}
+
+.video-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.6rem 1.1rem;
+  border: 1px solid color-mix(in srgb, var(--main-color) 25%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--main-color) 10%, transparent);
+  color: inherit;
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: background 0.25s ease;
+}
+
+.video-cta:hover {
+  background: color-mix(in srgb, var(--main-color) 18%, transparent);
+}
+
+.video-cta i {
+  font-size: 0.8em;
 }
 
 @media (prefers-reduced-motion: reduce) {
   .video-thumb img,
   .video-play i,
-  .video-sound {
+  .video-sound,
+  .video-cta {
     transition: none;
   }
 }
