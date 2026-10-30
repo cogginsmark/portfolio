@@ -35,6 +35,10 @@ export default {
      the viewport; the padding keeps its breathing room on tall ones. */
   width: 100%;
   max-width: 1180px;
+  /* border-box, or the side padding adds on top of the 100% width
+     and the footer (and with it the whole page) overflows by
+     exactly the padding — the run-off-the-page bug of 2026-10-30. */
+  box-sizing: border-box;
   margin: 0 auto;
   margin-top: auto;
   padding: 4rem 1.25rem;

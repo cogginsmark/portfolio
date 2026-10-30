@@ -113,14 +113,23 @@ export default {
   gap: 1rem;
 }
 
+.cta-section {
+  /* The trio's shared width, set by its widest label (Journalism:
+     label, icon block and the glass button's padding), held as one
+     token so all three buttons are that width exactly. */
+  --cta-w: 10rem;
+}
+
 .cta-section :deep(.styled-button) {
   margin-right: 0;
-  /* Equal-width trio (Mark's pick, 2026-10-30): every button takes
-     exactly half the row less half the gap, so all three share one
-     width and the wrapped third lands precisely under the first
-     instead of centring on its own row at its own size. */
-  flex: 0 1 calc(50% - 0.5rem);
-  max-width: calc(50% - 0.5rem);
+  /* Equal-width trio (Mark's spec, 2026-10-30): all three buttons
+     share one width, the widest label sets it, and the third wraps
+     to land exactly under the first — a deliberate 2-over-1 stack
+     with a shared left edge. */
+  flex: 0 0 auto;
+  width: var(--cta-w);
+  max-width: 100%;
+  white-space: nowrap;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -140,15 +149,6 @@ export default {
   }
 }
 
-/* On small phones the trio gives up the row entirely and stacks
-   full-width, one button per row, edges flush with the text
-   column (Mark's fallback pick, 2026-10-30). */
-@media screen and (max-width: 40rem) {
-  .cta-section :deep(.styled-button) {
-    flex-basis: 100%;
-    max-width: 100%;
-  }
-}
 
 /* On mobile the hero stops being a full-viewport stage: it was
    centring its text inside a 100vh box that starts below the header,

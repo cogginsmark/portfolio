@@ -234,10 +234,10 @@ onUnmounted(() => {
 /* Unit rules: rem for font sizes and spacing, em for letter
    tracking, px reserved for hairline borders. */
 .videos-wrap {
-  /* The media page takes the shell's measure (Mark's pick,
-     2026-10-30): 1180, the header's width, so the grid's columns
-     breathe and bylines stop squeezing. */
-  max-width: 1180px;
+  /* Widened to 1180 and reverted the same day on Mark's word
+     (2026-10-30): the page keeps its 980 measure; the byline fix
+     (unbreakable date, smaller size) carries the desktop layout. */
+  max-width: 980px;
   margin: 0 auto;
   padding: 3rem 1.25rem 1rem;
 }
@@ -425,7 +425,7 @@ onUnmounted(() => {
 
 .video-meta {
   margin: 0 0 0.45rem;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.12em;
 }
