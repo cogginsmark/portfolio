@@ -408,6 +408,15 @@ onUnmounted(() => {
   margin-top: 0.5rem;
 }
 
+/* The 916 text justifies to the right margin (Mark's call,
+   2026-10-30): in the side layout the whole column — title,
+   byline, tools, note and credit — aligns to its right edge,
+   and the Instagram pill, inline in its row, ends the block at
+   the same edge. The stacked layout keeps its left alignment. */
+.video-grid--side .video-card-text {
+  text-align: right;
+}
+
 @media screen and (max-width: 40rem) {
   .video-grid--side .video-card {
     flex-direction: column;
