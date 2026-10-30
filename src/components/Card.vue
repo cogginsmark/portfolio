@@ -6,7 +6,7 @@
           <h1 class="text-main-title">{{name}}</h1>
           <div class="medium">{{medium}}</div>
           <div class="carousel-container" v-if="windowWidth <= 980">
-            <Carousel v-if="images" class="styled-carousel" :items-to-show="1" :autoplay="autoplay" :wrap-around="true" :pause-autoplay-on-hover="true" slide-effect="fade" :transition="800">
+            <Carousel v-if="images" class="styled-carousel" :items-to-show="1" :autoplay="autoplay" :wrap-around="true" :pause-autoplay-on-hover="true" slide-effect="fade" :transition="1200">
               <Slide v-for="(image, index) in images" :key="index">
                 <img class="carousel-image" loading="lazy" v-bind:src="image"/>
               </Slide>
@@ -37,7 +37,7 @@
         </div>
       </div>
       <div class="carousel-container" v-if="windowWidth > 980">
-        <Carousel v-if="images" class="styled-carousel" :items-to-show="1" :autoplay="autoplay" :wrap-around="true" :pause-autoplay-on-hover="true" slide-effect="fade" :transition="800">
+        <Carousel v-if="images" class="styled-carousel" :items-to-show="1" :autoplay="autoplay" :wrap-around="true" :pause-autoplay-on-hover="true" slide-effect="fade" :transition="1200">
           <Slide v-for="(image, index) in images" :key="index">
             <img class="carousel-image" loading="lazy" v-bind:src="image"/>
           </Slide>
@@ -240,6 +240,12 @@ export default {
   box-shadow: var(--card-carousel-box-shadow);
   border-radius: 10px;
   overflow: hidden;
+  /* A dark bed under the fade (2026-10-30): midway through a
+     crossfade the two images' opacities dip, and what shows in
+     the dip decides whether the fade reads as a dissolve or a
+     flash. Over the page background it flashed; over this it
+     fades through dark, deliberately. */
+  background: #101216;
   height: 275px;
   width: 500px;
   /* The slide indicators, through the library's own variables:

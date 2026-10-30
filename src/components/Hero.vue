@@ -191,6 +191,20 @@ export default {
   }
 }
 
+@media screen and (max-width: 40rem) {
+  /* Smaller trio on phones (Mark's call, 2026-10-30): the glass
+     buttons take a shorter height through the library's own
+     --lg-h and a step smaller label and icon. */
+  .cta-section :deep(.styled-button) {
+    --lg-h: 2.3rem;
+    font-size: 0.88rem;
+  }
+
+  .cta-section .journalism-icon {
+    font-size: 1.02rem;
+  }
+}
+
 
 /* On mobile the hero stops being a full-viewport stage: it was
    centring its text inside a 100vh box that starts below the header,

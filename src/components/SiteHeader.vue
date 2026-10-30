@@ -254,6 +254,9 @@ export default {
   .primary-nav {
     order: 1;
     gap: 0.1rem;
+    /* The Menu button takes the lefthand side (Mark's call,
+       2026-10-30), so the links shift to the right end. */
+    margin-left: auto;
   }
 
   .nav-link {
@@ -269,8 +272,7 @@ export default {
 
   .nav-toggle {
     display: inline-flex;
-    order: 2;
-    margin-left: auto;
+    order: 0;
     /* The mobile links' own sizes, at their full hitbox: the
        Menu button is always a visible button, so it holds the
        padding the links grow into on hover. */
@@ -294,12 +296,15 @@ export default {
     display: none;
     position: absolute;
     top: 100%;
-    right: 0;
+    /* Drops from under the Menu button, which sits on the left
+       now, so the panel anchors left and its bordered edge is
+       the right one. */
+    left: 0;
     margin: 0;
     padding: 0.6rem 1rem 0.8rem;
     background: var(--main-background-color);
     border-bottom: 1px solid color-mix(in srgb, var(--main-color) 10%, transparent);
-    border-left: 1px solid color-mix(in srgb, var(--main-color) 10%, transparent);
+    border-right: 1px solid color-mix(in srgb, var(--main-color) 10%, transparent);
     box-shadow: 0 1rem 1.5rem rgb(0 0 0 / 0.12);
   }
 

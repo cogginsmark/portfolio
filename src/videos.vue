@@ -3,8 +3,7 @@
     <ThemeRoot>
       <div class="videos-wrap">
         <header class="videos-intro" data-reveal>
-          <h1 class="videos-heading">{{ author }}</h1>
-          <p class="videos-lede">{{ intro }}</p>
+          <p class="videos-lede"><i class="fas fa-play videos-lede-icon" aria-hidden="true"></i>{{ intro }}</p>
         </header>
 
         <section
@@ -207,10 +206,14 @@ onMounted(() => {
   const v = playerEl()
   if (!v) return
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    // No fade and no autoplay for reduced motion: the poster is
+    // simply there, and a tap starts the piece.
+    v.classList.add('is-on')
     return
   }
   v.muted = true
   if (!('IntersectionObserver' in window)) {
+    v.classList.add('is-on')
     v.play().catch(() => {})
     return
   }
@@ -218,6 +221,9 @@ onMounted(() => {
     (entries) => {
       for (const entry of entries) {
         if (entry.isIntersecting) {
+          // The fade onto the placeholder starts as the piece
+          // starts (Mark's call, 2026-10-30).
+          v.classList.add('is-on')
           v.play().catch(() => {})
           playerObserver.disconnect()
           playerObserver = null
@@ -253,19 +259,27 @@ onUnmounted(() => {
   margin-bottom: 3rem;
 }
 
-.videos-heading {
-  font-size: clamp(2.2rem, 6vw, 3.2rem);
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  margin: 0 0 0.5rem;
-}
-
+/* No page title (Mark's call, 2026-10-30): the lede leads the
+   page on its own, carrying the Videos button's play icon inline
+   and set on one line — no wrap, no measure cap — at any width
+   that can hold it; small phones wrap it rather than clip it. */
 .videos-lede {
   margin: 0;
-  font-size: 1.05rem;
+  font-size: 1rem;
   line-height: var(--leading-text);
   opacity: 0.75;
-  max-width: 38rem;
+  white-space: nowrap;
+}
+
+.videos-lede-icon {
+  margin-right: 0.6rem;
+  font-size: 0.85em;
+}
+
+@media screen and (max-width: 40rem) {
+  .videos-lede {
+    white-space: normal;
+  }
 }
 
 .videos-section {
@@ -384,6 +398,14 @@ onUnmounted(() => {
 
 .video-grid--side .video-credit {
   margin-top: auto;
+  margin-bottom: 0;
+}
+
+/* The credit sits at the column's foot, directly above the
+   Instagram pill (Mark's call, 2026-10-30): the credit's auto
+   margin does the pushing, the pill keeps only a small gap. */
+.video-grid--side .video-cta-row {
+  margin-top: 0.5rem;
 }
 
 @media screen and (max-width: 40rem) {
@@ -408,6 +430,11 @@ onUnmounted(() => {
   position: relative;
   max-width: 340px;
   margin-bottom: 0.85rem;
+  /* The darker placeholder space the piece fades onto
+     (Mark's call, 2026-10-30): before the video arrives, this
+     is what fills its 9/16 frame. */
+  background: #101216;
+  border-radius: 12px;
 }
 
 .video-native {
@@ -415,9 +442,21 @@ onUnmounted(() => {
   width: 100%;
   aspect-ratio: 9 / 16;
   border-radius: 12px;
-  background: #000;
+  background: transparent;
   object-fit: cover;
   cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.video-native.is-on {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .video-native {
+    transition: none;
+  }
 }
 
 .video-sound {
