@@ -76,8 +76,10 @@ export default {
 }
 
 .hero-text-container {
-  /* TODO: CONFIGURABLE */
-  width: 390px;
+  /* Fluid under its authored size (2026-10-30): the column is
+     390px where there is room and shrinks with the viewport
+     instead of holding a fixed width to the smallest screens. */
+  width: min(390px, calc(100% - 1.25rem));
   margin: 10px;
 
   /* Responsive */
@@ -85,7 +87,7 @@ export default {
 }
 @media screen and (max-width: 980px) {
   .hero-text-container {
-    width: 320px;
+    width: min(320px, calc(100% - 1.25rem));
     margin: auto;
   }
 }
@@ -107,17 +109,26 @@ export default {
   margin: 2.25rem 0;
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 1rem;
 }
 
 .cta-section :deep(.styled-button) {
   margin-right: 0;
+  /* Equal-width trio (Mark's pick, 2026-10-30): every button takes
+     exactly half the row less half the gap, so all three share one
+     width and the wrapped third lands precisely under the first
+     instead of centring on its own row at its own size. */
+  flex: 0 1 calc(50% - 0.5rem);
+  max-width: calc(50% - 0.5rem);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 }
 
-/* On mobile the Resume/CV + Journalism pair stays side by side on
-   one row; with the Videos button added the row may wrap, and the
-   wrapped button centres on its own row rather than overflowing. */
+/* On mobile the pair stays side by side on one row and the third
+   wraps under the first at the same width. */
 @media screen and (max-width: 61.25rem) {
   .cta-section {
     flex-wrap: wrap;
@@ -126,6 +137,16 @@ export default {
   .cta-section :deep(.styled-button) {
     padding-left: 1rem;
     padding-right: 1rem;
+  }
+}
+
+/* On small phones the trio gives up the row entirely and stacks
+   full-width, one button per row, edges flush with the text
+   column (Mark's fallback pick, 2026-10-30). */
+@media screen and (max-width: 40rem) {
+  .cta-section :deep(.styled-button) {
+    flex-basis: 100%;
+    max-width: 100%;
   }
 }
 

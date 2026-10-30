@@ -33,13 +33,26 @@
       <div class="logo-section-container">
         <h1 class="text-main-title">{{logoSection.title}}</h1>
         <div class="logo-container">
-          <logo-card
-            v-for="(logo, index) in logoSection.logos && logoSection.logos.slice(0,3)" :key="index"
-            v-bind:src="logo.src"
-            v-bind:url="logo.url"
-            v-bind:alt="logo.alt"
-          />
+          <div class="logo-track">
+            <div class="logo-set">
+              <logo-card
+                v-for="(logo, index) in logoSection.logos && logoSection.logos.slice(0,3)" :key="index"
+                v-bind:src="logo.src"
+                v-bind:url="logo.url"
+                v-bind:alt="logo.alt"
+              />
+            </div>
+            <div class="logo-set" aria-hidden="true" inert>
+              <logo-card
+                v-for="(logo, index) in logoSection.logos && logoSection.logos.slice(0,3)" :key="'dup-' + index"
+                v-bind:src="logo.src"
+                v-bind:url="logo.url"
+                v-bind:alt="logo.alt"
+              />
+            </div>
+          </div>
         </div>
+        <p class="logo-list-text">{{ (logoSection.logos || []).slice(0,3).map((logo) => logo.alt).join(' · ') }}</p>
       </div>
     </div>
     <foot v-bind:author="author" v-bind:footer="footer" />
@@ -95,7 +108,8 @@ export default {
 .minor-card-container {
   margin: auto;
   margin-bottom: 80px;
-  width: 980px;
+  width: 100%;
+  max-width: 980px;
   display: flex;
 }
 .minor-card-container > * {
@@ -109,7 +123,7 @@ export default {
 }
 @media screen and (max-width: 980px) {
   .minor-card-container {
-    width: 600px;
+    width: 100%;
     flex-direction: column;
   }
   .minor-card-container > * {
@@ -124,7 +138,6 @@ export default {
 }
 @media screen and (max-width: 600px) {
   .minor-card-container {
-    width: 360px;
     flex-direction: column;
   }
 }
@@ -132,38 +145,72 @@ export default {
 .logo-section-container {
   margin: auto;
   text-align: center;
-  width: 980px;
-}
-@media screen and (max-width: 980px) {
-  .logo-section-container {
-    width: 600px;
-    flex-direction: column;
-  }
-}
-@media screen and (max-width: 600px) {
-  .logo-section-container {
-    width: 360px;
-    flex-direction: column;
-  }
+  width: 100%;
+  max-width: 980px;
 }
 
 .logo-container {
   justify-content: center;
   margin: auto;
   margin-top: 20px;
-  width: 980px;
+  width: 100%;
   display: flex;
 }
+
+/* On desktop the track and sets are transparent to layout: the
+   three cards sit in the centred row exactly as before, the
+   duplicate set is not rendered, and the text line stays hidden. */
+.logo-track,
+.logo-set {
+  display: contents;
+}
+.logo-set + .logo-set {
+  display: none;
+}
+.logo-list-text {
+  display: none;
+}
+
+/* On smaller screens the strip stays horizontal and scrolls in a
+   seamless loop (Mark's direction, 2026-10-30): the set is
+   duplicated once in the markup and the track translates by
+   exactly one set, edges faded, with a plain text line under it
+   denoting the exact list. */
 @media screen and (max-width: 980px) {
   .logo-container {
-    width: 600px;
-    flex-direction: column;
+    overflow: hidden;
+    justify-content: flex-start;
+    -webkit-mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+    mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+  }
+  .logo-track {
+    display: flex;
+    width: max-content;
+    animation: logo-scroll 22s linear infinite;
+  }
+  .logo-set {
+    display: flex;
+  }
+  .logo-set + .logo-set {
+    display: flex;
+  }
+  .logo-list-text {
+    display: block;
+    margin: 0.75rem 1rem 0;
+    font-size: 0.85rem;
+    opacity: 0.75;
+  }
+  @keyframes logo-scroll {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
   }
 }
-@media screen and (max-width: 600px) {
+@media (prefers-reduced-motion: reduce) {
+  .logo-track {
+    animation: none;
+  }
   .logo-container {
-    width: 360px;
-    flex-direction: column;
+    overflow-x: auto;
   }
 }
 </style>
