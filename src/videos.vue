@@ -309,7 +309,6 @@ onUnmounted(() => {
 
 .video-grid--single .video-card {
   max-width: 340px;
-  text-align: center;
 }
 
 .video-grid--single .video-player {
