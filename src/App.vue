@@ -1,7 +1,6 @@
 <template>
   <div id="app">
     <div class="page-background" aria-hidden="true"></div>
-    <LiquidGlassFilter />
     <a class="skip-link" href="#main">Skip to content</a>
     <SiteHeader />
     <main id="main">
@@ -16,25 +15,13 @@
 
 <script>
 import SiteHeader from './components/SiteHeader.vue'
-import LiquidGlassFilter from './components/LiquidGlassFilter.vue'
 
 // The app shell: skip link, the shared SiteHeader, and the routed page
 // inside a <main> landmark with a short fade/slide between routes.
 export default {
   name: 'App',
   components: {
-    SiteHeader,
-    LiquidGlassFilter
-  },
-  mounted() {
-    // Liquid Glass refraction is a Chromium-only backdrop capability
-    // (the library's own canRefractBackdrop test); only there do the
-    // glass surfaces gain the SVG filter. Everywhere else they keep
-    // the frosted blur the stylesheet gives them.
-    const ua = navigator.userAgent
-    if (/Chrom(e|ium)\/|Edg\//.test(ua) && !/CriOS|FxiOS|EdgiOS/.test(ua)) {
-      document.documentElement.style.setProperty('--lg-filter', 'url(#liquid-glass-refract-3)')
-    }
+    SiteHeader
   }
 }
 </script>
