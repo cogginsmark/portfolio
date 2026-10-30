@@ -5,12 +5,12 @@
       <h1 id="contact-heading" class="visually-hidden">Contact</h1>
       <a class="contact-email" :href="`mailto:${email}`">{{ email }}</a>
       <div class="contact-actions">
-        <StyledButton primary color="#363636" :href="`mailto:${email}`"><span class="text-button-text">Email</span><i class="fas fa-envelope"></i></StyledButton>
-        <StyledButton secondary v-bind:href="cta.url"><span class="text-button-text">{{ cta.label }}</span><i class="fas fa-arrow-down"></i></StyledButton>
-        <StyledButton secondary v-bind:href="journalism.url" target="_blank" rel="noopener"><span class="text-button-text">{{ journalism.label }}</span><span class="journalism-icon" aria-hidden="true">history_edu</span></StyledButton>
+        <StyledButton glass primary color="#363636" :href="`mailto:${email}`"><span class="text-button-text">Email</span><i class="fas fa-envelope"></i></StyledButton>
+        <StyledButton glass secondary v-bind:href="cta.url"><span class="text-button-text">{{ cta.label }}</span><i class="fas fa-arrow-down"></i></StyledButton>
+        <StyledButton glass secondary v-bind:href="journalism.url" target="_blank" rel="noopener"><span class="text-button-text">{{ journalism.label }}</span><span class="journalism-icon" aria-hidden="true">history_edu</span></StyledButton>
       </div>
     </section>
-    <foot v-bind:author="author" v-bind:footer="footer"/>
+    <foot v-bind:author="author" v-bind:footer="footer" link-buttons/>
     </ThemeRoot>
   </div>
 </template>
