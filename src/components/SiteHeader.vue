@@ -94,19 +94,9 @@ export default {
 }
 
 .header-inner {
-  /* One text size for the whole bar (Mark's nav pass, 2026-10-30),
-     held as a token on the bar itself: brand, links and the Menu
-     button all draw from it, and weight alone carries hierarchy.
-     0.95rem at the site's 18px root is ~17px in Manrope, the
-     apparent size the spec's headline step intends. */
-  --nav-size: 0.95rem;
   max-width: 1180px;
   margin: 0 auto;
-  /* Bar height trimmed on Mark's word (2026-10-30, twice): first
-     the bar's breathing room went, then the hit floor itself came
-     down (see --hit). No vertical padding remains; the controls
-     are the bar's height. */
-  padding: 0 1.25rem;
+  padding: 0.65rem 1.25rem;
   display: flex;
   align-items: center;
   gap: 1rem;
@@ -121,14 +111,14 @@ export default {
 
 .brand-name {
   font-weight: 700;
-  font-size: var(--nav-size);
+  font-size: 1.02rem;
   letter-spacing: -0.01em;
 }
 
 .primary-nav {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.35rem;
 }
 
 .nav-link {
@@ -136,12 +126,9 @@ export default {
   align-items: center;
   justify-content: center;
   color: var(--main-color);
-  /* The hit floor is the shared token; padding is in em so the
-     pill's proportions follow its own label if the size moves. */
-  min-height: var(--hit);
-  padding: 0.5em 1em;
+  padding: 0.45rem 0.9rem;
   border-radius: 999px;
-  font-size: var(--nav-size);
+  font-size: 0.95rem;
   line-height: 1.25;
   transition: background-color 0.2s ease, color 0.2s ease;
 }
@@ -192,10 +179,6 @@ export default {
 .switch-wrap {
   display: flex;
   align-items: center;
-  /* The switch's hit area reaches the shared floor through the
-     wrapper; the switch's own visual size is unchanged (padding
-     extends the hit region, not the visual). */
-  min-height: var(--hit);
   margin-left: 0.35rem;
 }
 
@@ -208,28 +191,20 @@ export default {
 .nav-toggle {
   display: none;
   align-items: center;
-  justify-content: center;
-  /* One pill construction for the whole bar: the Menu button now
-     wears the active link's treatment (soft fill, inset ring) at
-     the shared hit floor and text size, instead of its own
-     bordered dialect. */
-  min-height: var(--hit);
-  padding: 0.5em 1em;
-  border: none;
+  padding: 0.45rem 0.95rem;
+  border: 1px solid color-mix(in srgb, var(--main-color) 22%, transparent);
   border-radius: 999px;
-  background: color-mix(in srgb, var(--main-color) 6%, transparent);
-  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--main-color) 12%, transparent);
+  background: transparent;
   color: var(--main-color);
   font: inherit;
-  font-size: var(--nav-size);
+  font-size: 0.95rem;
   font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+  transition: background-color 0.2s ease;
 }
 
 .nav-toggle:hover {
-  background: color-mix(in srgb, var(--main-color) 16%, transparent);
-  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--main-color) 30%, transparent);
+  background: color-mix(in srgb, var(--main-color) 8%, transparent);
 }
 
 /* The light/dark switch is labelled on mobile only; on desktop the
@@ -247,18 +222,18 @@ export default {
   }
 
   .header-inner {
-    --nav-size: 0.875rem;
     padding-inline: 0.9rem;
     gap: 0.5rem;
   }
 
   .primary-nav {
     order: 1;
-    gap: 0.25rem;
+    gap: 0.1rem;
   }
 
   .nav-link {
-    padding: 0.5em 0.6em;
+    padding: 0.4rem 0.5rem;
+    font-size: 0.88rem;
   }
 
   .nav-toggle {
@@ -270,7 +245,7 @@ export default {
   .theme-toggle-label {
     display: inline;
     margin-left: 0.5rem;
-    font-size: var(--nav-size);
+    font-size: 0.95rem;
     font-weight: 600;
     letter-spacing: 0.01em;
   }
