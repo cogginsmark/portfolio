@@ -387,6 +387,12 @@ export default {
      opacity, instead of giving it up and standing as bold
      text alone. */
   animation: nav-pill-fade 1.6s ease forwards;
+  /* The hitbox is at its end state from the first frame
+     (Mark's call, 2026-10-30): padding does not transition
+     while the item stands in its navigated state — the
+     background, colour and weight keep their rates. */
+  transition-property: background-color, color, padding, font-weight;
+  transition-duration: 0.45s, 0.2s, 0s, 0.25s;
 }
 
 @keyframes nav-pill-fade {
