@@ -238,7 +238,11 @@ export default {
   border-radius: 999px;
   font-size: 0.95rem;
   line-height: 1.25;
-  transition: background-color 0.2s ease, color 0.2s ease, padding 0.25s ease, font-weight 0.25s ease;
+  /* The background's slower rate is the fade (Mark's call,
+     2026-10-30): a hovered pill arrives quickly (the hover
+     rule carries its own faster transition) and fades back
+     slowly once the hover is done. */
+  transition: background-color 0.45s ease, color 0.2s ease, padding 0.25s ease, font-weight 0.25s ease;
 }
 
 /* The label carries a hidden bold twin (::after, height 0) so every
@@ -283,6 +287,16 @@ export default {
   .nav-link:hover {
     background: color-mix(in srgb, var(--main-color) 8%, transparent);
     padding-inline: 0.9rem;
+    transition: background-color 0.18s ease, color 0.2s ease, padding 0.25s ease, font-weight 0.25s ease;
+  }
+
+  /* While the current item is hovered or keyboard-focused,
+     its arrival fade (below) stands down — the pill is being
+     interacted with, so it stays. Leaving lets the finished
+     fade's end state resume. */
+  .site-header.has-navigated .nav-link.router-link-exact-active:hover,
+  .site-header.has-navigated .nav-link.router-link-exact-active:focus-visible {
+    animation: none;
   }
 
   .nav-link.router-link-exact-active:hover {
@@ -327,6 +341,25 @@ export default {
 .site-header.has-navigated .nav-link.router-link-exact-active {
   background: color-mix(in srgb, var(--main-color) 6%, transparent);
   box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--main-color) 12%, transparent);
+  /* The pill is an arrival, not a residence (Mark's call,
+     2026-10-30): it shows as the item becomes current, holds
+     a beat, then fades — fill, ring and hitbox together —
+     back to the variable bold text, which is what carries
+     the current page from then on. */
+  animation: nav-pill-fade 1.5s ease forwards;
+}
+
+@keyframes nav-pill-fade {
+  0%, 55% {
+    background-color: color-mix(in srgb, var(--main-color) 6%, transparent);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--main-color) 12%, transparent);
+    padding-inline: 0.9rem;
+  }
+  100% {
+    background-color: transparent;
+    box-shadow: inset 0 0 0 1px transparent;
+    padding-inline: 0.25rem;
+  }
 }
 
 .nav-link.router-link-exact-active:active {
@@ -452,6 +485,20 @@ export default {
      stands as bold text at its text spacing. */
   .site-header.has-navigated .nav-link.router-link-exact-active {
     padding-inline: 0.5rem;
+    animation: nav-pill-fade-mobile 1.5s ease forwards;
+  }
+
+  @keyframes nav-pill-fade-mobile {
+    0%, 55% {
+      background-color: color-mix(in srgb, var(--main-color) 6%, transparent);
+      box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--main-color) 12%, transparent);
+      padding-inline: 0.5rem;
+    }
+    100% {
+      background-color: transparent;
+      box-shadow: inset 0 0 0 1px transparent;
+      padding-inline: 0.42rem;
+    }
   }
 
   /* On mobile the bar's two alignments separate (Mark's spec,
@@ -642,6 +689,12 @@ export default {
   .nav-toggle,
   .primary-nav {
     transition: none;
+  }
+
+  /* No arrival fade under reduced motion: the navigated
+     pill simply stays, as it did before the fade. */
+  .site-header.has-navigated .nav-link.router-link-exact-active {
+    animation: none;
   }
 }
 </style>

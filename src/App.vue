@@ -165,19 +165,6 @@ export default {
     z-index: 900;
     border-radius: 999px;
     box-shadow: 0 12px 32px rgb(0 0 0 / 0.16);
-    /* At rest the control sits faded (Mark's call,
-       2026-10-30): hover or keyboard focus brings it fully
-       forward, and it fades back when the pointer leaves —
-       in either theme state, the activated (pressed) state
-       included, so the fade rides on the wrapper's opacity
-       rather than the pill's own colours. */
-    opacity: 0.55;
-    transition: opacity 0.4s ease;
-  }
-
-  .theme-float:hover,
-  .theme-float:focus-within {
-    opacity: 1;
   }
 
   .theme-float :deep(.theme-pill) {
@@ -231,7 +218,6 @@ export default {
   .page-enter-active,
   .page-leave-active,
   .skip-link,
-  .theme-float,
   .watercolor-layer {
     transition: none;
   }
