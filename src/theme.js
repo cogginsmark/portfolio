@@ -9,6 +9,16 @@ export const localStore = reactive({
   dark: false
 })
 
+// The mobile header's hitbox state (Mark's model, 2026-10-30):
+// the nav buttons start with their hitbox defined by the text,
+// and the first tap on a menu nav item promotes the whole
+// header to its full button hitboxes, where it stays until a
+// reload. Plain in-memory state on purpose — storage would
+// survive the reload that is supposed to reset it.
+export const navStore = reactive({
+  roomy: false
+})
+
 export const currentTheme = () => (localStore.dark ? dark : light)
 
 export const mutations = {

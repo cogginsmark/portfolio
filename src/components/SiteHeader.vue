@@ -1,5 +1,5 @@
 <template>
-  <header class="site-header" :class="{ 'is-scrolled': scrolled }">
+  <header class="site-header" :class="{ 'is-scrolled': scrolled, 'nav-roomy': roomy }">
     <div class="header-inner">
       <router-link to="/" class="brand" aria-label="Mark Coggins — home">
         <span class="brand-name">Mark Coggins</span>
@@ -11,7 +11,7 @@
           class="nav-toggle"
           :aria-expanded="open ? 'true' : 'false'"
           aria-controls="menu-panel"
-          @click="open = !open"
+          @click="markNavUsed(); open = !open"
         >
           <span class="nav-toggle-label">{{ open ? 'Close' : 'Menu' }}</span>
         </button>
@@ -19,7 +19,7 @@
         <div id="menu-panel" class="switch-wrap" :class="{ 'is-open': open }">
           <LightToggle><span class="theme-toggle-label">{{ isDark ? 'Dark' : 'Light' }} mode</span></LightToggle>
 
-          <nav class="panel-links" aria-label="Quick actions" @click="open = false">
+          <nav class="panel-links" aria-label="Quick actions" @click="markNavUsed(); open = false">
             <a class="panel-link" href="/cv.pdf" target="_blank" rel="noopener"><span>Resume / CV</span></a>
             <a class="panel-link" :href="emailUrl"><span>Email</span></a>
             <a v-for="link in socialLinks" :key="link.name" class="panel-link" :href="link.url" target="_blank" rel="noopener"><span>{{ link.name }}</span></a>
@@ -27,7 +27,7 @@
         </div>
       </div>
 
-      <nav id="primary-nav" class="primary-nav" aria-label="Primary">
+      <nav id="primary-nav" class="primary-nav" aria-label="Primary" @click="markNavUsed">
         <router-link class="nav-link" to="/"><span class="nav-text" data-text="Home">Home</span></router-link>
         <router-link class="nav-link" to="/about"><span class="nav-text" data-text="About">About</span></router-link>
         <router-link class="nav-link" to="/videos"><span class="nav-text" data-text="Videos">Videos</span></router-link>
@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import { localStore } from '../theme.js'
+import { localStore, navStore } from '../theme.js'
 import LightToggle from './LightToggle.vue'
 import homeData from '../data/fixtures'
 
@@ -64,6 +64,9 @@ export default {
     isDark() {
       return localStore.dark
     },
+    roomy() {
+      return navStore.roomy
+    },
     // The Menu panel's quick actions draw on the same link
     // data as the footer (2026-10-30), so the two never drift.
     emailUrl() {
@@ -75,6 +78,14 @@ export default {
       return order
         .map((name) => homeData.footer.links.find((link) => link.name === name))
         .filter(Boolean)
+    }
+  },
+  methods: {
+    // The first tap on any menu nav item promotes the header
+    // to its full hitboxes for the rest of the load (the
+    // navStore comment in theme.js carries the model).
+    markNavUsed() {
+      navStore.roomy = true
     }
   },
   mounted() {
@@ -335,16 +346,34 @@ export default {
   }
 
   .nav-link {
-    /* Sizes swapped with the Menu item (Mark's spec,
-       2026-10-30): the nav items take the full hitbox padding
-       the Menu button used to hold, at rest. */
-    padding: 0.4rem 0.5rem;
+    /* Text-defined hitboxes until the first nav tap (Mark's
+       model, 2026-10-30): the items rest at the close padding,
+       their targets hugging the words. */
+    padding: 0.4rem 0.42rem;
     font-size: 0.88rem;
   }
 
-  .nav-link:focus-visible,
-  .nav-link.router-link-exact-active {
+  .nav-link:focus-visible {
     padding-inline: 0.5rem;
+  }
+
+  /* Promoted (the .nav-roomy rules): once any menu nav item
+     has been tapped, the whole header takes its full button
+     hitboxes and keeps them until a reload — the growth
+     animates once, on that first tap, through the links' own
+     padding transition, and never moves again. Route changes
+     are not reloads, so the state rides along in memory. */
+  .site-header.nav-roomy .nav-link {
+    padding-inline: 0.5rem;
+  }
+
+  .site-header.nav-roomy .nav-link.router-link-exact-active {
+    animation-name: nav-active-in-roomy;
+  }
+
+  .site-header.nav-roomy .nav-toggle {
+    padding-inline: 0.5rem;
+    min-width: 3.75rem;
   }
 
   /* No hover on a phone (Mark's call, 2026-10-30): the active
@@ -382,16 +411,18 @@ export default {
   .nav-toggle {
     display: inline-flex;
     justify-content: center;
-    /* One constant box in both states (bug fix, 2026-10-30):
-       the button used to rest at text spacing and expand its
-       hotbox when it read Close — right-anchored, the growth
-       slid the label leftward under the finger on every tap,
-       a jitter in the hitbox itself. It now always wears the
-       full hitbox the open state wanted, sized to the wider
-       word, and only the label swaps inside the stable box. */
-    padding: 0.4rem 0.5rem;
-    min-width: 3.75rem;
+    /* Text-defined like the links (Mark's model, 2026-10-30),
+       superseding the constant full box tried earlier today:
+       tight spacing on load, with the measure already fitted
+       to the wider word so Menu and Close swap inside one
+       stable box and a tap never moves the target. The
+       .nav-roomy rule promotes it to the full hitbox on the
+       first nav tap; padding and measure transition here so
+       that single promotion is one smooth growth. */
+    padding: 0.4rem 0.15rem;
+    min-width: 2.65rem;
     font-size: 0.88rem;
+    transition: background-color 0.2s ease, box-shadow 0.25s ease, padding 0.25s ease, min-width 0.25s ease;
   }
 
   .theme-toggle-label {
@@ -501,10 +532,23 @@ export default {
 }
 
 @keyframes nav-active-in {
-  /* The growth is back, kept subtle (Mark's call, 2026-10-30):
-     since the size swap the links rest at their full hitbox,
-     so the incoming tab dips a touch under it and grows the
-     last fraction into place alongside the weight. */
+  /* The incoming tab's settle, in each of the header's two
+     states (2026-10-30): before the first tap the links rest
+     at their text-close .42, so the tab dips under it and
+     grows the last fraction into place alongside the weight. */
+  from {
+    padding-inline: 0.34rem;
+    font-weight: 400;
+  }
+  to {
+    padding-inline: 0.42rem;
+    font-weight: 700;
+  }
+}
+
+@keyframes nav-active-in-roomy {
+  /* The same settle once the header is promoted to its full
+     hitboxes: the dip and growth land on .5 instead. */
   from {
     padding-inline: 0.42rem;
     font-weight: 400;
