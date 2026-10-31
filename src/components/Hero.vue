@@ -11,6 +11,9 @@
           <router-link v-if="cta3" :to="cta3Url" class="cta-nav-link"><StyledButton glass secondary :color="'#363636'"><span class="text-button-text">{{cta3}}</span><i class="fas fa-play"></i></StyledButton></router-link>
         </div>
       </div>
+      <section class="services-section services-section--hero" aria-label="Services">
+        <p class="services-line">Design · Video editing · Motion graphics · Social</p>
+      </section>
     </div>
   </div>
 
@@ -182,6 +185,42 @@ export default {
   .hero-heading {
     font-size: 2.625rem;
   }
+}
+
+/* The services line's desktop placement (Mark's call,
+   2026-10-30): centred between the CTAs and the first card.
+   On desktop the hero is a full-height stage with its text
+   group centred, so the span from the group's foot to the
+   card's top edge (which overlaps the hero's foot by
+   5.25rem) has its midpoint at three-quarters of the hero
+   plus a quarter of the group's height, less half the
+   overlap — the section is anchored there, out of flow, so
+   the group itself never moves. Below the desktop widths
+   this instance stands down: the line's home there is the
+   card column's first row (Home.vue), in the joint itself. */
+.services-section--hero {
+  display: none;
+}
+
+@media (min-width: 61.25rem) {
+  .services-section--hero {
+    display: block;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 75%;
+    transform: translateY(1.85rem);
+    text-align: center;
+  }
+}
+
+.services-line {
+  margin: 0;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0.75;
 }
 
 .cta-section {

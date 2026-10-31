@@ -117,6 +117,16 @@ export default {
   text-align: center;
 }
 
+/* At desktop widths the line's placement is the hero's
+   centred instance instead (Hero.vue): the full-height
+   stage puts this row far below the CTAs rather than
+   between them and the card. */
+@media (min-width: 61.25rem) {
+  .services-section {
+    display: none;
+  }
+}
+
 .services-line {
   margin: 0;
   font-size: 0.85rem;
