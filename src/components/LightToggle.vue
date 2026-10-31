@@ -45,7 +45,11 @@ export default {
   gap: var(--pill-icon-gap);
   min-height: 2.25rem;
   margin: 0;
-  padding: 0.45rem 0.9rem;
+  /* Wider sides in the Apple-spec sweep (Mark's call,
+     2026-10-30): 1.25rem, the panel rows' new measure —
+     in the panel the header's parity rule sets the exact
+     row metrics over this. */
+  padding: 0.45rem 1.25rem;
   border: 0;
   border-radius: 999px;
   background: transparent;

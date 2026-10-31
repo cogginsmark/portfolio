@@ -28,7 +28,10 @@ export default {
   font-size: 0.66rem;
   letter-spacing: 1.2px;
   text-transform: uppercase;
-  padding: 0.75rem 1.5rem;
+  /* Wider side margins (Mark's call, 2026-10-30): the
+     site-wide Apple-spec pill sweep — every button the
+     site makes breathes at 1.75rem a side. */
+  padding: 0.75rem 1.75rem;
   font-weight: bold;
   margin-right: 20px;
   border-radius: 24px;
@@ -77,7 +80,8 @@ export default {
   .styled-button {
     font-size: 0.6rem;
     line-height: 1.6rem;
-    padding: 0.55rem 0.9rem;
+    /* The sweep's phone measure: 1.25rem a side. */
+    padding: 0.55rem 1.25rem;
   }
 }
 </style>

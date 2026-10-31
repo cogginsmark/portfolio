@@ -621,7 +621,10 @@ export default {
      to sit in, and the target grows with it. The base rule's
      transition animates the growth. */
   .nav-toggle[aria-expanded="true"] {
-    padding-inline: 0.5rem;
+    /* The Close pill takes the nav pills' own wider measure
+       (Mark's call, 2026-10-30 — the Apple-spec sweep
+       includes the close pill). */
+    padding-inline: 0.75rem;
   }
 
   /* The centred layout (Mark's model, 2026-10-30): once a nav
@@ -650,13 +653,14 @@ export default {
        no min-width — the button hugs the glyph, and the
        faded word leaves the layout (below) so the stack
        sizes to the dots alone. Its inline padding is the
-       panel rows' own 1rem inset, so the dots sit on the
-       same right-hand line as the rows' icons below (Mark's
-       call, 2026-10-30); the background already matched the
+       panel rows' own inset — widened to 1.25rem with them
+       in the Apple-spec sweep (Mark's call, 2026-10-30) —
+       so the dots sit on the same right-hand line as the
+       rows' icons below; the background already matched the
        rows and is untouched. The right edge does not move:
        the wrap is anchored to the gutter line, and the
        panel below keys off the same edge. */
-    padding: 0.55rem 1rem;
+    padding: 0.55rem 1.25rem;
     min-width: 0;
     justify-content: center;
   }
@@ -781,7 +785,11 @@ export default {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0.55rem 1rem;
+    /* Wider side margins (Mark's call, 2026-10-30): the
+       panel rows join the site-wide Apple-spec pill sweep
+       at 1.25rem, the Background row and the collapsed
+       dots pill moving with them to hold the icon line. */
+    padding: 0.55rem 1.25rem;
     border-radius: 999px;
     background: var(--fallback-background-color);
     box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--main-color) 10%, transparent), 0 12px 32px rgb(0 0 0 / 0.2);
@@ -819,8 +827,9 @@ export default {
     justify-content: space-between;
     /* Panel parity (the spacing system, 2026-10-30): the
        Background row takes the link rows' exact metrics, so
-       all six panel rows share a height and a text line. */
-    padding: 0.55rem 1rem;
+       all six panel rows share a height and a text line —
+       1.25rem inline since the Apple-spec sweep. */
+    padding: 0.55rem 1.25rem;
   }
 }
 

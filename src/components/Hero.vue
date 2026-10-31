@@ -344,14 +344,18 @@ export default {
     font-size: 2.25rem;
   }
 
-  /* The CTA row tightens so the trio's defined widths fit
-     more viewports before compression has to start. */
+  /* The CTA row tightens its gap so the trio's defined
+     widths fit more viewports before compression has to
+     start. The trio's own inset rises with the site-wide
+     pill sweep but stays a step under the buttons' phone
+     measure — three defined widths share one row here,
+     and their fit is the tighter budget. */
   .cta-section {
     gap: 0.5rem;
   }
 
   .cta-section :deep(.styled-button) {
-    padding-inline: 0.7rem;
+    padding-inline: 0.9rem;
   }
 }
 </style>

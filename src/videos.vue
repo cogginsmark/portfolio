@@ -493,15 +493,15 @@ onUnmounted(() => {
      and padding. */
   .video-cta {
     font-size: 0.82rem;
-    /* The StyledButton phone step-down exactly (the spacing
-       system, 2026-10-30): 0.55rem 0.9rem. Was its own
-       near-miss, 0.5rem 0.95rem. */
-    padding: 0.55rem 0.9rem;
+    /* The StyledButton phone metrics (the spacing system,
+       2026-10-30), widened with them in the Apple-spec
+       sweep: 0.55rem 1.25rem. */
+    padding: 0.55rem 1.25rem;
   }
 
   .video-sound {
     font-size: 0.8rem;
-    padding: 0.4rem 0.7rem;
+    padding: 0.4rem 1rem;
   }
 }
 
@@ -512,7 +512,10 @@ onUnmounted(() => {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  padding: 0.45rem 0.8rem;
+  /* Wider sides in the Apple-spec sweep (Mark's call,
+     2026-10-30), a step under the CTA pills — it rides on
+     the video itself. */
+  padding: 0.45rem 1.1rem;
   border: 0;
   border-radius: 999px;
   background: rgb(0 0 0 / 0.55);
@@ -643,7 +646,9 @@ onUnmounted(() => {
   display: inline-flex;
   align-items: center;
   gap: 0.45rem;
-  padding: 0.6rem 1.1rem;
+  /* Wider sides in the Apple-spec sweep (Mark's call,
+     2026-10-30): 1.5rem, in step with the site's buttons. */
+  padding: 0.6rem 1.5rem;
   border: 1px solid color-mix(in srgb, var(--main-color) 25%, transparent);
   border-radius: 999px;
   background: color-mix(in srgb, var(--main-color) 10%, transparent);
