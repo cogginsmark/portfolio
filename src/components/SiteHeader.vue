@@ -146,10 +146,9 @@ export default {
       })
     },
     onNavPillSettled(event) {
-      // The arrival fade has finished: hand its end state
-      // (transparent fill, no ring, text spacing) to a real
-      // class with the same values and stand the animation
-      // down. While the animation's fill was the last word,
+      // The arrival has finished: hand its end state (the
+      // reduced standing pill) to a real class with the
+      // same values and stand the animation down. While the animation's fill was the last word,
       // it outranked every hover style and the pill snapped
       // instead of transitioning (Mark's bug report,
       // 2026-10-30); as plain styles, the settled values
@@ -308,19 +307,7 @@ export default {
   .nav-link:hover {
     background: color-mix(in srgb, var(--main-color) 8%, transparent);
     padding-inline: 0.9rem;
-    /* The font readies itself for the pill (Mark's call,
-       2026-10-30): the variable weight springs up on hover —
-       the bold twins already hold every link at its bold
-       width, so the growth never reflows the row. The weight
-       itself is capped by the rule after this one. */
-    transition: background-color 0.18s ease, color 0.2s ease, padding 0.25s ease, font-weight 0.45s cubic-bezier(0.34, 1.35, 0.64, 1);
-  }
-
-  /* The hover weight is capped under the active state's
-     (Mark's call, 2026-10-30): hovering readies the font to
-     600, and the current page alone stands at the full 700. */
-  .nav-link:not(.router-link-exact-active):hover {
-    font-weight: 600;
+    transition: background-color 0.18s ease, color 0.2s ease, padding 0.25s ease, font-weight 0.25s ease;
   }
 
   /* While the current item is hovered or keyboard-focused,
@@ -333,11 +320,10 @@ export default {
   }
 
   /* Hovering the header brings the current item's pill back
-     (Mark's call, 2026-10-30, widened from the nav area to
-     the whole bar the same day) — after its arrival fade has
-     settled it to bold text, the pill returns while the
-     pointer is anywhere over the header, and goes again when
-     the pointer leaves. The element in the chain keeps it
+     to full strength (Mark's call, 2026-10-30, widened from
+     the nav area to the whole bar the same day) — it stands
+     at its reduced opacity otherwise, and returns to full
+     while the pointer is anywhere over the header. The element in the chain keeps it
      above the settled rule; the settled item's own hover
      rule below still wins on the item itself, with the
      stronger fill. */
@@ -395,19 +381,19 @@ export default {
 .site-header.has-navigated .nav-link.router-link-exact-active {
   background: color-mix(in srgb, var(--main-color) 6%, transparent);
   box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--main-color) 12%, transparent);
-  /* The pill is an arrival, not a residence (Mark's call,
-     2026-10-30): it shows as the item becomes current, holds
-     a beat, then fades — fill, ring and hitbox together —
-     back to the variable bold text, which is what carries
-     the current page from then on. */
+  /* The pill arrives at full strength, then settles to a
+     quieter standing state (Mark's call, 2026-10-30): the
+     current item keeps its pill, at a reduced background
+     opacity, instead of giving it up and standing as bold
+     text alone. */
   animation: nav-pill-fade 1.6s ease forwards;
 }
 
 @keyframes nav-pill-fade {
   /* The pill arrives the way the Menu toggle's does (Mark's
      call, 2026-10-30): it grows in — fill, ring and padding
-     together, from the text spacing — holds a beat, then
-     fades back the same way it came. */
+     together, from the text spacing — holds a beat at full
+     strength, then dims to the reduced standing pill. */
   0% {
     background-color: transparent;
     box-shadow: inset 0 0 0 1px transparent;
@@ -419,20 +405,21 @@ export default {
     padding-inline: 0.9rem;
   }
   100% {
-    background-color: transparent;
-    box-shadow: inset 0 0 0 1px transparent;
-    padding-inline: 0.25rem;
+    background-color: color-mix(in srgb, var(--main-color) 3%, transparent);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--main-color) 6%, transparent);
+    padding-inline: 0.9rem;
   }
 }
 
-/* The settled state (see onNavPillSettled): the fade's end
-   values as plain styles, animation stood down, so hover
-   and focus transitions run smoothly from here. */
+/* The settled state (see onNavPillSettled): the arrival's
+   end values — the reduced standing pill — as plain styles,
+   animation stood down, so hover and focus transitions run
+   smoothly from here. */
 .site-header.has-navigated .nav-link.router-link-exact-active.pill-settled {
   animation: none;
-  background: transparent;
-  box-shadow: none;
-  padding-inline: 0.25rem;
+  background: color-mix(in srgb, var(--main-color) 3%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--main-color) 6%, transparent);
+  padding-inline: 0.9rem;
 }
 
 .site-header.has-navigated .nav-link.router-link-exact-active.pill-settled:focus-visible {
@@ -579,14 +566,14 @@ export default {
       padding-inline: 0.5rem;
     }
     100% {
-      background-color: transparent;
-      box-shadow: inset 0 0 0 1px transparent;
-      padding-inline: 0.3rem;
+      background-color: color-mix(in srgb, var(--main-color) 3%, transparent);
+      box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--main-color) 6%, transparent);
+      padding-inline: 0.5rem;
     }
   }
 
   .site-header.has-navigated .nav-link.router-link-exact-active.pill-settled {
-    padding-inline: 0.3rem;
+    padding-inline: 0.5rem;
   }
 
   .site-header.has-navigated .nav-link.router-link-exact-active.pill-settled:focus-visible {

@@ -17,9 +17,9 @@ export const localStore = reactive({
 // navigated: on load the current page's nav item stands as
 // bold text alone — its pill (fill, ring, full hitbox) appears
 // only once navigation has happened, from the first tap or
-// route change on. The pill is an arrival: it holds a beat,
-// then fades back to the bold variable text, which is what
-// carries the current page for the rest of the session.
+// route change on. The pill arrives at full strength, holds
+// a beat, then settles to a quieter standing pill at a
+// reduced background opacity, which the item keeps.
 // Both are in-memory only; a page reload resets them.
 export const navStore = reactive({
   centered: false,
