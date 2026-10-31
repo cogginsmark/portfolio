@@ -195,6 +195,19 @@ export default {
   }
 }
 
+@media (hover: hover) {
+  /* A very short beat before the hitbox gives back its growth
+     (Mark's call, 2026-10-30): leaving a link, the pill holds
+     its full width for a moment, then returns to its text
+     spacing. The delay rides on the resting state only, so
+     growing on hover stays instant — and it touches the
+     padding alone, the third entry in the links' transition
+     list. */
+  .nav-link:not(:hover):not(:focus-visible):not(.router-link-exact-active) {
+    transition-delay: 0s, 0s, 0.12s, 0s;
+  }
+}
+
 /* The current page is carried by the bold text. The pill itself sits
    faded and only comes fully forward on hover or press. */
 .nav-link.router-link-exact-active {
