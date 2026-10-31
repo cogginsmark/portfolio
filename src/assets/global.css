@@ -86,17 +86,40 @@ html {
 }
 
 /* Phones get the offline-rendered background image at the root
-   too (2026-10-30), matching the shell layer's swap in App.vue. */
+   too (2026-10-30), matching the shell layer's swap in App.vue.
+   It is sized to the large viewport and pinned to the top, like
+   the gradient it replaces — the root's job is the top strip
+   and the overscroll, not the document's whole height. */
 @media screen and (max-width: 40rem) {
   html {
     background-image: url("/bg-gradient-light.png");
-    background-size: cover;
-    background-position: center;
+    background-size: 100% 100vh;
+    background-size: 100% 100lvh;
+    background-position: 50% 0;
   }
 
   html[data-theme="dark"] {
     background-image: url("/bg-gradient-dark.png");
   }
+}
+
+/* The canvas colour (2026-10-30): anywhere the viewport-sized
+   image does not reach — the overscroll past the footer's end
+   when a page is scrolled all the way down, the rubber-band
+   past the top — the browser paints the root's background
+   colour. Set per theme to the gradient's own end colour, so
+   those stretches continue the background's foot instead of
+   cutting to the flat fallback. Together with viewport-fit=
+   cover (index.html) and the theme-color meta (theme.js), this
+   is the current way a background runs edge to edge on iOS:
+   the fixed layers cover the large viewport, and the root
+   carries everything past it. */
+html[data-theme="light"] {
+  background-color: #dddddd;
+}
+
+html[data-theme="dark"] {
+  background-color: #1a1a1a;
 }
 
 a {
@@ -144,9 +167,9 @@ a {
 }
 
 /* The watercolor's second home (Mark's call, 2026-10-30): a
-   shell layer in App.vue keeps the wash present on the other
-   pages at 70% opacity. In the light theme it is the same
-   inverted dark cover the hero paints. */
+   shell layer in App.vue keeps the wash present on all pages,
+   fading to 30% away from Home. In the light theme it is the
+   same inverted dark cover the hero paints. */
 :root[data-theme="light"] .watercolor-layer {
   background-image: url("/falcon-dark-minus-50-brightness2.webp");
   filter: invert(1);

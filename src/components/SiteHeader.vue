@@ -135,6 +135,7 @@ export default {
      (Mark's feature, 2026-10-30) — the padding transition below
      is what makes the shift glide instead of jump. */
   padding: 0.45rem 0.25rem;
+  -webkit-tap-highlight-color: transparent;
   border-radius: 999px;
   font-size: 0.95rem;
   line-height: 1.25;
@@ -160,17 +161,38 @@ export default {
   pointer-events: none;
 }
 
-.nav-link:hover {
-  background: color-mix(in srgb, var(--main-color) 8%, transparent);
-}
-
-/* The hitbox states: hover and keyboard focus grow the pill to
-   its full width, and the current page's link — whose button is
-   always showing — holds the full hitbox at rest too. */
-.nav-link:hover,
+/* The hitbox states: keyboard focus grows the pill to its full
+   width, and the current page's link — whose button is always
+   showing — holds the full hitbox at rest too. Hover grows it
+   as well, but only where hover exists: those rules live in
+   the (hover: hover) block below, because on touch a tap was
+   flashing the hover pill for a frame before the route changed
+   (Mark's report, 2026-10-30). */
 .nav-link:focus-visible,
 .nav-link.router-link-exact-active {
   padding-inline: 0.9rem;
+}
+
+@media (hover: hover) {
+  .nav-link:hover {
+    background: color-mix(in srgb, var(--main-color) 8%, transparent);
+    padding-inline: 0.9rem;
+  }
+
+  .nav-link.router-link-exact-active:hover {
+    background: color-mix(in srgb, var(--main-color) 16%, transparent);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--main-color) 30%, transparent);
+  }
+
+  .nav-toggle:hover {
+    background: color-mix(in srgb, var(--main-color) 8%, transparent);
+  }
+}
+
+@media (max-width: 40rem) and (hover: hover) {
+  .nav-link:hover {
+    padding-inline: 0.5rem;
+  }
 }
 
 /* The current page is carried by the bold text. The pill itself sits
@@ -183,7 +205,6 @@ export default {
   transition: background-color 0.25s ease, box-shadow 0.25s ease, color 0.2s ease, padding 0.25s ease, font-weight 0.25s ease;
 }
 
-.nav-link.router-link-exact-active:hover,
 .nav-link.router-link-exact-active:active {
   background: color-mix(in srgb, var(--main-color) 16%, transparent);
   box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--main-color) 30%, transparent);
@@ -221,6 +242,7 @@ export default {
   display: none;
   align-items: center;
   padding: 0.45rem 0.95rem;
+  -webkit-tap-highlight-color: transparent;
   border: 0;
   border-radius: 999px;
   background: transparent;
@@ -230,10 +252,6 @@ export default {
   font-weight: 500;
   cursor: pointer;
   transition: background-color 0.2s ease, box-shadow 0.25s ease;
-}
-
-.nav-toggle:hover {
-  background: color-mix(in srgb, var(--main-color) 8%, transparent);
 }
 
 /* Built like the nav links it sits beside (Mark's call,
@@ -282,7 +300,6 @@ export default {
     font-size: 0.88rem;
   }
 
-  .nav-link:hover,
   .nav-link:focus-visible,
   .nav-link.router-link-exact-active {
     padding-inline: 0.5rem;

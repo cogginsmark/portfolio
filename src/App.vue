@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <div class="page-background" aria-hidden="true"></div>
-    <div class="watercolor-layer" :class="{ 'is-on': $route.path !== '/' }" aria-hidden="true"></div>
+    <div class="watercolor-layer" :class="{ 'is-away': $route.path !== '/' }" aria-hidden="true"></div>
     <a class="skip-link" href="#main">Skip to content</a>
     <SiteHeader />
     <main id="main">
@@ -78,14 +78,14 @@ export default {
   }
 }
 
-/* The watercolor stays present past Home (Mark's call,
-   2026-10-30): this fixed layer paints the same cover the hero
-   uses, over the gradient and behind the content. On Home it
-   rests at zero — the hero carries the picture there at full
-   strength — and on every other page it fades to 70%, the
-   opacity transition doing the fading as the route changes.
-   The light theme's inverted painting is set in global.css,
-   beside the hero's own. */
+/* The watercolor is present on all pages (Mark's call,
+   2026-10-30, as corrected by him the same day): this fixed
+   layer paints the same cover the hero uses, over the gradient
+   and behind the content, at full strength on Home — and when
+   navigation leaves Home it fades to 30%, the opacity
+   transition doing the fading as the route changes. The light
+   theme's inverted painting is set in global.css, beside the
+   hero's own. */
 .watercolor-layer {
   position: fixed;
   top: 0;
@@ -97,13 +97,13 @@ export default {
   background-image: var(--hero-background-image);
   background-size: cover;
   background-position: 50%;
-  opacity: 0;
+  opacity: 1;
   transition: opacity 0.45s ease;
   pointer-events: none;
 }
 
-.watercolor-layer.is-on {
-  opacity: 0.7;
+.watercolor-layer.is-away {
+  opacity: 0.3;
 }
 
 /* Sticky-footer shell: the column always fills the viewport, <main>
