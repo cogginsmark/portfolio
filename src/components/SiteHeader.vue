@@ -309,11 +309,18 @@ export default {
     background: color-mix(in srgb, var(--main-color) 8%, transparent);
     padding-inline: 0.9rem;
     /* The font readies itself for the pill (Mark's call,
-       2026-10-30): the variable weight springs up to bold on
-       hover — the bold twins already hold every link at its
-       bold width, so the growth never reflows the row. */
-    font-weight: 700;
+       2026-10-30): the variable weight springs up on hover —
+       the bold twins already hold every link at its bold
+       width, so the growth never reflows the row. The weight
+       itself is capped by the rule after this one. */
     transition: background-color 0.18s ease, color 0.2s ease, padding 0.25s ease, font-weight 0.45s cubic-bezier(0.34, 1.35, 0.64, 1);
+  }
+
+  /* The hover weight is capped under the active state's
+     (Mark's call, 2026-10-30): hovering readies the font to
+     600, and the current page alone stands at the full 700. */
+  .nav-link:not(.router-link-exact-active):hover {
+    font-weight: 600;
   }
 
   /* While the current item is hovered or keyboard-focused,
@@ -393,11 +400,20 @@ export default {
      a beat, then fades — fill, ring and hitbox together —
      back to the variable bold text, which is what carries
      the current page from then on. */
-  animation: nav-pill-fade 1.5s ease forwards;
+  animation: nav-pill-fade 1.6s ease forwards;
 }
 
 @keyframes nav-pill-fade {
-  0%, 55% {
+  /* The pill arrives the way the Menu toggle's does (Mark's
+     call, 2026-10-30): it grows in — fill, ring and padding
+     together, from the text spacing — holds a beat, then
+     fades back the same way it came. */
+  0% {
+    background-color: transparent;
+    box-shadow: inset 0 0 0 1px transparent;
+    padding-inline: 0.25rem;
+  }
+  22%, 58% {
     background-color: color-mix(in srgb, var(--main-color) 6%, transparent);
     box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--main-color) 12%, transparent);
     padding-inline: 0.9rem;
@@ -532,7 +548,7 @@ export default {
        becoming current, focus — grow the pill through the
        links' own padding and weight transitions. The two-state
        promotion tried earlier today is gone. */
-    padding: 0.4rem 0.42rem;
+    padding: 0.4rem 0.3rem;
     font-size: 0.88rem;
   }
 
@@ -548,11 +564,16 @@ export default {
      stands as bold text at its text spacing. */
   .site-header.has-navigated .nav-link.router-link-exact-active {
     padding-inline: 0.5rem;
-    animation: nav-pill-fade-mobile 1.5s ease forwards;
+    animation: nav-pill-fade-mobile 1.6s ease forwards;
   }
 
   @keyframes nav-pill-fade-mobile {
-    0%, 55% {
+    0% {
+      background-color: transparent;
+      box-shadow: inset 0 0 0 1px transparent;
+      padding-inline: 0.3rem;
+    }
+    22%, 58% {
       background-color: color-mix(in srgb, var(--main-color) 6%, transparent);
       box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--main-color) 12%, transparent);
       padding-inline: 0.5rem;
@@ -560,12 +581,12 @@ export default {
     100% {
       background-color: transparent;
       box-shadow: inset 0 0 0 1px transparent;
-      padding-inline: 0.42rem;
+      padding-inline: 0.3rem;
     }
   }
 
   .site-header.has-navigated .nav-link.router-link-exact-active.pill-settled {
-    padding-inline: 0.42rem;
+    padding-inline: 0.3rem;
   }
 
   .site-header.has-navigated .nav-link.router-link-exact-active.pill-settled:focus-visible {
@@ -624,15 +645,16 @@ export default {
 
   .site-header.nav-centered .nav-toggle,
   .site-header.nav-centered .nav-toggle[aria-expanded="true"] {
-    /* The dots stay anchored right within the original Menu
-       block at its full-text size (Mark's call, 2026-10-30):
-       the button keeps the full hitbox padding and the
-       measure fitted to the wider word (the Close block), and
-       the glyph right-aligns inside it, instead of the button
-       shrinking down around the dots. */
-    padding: 0.4rem 0.5rem;
-    min-width: 3.75rem;
-    justify-content: flex-end;
+    /* The collapsed pill is form-fitted to the dots (Mark's
+       call, 2026-10-30, superseding the full-text block):
+       no min-width — the button hugs the glyph at a pill's
+       padding, and the faded word leaves the layout (below)
+       so the stack sizes to the dots alone. The right edge
+       does not move: the wrap is anchored to the gutter
+       line, and the panel below keys off the same edge. */
+    padding: 0.4rem 0.6rem;
+    min-width: 0;
+    justify-content: center;
   }
 
   /* The glyph is the font's own (Mark's call, 2026-10-30):
@@ -650,6 +672,7 @@ export default {
      cut. */
   .nav-toggle-stack {
     display: inline-grid;
+    position: relative;
   }
 
   .nav-toggle-stack > * {
@@ -673,6 +696,12 @@ export default {
   }
 
   .site-header.nav-centered .nav-toggle-label {
+    /* Out of the layout while centred, so the stack — and
+       with it the form-fitted pill — sizes to the glyph
+       alone; it still paints its fade from the stack's
+       right edge, where the word used to sit. */
+    position: absolute;
+    right: 0;
     opacity: 0;
     transform: translateX(0.3rem) scaleX(0.6);
     letter-spacing: -0.06em;
