@@ -380,6 +380,14 @@ export default {
      hidden bold twin already holds the text's width, so the
      motion is pure padding and weight. */
   .nav-link.router-link-exact-active {
+    /* The current item rests text-defined too, before any tap
+       (bug fix, 2026-10-30): the base stylesheet gives the
+       current link the full .9rem hitbox at every width, and
+       the mobile override that used to mask it went away with
+       the two-state split — so on load the Home item sat at
+       full size among text-defined siblings. The .nav-roomy
+       rule still promotes it to .5 after the first tap. */
+    padding-inline: 0.42rem;
     animation: nav-active-in 0.3s ease;
     /* The keyframes own the weight and the last fraction of
        padding while the tab becomes current, so the general
