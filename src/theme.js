@@ -15,11 +15,13 @@ export const localStore = reactive({
 // the items and collapses the Menu text into its three-circle
 // glyph; arriving Home by any route restores the as-is layout.
 // navigated: on load the current page's nav item stands as
-// bold text alone — its pill (fill, ring, full hitbox) appears
-// only once navigation has happened, from the first tap or
-// route change on. The pill arrives at full strength, holds
-// a beat, then settles to a quieter standing pill at a
-// reduced background opacity, which the item keeps.
+// bold text alone — its pill appears only after a nav item
+// has been clicked (set in the header's click handler, never
+// by a route change alone), and stays for the session. The
+// pill never expands: it is a background only, at the item's
+// constant padding — it arrives at full strength, holds a
+// beat, then settles to a quieter standing pill at a reduced
+// background opacity, which the item keeps.
 // Both are in-memory only; a page reload resets them.
 export const navStore = reactive({
   centered: false,

@@ -340,4 +340,12 @@ export default {
     margin-top: 0;
   }
 }
+
+@media screen and (max-width: 40rem) {
+  /* Smaller margins on phones (Mark's call, 2026-10-30):
+     the hero's breathing room tightens at both ends. */
+  .hero-container {
+    padding: 2rem 0 4rem;
+  }
+}
 </style>

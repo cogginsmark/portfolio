@@ -178,10 +178,11 @@ export default {
       // holds from here on. The first firing is the router
       // settling onto the loaded page, not a navigation.
       if (this.routeReady) {
-        navStore.navigated = true
-        // A fresh arrival gets a fresh fade: clear any settled
-        // state so the incoming page's pill can play its
-        // animation again.
+        // A fresh arrival gets a fresh arrival: clear any
+        // settled state so the incoming page's pill can play
+        // its animation again. The navigated state itself is
+        // set only by a click on a nav item (markNavTapped) —
+        // never by the route changing on its own.
         this.$el.querySelectorAll('.pill-settled').forEach((el) => el.classList.remove('pill-settled'))
       }
       this.routeReady = true
@@ -285,86 +286,31 @@ export default {
 }
 
 /* The hitbox states: keyboard focus grows the pill to its full
-   width, and the current page's link holds the full hitbox at
-   rest too — but only once navigation has happened (Mark's
-   model, 2026-10-30): on load the current item stands as bold
-   text alone, and its button appears during the first
-   navigation and stays for the session; a reload resets it
-   to the bold standing position. Hover grows it as well, but
-   only where hover exists: those rules live in the
-   (hover: hover) block below, because on touch a tap was
-   flashing the hover pill for a frame before the route changed
-   (Mark's report, 2026-10-30). */
+   width. The pills never expand to appear (Mark's model,
+   2026-10-30): a link's padding is its padding at every
+   moment, and the pill is only ever a background — the
+   current item's fill and ring, nothing more. And it
+   appears only after a nav item has been clicked: on load
+   the current item stands as bold text alone, the first
+   click on the nav sets the state, and it stays for the
+   session; a reload resets it to the bold standing
+   position. */
 .nav-link:focus-visible {
-  padding-inline: 0.9rem;
-}
-
-.site-header.has-navigated .nav-link.router-link-exact-active {
-  padding-inline: 0.9rem;
+  background: color-mix(in srgb, var(--main-color) 8%, transparent);
 }
 
 @media (hover: hover) {
-  .nav-link:hover {
-    background: color-mix(in srgb, var(--main-color) 8%, transparent);
-    padding-inline: 0.9rem;
-    transition: background-color 0.18s ease, color 0.2s ease, padding 0.25s ease, font-weight 0.25s ease;
-  }
-
-  /* While the current item is hovered or keyboard-focused,
-     its arrival fade (below) stands down — the pill is being
-     interacted with, so it stays. Leaving lets the finished
-     fade's end state resume. */
-  .site-header.has-navigated .nav-link.router-link-exact-active:hover,
+  /* While the current item is keyboard-focused, its arrival
+     stands down — the pill is being interacted with, so it
+     stays at full strength. Leaving lets the finished
+     arrival's end state resume. (There is no hover pill:
+     the pill appears only after a nav item is clicked.) */
   .site-header.has-navigated .nav-link.router-link-exact-active:focus-visible {
     animation: none;
   }
 
-  /* Hovering the header brings the current item's pill back
-     to full strength (Mark's call, 2026-10-30, widened from
-     the nav area to the whole bar the same day) — it stands
-     at its reduced opacity otherwise, and returns to full
-     while the pointer is anywhere over the header. The element in the chain keeps it
-     above the settled rule; the settled item's own hover
-     rule below still wins on the item itself, with the
-     stronger fill. */
-  header.site-header.has-navigated:hover .nav-link.router-link-exact-active {
-    animation: none;
-    background: color-mix(in srgb, var(--main-color) 6%, transparent);
-    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--main-color) 12%, transparent);
-    padding-inline: 0.9rem;
-  }
-
-  .site-header.has-navigated .nav-link.router-link-exact-active.pill-settled:hover {
-    background: color-mix(in srgb, var(--main-color) 16%, transparent);
-    padding-inline: 0.9rem;
-  }
-
-  .nav-link.router-link-exact-active:hover {
-    background: color-mix(in srgb, var(--main-color) 16%, transparent);
-    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--main-color) 30%, transparent);
-  }
-
   .nav-toggle:hover {
     background: color-mix(in srgb, var(--main-color) 8%, transparent);
-  }
-}
-
-@media (max-width: 40rem) and (hover: hover) {
-  .nav-link:hover {
-    padding-inline: 0.5rem;
-  }
-}
-
-@media (hover: hover) {
-  /* A very short beat before the hitbox gives back its growth
-     (Mark's call, 2026-10-30): leaving a link, the pill holds
-     its full width for a moment, then returns to its text
-     spacing. The delay rides on the resting state only, so
-     growing on hover stays instant — and it touches the
-     padding alone, the third entry in the links' transition
-     list. */
-  .nav-link:not(:hover):not(:focus-visible):not(.router-link-exact-active) {
-    transition-delay: 0s, 0s, 0.12s, 0s;
   }
 }
 
@@ -387,23 +333,16 @@ export default {
      opacity, instead of giving it up and standing as bold
      text alone. */
   animation: nav-pill-fade 1.6s ease forwards;
-  /* The hitbox is at its end state from the first frame
-     (Mark's call, 2026-10-30): padding does not transition
-     while the item stands in its navigated state — the
-     background, colour and weight keep their rates. */
-  transition-property: background-color, color, padding, font-weight;
-  transition-duration: 0.45s, 0.2s, 0s, 0.25s;
 }
 
 @keyframes nav-pill-fade {
   /* The pill's background arrives the way the Menu toggle's
      does (Mark's call, 2026-10-30) — the fill and ring fade
      in, hold a beat at full strength, then dim to the
-     reduced standing pill. The hitbox does not take part
-     (Mark's call, 2026-10-30): the gated rule below holds
-     the padding at its end state from the first frame, so
-     the item's target is full-size throughout the arrival
-     and only the background animates. */
+     reduced standing pill. The padding never takes part
+     (Mark's call, 2026-10-30): the pill is a background at
+     a constant size — the items' padding is the same
+     before, during and after the arrival. */
   0% {
     background-color: transparent;
     box-shadow: inset 0 0 0 1px transparent;
@@ -420,24 +359,17 @@ export default {
 
 /* The settled state (see onNavPillSettled): the arrival's
    end values — the reduced standing pill — as plain styles,
-   animation stood down, so hover and focus transitions run
+   animation stood down, so the focus transitions run
    smoothly from here. */
 .site-header.has-navigated .nav-link.router-link-exact-active.pill-settled {
   animation: none;
   background: color-mix(in srgb, var(--main-color) 3%, transparent);
   box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--main-color) 6%, transparent);
-  padding-inline: 0.9rem;
 }
 
 .site-header.has-navigated .nav-link.router-link-exact-active.pill-settled:focus-visible {
   background: color-mix(in srgb, var(--main-color) 6%, transparent);
   box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--main-color) 12%, transparent);
-  padding-inline: 0.9rem;
-}
-
-.nav-link.router-link-exact-active:active {
-  background: color-mix(in srgb, var(--main-color) 16%, transparent);
-  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--main-color) 30%, transparent);
 }
 
 /* The Menu button and the theme switch share a wrapper so the
@@ -537,35 +469,31 @@ export default {
   }
 
   .nav-link {
-    /* Text-defined at rest (Mark's call, 2026-10-30: reactive
-       again): the items hug their words, and state changes —
-       becoming current, focus — grow the pill through the
-       links' own padding and weight transitions. The two-state
-       promotion tried earlier today is gone. */
-    padding: 0.4rem 0.3rem;
+    /* Touch-optimised and closer (Mark's calls, 2026-10-30):
+       the taller padding takes each item to a comfortable
+       tap height, and the inline spacing tightens to .2rem
+       so the items sit closer together for the pill effect.
+       The padding is constant — the pills never expand. */
+    padding: 0.55rem 0.2rem;
     font-size: 0.88rem;
   }
 
   .nav-link:focus-visible {
-    padding-inline: 0.5rem;
+    background: color-mix(in srgb, var(--main-color) 8%, transparent);
   }
 
-  /* The current item: full hitbox once the header has
-     navigated, reached reactively — the base transition
-     animates the padding and the variable weight together
-     as the item becomes current, the same glide the desktop
-     bar has always had. Before any navigation the item
-     stands as bold text at its text spacing. */
+  /* The current item's pill, once a nav item has been
+     clicked: the background arrival only — its padding
+     never changes. Before any click the item stands as
+     bold text at its text spacing. */
   .site-header.has-navigated .nav-link.router-link-exact-active {
-    padding-inline: 0.5rem;
     animation: nav-pill-fade-mobile 1.6s ease forwards;
-    transition-property: background-color, color, padding, font-weight;
-    transition-duration: 0.45s, 0.2s, 0s, 0.25s;
   }
 
   @keyframes nav-pill-fade-mobile {
-    /* Background only, as on desktop: the hitbox sits at
-       its end state (.5rem, the gated rule) throughout. */
+    /* Background only, as on desktop: the padding never
+       takes part — the pill is a background at a constant
+       size. */
     0% {
       background-color: transparent;
       box-shadow: inset 0 0 0 1px transparent;
@@ -578,14 +506,6 @@ export default {
       background-color: color-mix(in srgb, var(--main-color) 3%, transparent);
       box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--main-color) 6%, transparent);
     }
-  }
-
-  .site-header.has-navigated .nav-link.router-link-exact-active.pill-settled {
-    padding-inline: 0.5rem;
-  }
-
-  .site-header.has-navigated .nav-link.router-link-exact-active.pill-settled:focus-visible {
-    padding-inline: 0.5rem;
   }
 
   /* On mobile the bar's two alignments separate (Mark's spec,
@@ -605,7 +525,7 @@ export default {
   .nav-toggle {
     display: inline-flex;
     /* Text spacing at rest; opening grows it (below). */
-    padding: 0.4rem 0.15rem;
+    padding: 0.55rem 0.15rem;
     font-size: 0.88rem;
   }
 
@@ -651,7 +571,7 @@ export default {
        rows and is untouched. The right edge does not move:
        the wrap is anchored to the gutter line, and the
        panel below keys off the same edge. */
-    padding: 0.4rem 1rem;
+    padding: 0.55rem 1rem;
     min-width: 0;
     justify-content: center;
   }
