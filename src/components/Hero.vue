@@ -218,10 +218,11 @@ export default {
   margin: 0;
   font-size: 0.85rem;
   font-weight: 600;
-  /* Wider tracking on desktop (Mark's call, 2026-10-30):
-     the stage has the room for it. The smaller widths keep
-     the .12em of the column's row in Home.vue. */
-  letter-spacing: 0.2em;
+  /* Wide tracking on desktop (Mark's calls, 2026-10-30 —
+     widened twice): the stage has the room for it. The
+     smaller widths keep the .12em of the column's row in
+     Home.vue. */
+  letter-spacing: 0.3em;
   text-transform: uppercase;
   opacity: 0.75;
 }

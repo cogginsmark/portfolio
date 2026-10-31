@@ -168,8 +168,14 @@ a {
 
 .experience-list {
   display: grid;
+  /* One full-width column (fix, 2026-10-30): with no column
+     template the single track shrink-wrapped to the widest
+     entry and justify-content centred it, so the Experience
+     and Awards text sat inset from the page's left edge
+     instead of aligning with the section titles and the
+     Background grid. */
+  grid-template-columns: 1fr;
   gap: 1rem;
-  justify-content: center;
   margin: 0;
 }
 

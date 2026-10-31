@@ -29,7 +29,7 @@
         </div>
       </div>
 
-      <nav id="primary-nav" class="primary-nav" aria-label="Primary" @click="markNavTapped">
+      <nav id="primary-nav" class="primary-nav" aria-label="Primary" @click="markNavTapped" @animationend="onNavPillSettled">
         <router-link class="nav-link" to="/"><span class="nav-text" data-text="Home">Home</span></router-link>
         <router-link class="nav-link" to="/about"><span class="nav-text" data-text="About">About</span></router-link>
         <router-link class="nav-link" to="/videos"><span class="nav-text" data-text="Videos">Videos</span></router-link>
@@ -142,6 +142,21 @@ export default {
           { duration: 400, easing: 'ease' }
         )
       })
+    },
+    onNavPillSettled(event) {
+      // The arrival fade has finished: hand its end state
+      // (transparent fill, no ring, text spacing) to a real
+      // class with the same values and stand the animation
+      // down. While the animation's fill was the last word,
+      // it outranked every hover style and the pill snapped
+      // instead of transitioning (Mark's bug report,
+      // 2026-10-30); as plain styles, the settled values
+      // transition smoothly in and out of hover from here.
+      if (!event.animationName || !event.animationName.startsWith('nav-pill-fade')) return
+      const link = event.target
+      if (link.classList && link.classList.contains('router-link-exact-active')) {
+        link.classList.add('pill-settled')
+      }
     }
   },
   mounted() {
@@ -163,6 +178,10 @@ export default {
       // settling onto the loaded page, not a navigation.
       if (this.routeReady) {
         navStore.navigated = true
+        // A fresh arrival gets a fresh fade: clear any settled
+        // state so the incoming page's pill can play its
+        // animation again.
+        this.$el.querySelectorAll('.pill-settled').forEach((el) => el.classList.remove('pill-settled'))
       }
       this.routeReady = true
       // Arriving home by any route — the brand, a back swipe —
@@ -299,6 +318,25 @@ export default {
     animation: none;
   }
 
+  /* Hovering the nav area itself brings the current item's
+     pill back (Mark's call, 2026-10-30) — after its arrival
+     fade has settled it to bold text, the pill returns while
+     the pointer is anywhere over the nav contents, and goes
+     again when the pointer leaves. This rule sits before the
+     settled item's own hover rule below so that hovering the
+     item itself still wins with the stronger fill. */
+  .site-header.has-navigated .primary-nav:hover .nav-link.router-link-exact-active {
+    animation: none;
+    background: color-mix(in srgb, var(--main-color) 6%, transparent);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--main-color) 12%, transparent);
+    padding-inline: 0.9rem;
+  }
+
+  .site-header.has-navigated .nav-link.router-link-exact-active.pill-settled:hover {
+    background: color-mix(in srgb, var(--main-color) 16%, transparent);
+    padding-inline: 0.9rem;
+  }
+
   .nav-link.router-link-exact-active:hover {
     background: color-mix(in srgb, var(--main-color) 16%, transparent);
     box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--main-color) 30%, transparent);
@@ -360,6 +398,22 @@ export default {
     box-shadow: inset 0 0 0 1px transparent;
     padding-inline: 0.25rem;
   }
+}
+
+/* The settled state (see onNavPillSettled): the fade's end
+   values as plain styles, animation stood down, so hover
+   and focus transitions run smoothly from here. */
+.site-header.has-navigated .nav-link.router-link-exact-active.pill-settled {
+  animation: none;
+  background: transparent;
+  box-shadow: none;
+  padding-inline: 0.25rem;
+}
+
+.site-header.has-navigated .nav-link.router-link-exact-active.pill-settled:focus-visible {
+  background: color-mix(in srgb, var(--main-color) 6%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--main-color) 12%, transparent);
+  padding-inline: 0.9rem;
 }
 
 .nav-link.router-link-exact-active:active {
@@ -499,6 +553,14 @@ export default {
       box-shadow: inset 0 0 0 1px transparent;
       padding-inline: 0.42rem;
     }
+  }
+
+  .site-header.has-navigated .nav-link.router-link-exact-active.pill-settled {
+    padding-inline: 0.42rem;
+  }
+
+  .site-header.has-navigated .nav-link.router-link-exact-active.pill-settled:focus-visible {
+    padding-inline: 0.5rem;
   }
 
   /* On mobile the bar's two alignments separate (Mark's spec,

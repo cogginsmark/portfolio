@@ -11,7 +11,7 @@
         </Transition>
       </router-view>
     </main>
-    <div class="theme-float">
+    <div class="theme-float" ref="themeFloat" :class="{ 'theme-float--compact': floatCompact }">
       <LightToggle />
     </div>
   </div>
@@ -28,6 +28,85 @@ export default {
   components: {
     SiteHeader,
     LightToggle
+  },
+  data() {
+    return {
+      // The floating Background control collapses to its
+      // Material Symbol alone when it would overlay page
+      // content (Mark's call, 2026-10-30); measureFloat keeps
+      // this current as the page scrolls and resizes.
+      floatCompact: false,
+      floatFullWidth: 0,
+      floatRaf: 0
+    }
+  },
+  mounted() {
+    this.measureFloat()
+    window.addEventListener('scroll', this.scheduleFloatMeasure, { passive: true })
+    window.addEventListener('resize', this.scheduleFloatMeasure)
+  },
+  beforeUnmount() {
+    window.removeEventListener('scroll', this.scheduleFloatMeasure)
+    window.removeEventListener('resize', this.scheduleFloatMeasure)
+    if (this.floatRaf) cancelAnimationFrame(this.floatRaf)
+  },
+  watch: {
+    $route() {
+      // The routed content changes under the float; remeasure
+      // once the swap has painted and again after the route
+      // transition settles.
+      this.$nextTick(() => {
+        this.measureFloat()
+        setTimeout(this.measureFloat, 350)
+      })
+    }
+  },
+  methods: {
+    scheduleFloatMeasure() {
+      if (this.floatRaf) return
+      this.floatRaf = requestAnimationFrame(() => {
+        this.floatRaf = 0
+        this.measureFloat()
+      })
+    },
+    measureFloat() {
+      const el = this.$refs.themeFloat
+      if (!el) return
+      const rect = el.getBoundingClientRect()
+      if (!rect.width) return
+      if (!this.floatCompact) this.floatFullWidth = rect.width
+      // Probe with the expanded footprint even while compact
+      // (the compact box alone would never touch anything, so
+      // it could never earn its label back), and ask for a few
+      // pixels of clearance before expanding again so the
+      // state cannot flap on a boundary.
+      const width = this.floatFullWidth || rect.width
+      const clearance = this.floatCompact ? 10 : 0
+      const probe = {
+        left: rect.right - width + clearance,
+        right: rect.right - clearance,
+        top: rect.top + clearance,
+        bottom: rect.bottom - clearance
+      }
+      const targets = document.querySelectorAll(
+        '#main .card, #main .minor-card, #main .logo-card, #main section, #main .app-footer'
+      )
+      let hit = false
+      targets.forEach((target) => {
+        if (hit || target.closest('.hero-background')) return
+        const box = target.getBoundingClientRect()
+        if (
+          box.width &&
+          box.left < probe.right &&
+          box.right > probe.left &&
+          box.top < probe.bottom &&
+          box.bottom > probe.top
+        ) {
+          hit = true
+        }
+      })
+      this.floatCompact = hit
+    }
   },
   computed: {
     // Contact does not fade in (Mark's call, 2026-10-30): its
@@ -175,6 +254,23 @@ export default {
   .theme-float :deep(.theme-pill[aria-pressed="true"]) {
     background: color-mix(in srgb, var(--main-color) 6%, var(--fallback-background-color));
     box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--main-color) 12%, transparent);
+  }
+
+  /* The collapse to the symbol alone (Mark's call,
+     2026-10-30): when the float would overlay content the
+     label stands down and the pill tightens around the
+     glyph; the padding transition softens the change, and
+     the button keeps its "Background" accessible name. */
+  .theme-float :deep(.theme-pill) {
+    transition: padding 0.3s ease, background-color 0.2s ease, box-shadow 0.2s ease, color 0.2s ease;
+  }
+
+  .theme-float--compact :deep(.theme-pill-label) {
+    display: none;
+  }
+
+  .theme-float--compact :deep(.theme-pill) {
+    padding-inline: 0.78rem;
   }
 }
 
