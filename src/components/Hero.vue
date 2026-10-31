@@ -6,9 +6,9 @@
         <p class="text-paragraph text-subtitle">{{subtitle}}</p>
         <p class="text-paragraph" style="white-space: pre-wrap;">{{description}}</p>
         <div class="cta-section">
-          <StyledButton glass secondary :color="'#363636'" v-bind:href="ctaUrl || '/resume.pdf'"><span class="text-button-text">{{cta}}</span><i class="fas fa-arrow-down"></i></StyledButton>
-          <StyledButton glass v-if="cta2" secondary :color="'#363636'" v-bind:href="cta2Url" target="_blank" rel="noopener"><span class="text-button-text">{{cta2}}</span><span class="journalism-icon" aria-hidden="true">history_edu</span></StyledButton>
-          <router-link v-if="cta3" :to="cta3Url" class="cta-nav-link"><StyledButton glass secondary :color="'#363636'"><span class="text-button-text">{{cta3}}</span><i class="fas fa-play"></i></StyledButton></router-link>
+          <StyledButton glass secondary :color="'#363636'" v-bind:href="ctaUrl || '/resume.pdf'"><span class="lg-button__label"><span class="text-button-text">{{cta}}</span></span><span class="lg-button__icon"><i class="fas fa-arrow-down"></i></span></StyledButton>
+          <StyledButton glass v-if="cta2" secondary :color="'#363636'" v-bind:href="cta2Url" target="_blank" rel="noopener"><span class="lg-button__label"><span class="text-button-text">{{cta2}}</span></span><span class="lg-button__icon"><span class="journalism-icon" aria-hidden="true">history_edu</span></span></StyledButton>
+          <router-link v-if="cta3" :to="cta3Url" class="cta-nav-link"><StyledButton glass secondary :color="'#363636'"><span class="lg-button__label"><span class="text-button-text">{{cta3}}</span></span><span class="lg-button__icon"><i class="fas fa-play"></i></span></StyledButton></router-link>
         </div>
       </div>
       <section class="services-section services-section--hero" aria-label="Services">
@@ -281,12 +281,12 @@ export default {
 
 @media screen and (max-width: 40rem) {
   /* The trio's smaller phone size now lives in StyledButton
-     itself, applied to every button the site makes (2026-10-30);
-     what remains here is the Journalism icon, which is sized in
-     rem of its own and steps down with them. */
-  .cta-section .journalism-icon {
-    font-size: 1.02rem;
-  }
+     itself, applied to every button the site makes (2026-10-30).
+     The Journalism icon's phone step-down that used to sit here
+     is deleted (patch 002): inside the library's icon box the
+     symbol's size is set by StyledButton's glass rules at every
+     width, since the glass button's height no longer steps
+     down. */
 }
 
 

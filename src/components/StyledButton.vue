@@ -7,8 +7,12 @@
     :data-liquid-glass="glass ? '' : undefined"
     @pointerdown="onPointerDown"
   >
-    <span v-if="glass" class="lg-button__label"><slot /></span>
-    <slot v-else />
+    <!-- Glass mode (patch 002): the slot renders directly, as the
+         button's own children — call sites now supply the library's
+         structure themselves (an .lg-button__icon span and an
+         .lg-button__label span), instead of the whole slot being
+         wrapped in the label as the first pass had it. -->
+    <slot />
   </a>
 </template>
 
@@ -94,10 +98,10 @@ export default {
    under the site-wide pill sweep and crowded the trailing icons
    these buttons carry (Mark's report from the branch preview,
    2026-10-31), so glass pills take the sweep's own measures —
-   1.75rem a side here, 1.25rem in the phone block below — and
-   the text-to-icon gap is the site's standing 0.5em (the
-   .text-button-text margin in text.css, stood down below),
-   stated on the label that now carries the spacing. */
+   1.75rem a side here, 1.25rem in the phone block below. The
+   text-to-icon gap is the library's own button-level 8px, which
+   at this type size equals the site's standing 0.5em — the
+   measure did not change, only where it lives (patch 002). */
 .styled-button.lg-button {
   background: transparent;
   box-shadow: var(--lg-glass-shadow, var(--lg-shadow)), inset 0 0 0 0.5px var(--lg-edge);
@@ -114,8 +118,20 @@ export default {
   display: none;
 }
 
-.styled-button.lg-button .lg-button__label {
-  gap: 0.5em;
+/* The library's icon box, with this site's font glyphs in it
+   (patch 002): the package stylesheet stretches svg and
+   .lg-symbol children of .lg-button__icon to fill the box, but
+   these buttons' glyphs are webfont elements, so they are seated
+   explicitly — FontAwesome at the balanced 18px from the weight
+   check, the Material symbol at 20px (its reserved 1em square
+   scales with its font size), both centred by the box's grid. */
+.styled-button.lg-button .lg-button__icon > i {
+  font-size: 18px;
+  line-height: 1;
+}
+
+.styled-button.lg-button .lg-button__icon .journalism-icon {
+  font-size: 20px;
 }
 
 .styled-button.lg-button .text-button-text {

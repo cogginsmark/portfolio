@@ -4,10 +4,10 @@
     <section class="contact-main" aria-labelledby="contact-heading">
       <h1 id="contact-heading" class="contact-title">Contact me</h1>
       <div class="contact-actions">
-        <StyledButton glass primary color="#363636" :href="`mailto:${email}`"><span class="text-button-text">Email</span><i class="fas fa-envelope"></i></StyledButton>
-        <StyledButton glass secondary v-bind:href="cta.url"><span class="text-button-text">{{ cta.label }}</span><i class="fas fa-arrow-down"></i></StyledButton>
-        <StyledButton glass secondary v-bind:href="journalism.url" target="_blank" rel="noopener"><span class="text-button-text">{{ journalism.label }}</span><span class="journalism-icon" aria-hidden="true">history_edu</span></StyledButton>
-        <StyledButton glass secondary v-for="(link, index) in stackLinks" :key="`contact-link-${index}`" v-bind:href="link.url" target="_blank" rel="noopener"><span class="text-button-text">{{ link.name }}</span><i v-bind:class="link.fa"></i></StyledButton>
+        <StyledButton glass primary color="#363636" :href="`mailto:${email}`"><span class="lg-button__label"><span class="text-button-text">Email</span></span><span class="lg-button__icon"><i class="fas fa-envelope"></i></span></StyledButton>
+        <StyledButton glass secondary v-bind:href="cta.url"><span class="lg-button__label"><span class="text-button-text">{{ cta.label }}</span></span><span class="lg-button__icon"><i class="fas fa-arrow-down"></i></span></StyledButton>
+        <StyledButton glass secondary v-bind:href="journalism.url" target="_blank" rel="noopener"><span class="lg-button__label"><span class="text-button-text">{{ journalism.label }}</span></span><span class="lg-button__icon"><span class="journalism-icon" aria-hidden="true">history_edu</span></span></StyledButton>
+        <StyledButton glass secondary v-for="(link, index) in stackLinks" :key="`contact-link-${index}`" v-bind:href="link.url" target="_blank" rel="noopener"><span class="lg-button__label"><span class="text-button-text">{{ link.name }}</span></span><span class="lg-button__icon"><i v-bind:class="link.fa"></i></span></StyledButton>
       </div>
     </section>
     <foot v-bind:author="author" v-bind:footer="footer" hide-links/>

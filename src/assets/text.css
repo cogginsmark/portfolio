@@ -32,8 +32,13 @@
 /* The Journalism button's icon is Material Symbols' history_edu —
    the properly sourced quill-and-paper glyph (its own tags: feather,
    paper, pen, quill, document) — set from the variable font loaded
-   in index.html, full axis ranges live; this instance is filled at
-   the 24 optical size. text-transform and letter-spacing are reset
+   in index.html, full axis ranges live. Instance: filled, weight
+   500 and optical size 20 (patch 002, 2026-10-31: the weight meets
+   the glass buttons' Manrope 500 text, and the optical size matches
+   the glyph's 20px seat in the library's icon box; it was wght 400
+   at opsz 24 when the icon stood free in the old button). It stays
+   on the variable font by Mark's instruction — never an SVG or a
+   mask symbol. text-transform and letter-spacing are reset
    because the buttons' uppercase tracking would break the ligature
    the glyph renders from. */
 .journalism-icon {
@@ -60,7 +65,7 @@
   word-wrap: normal;
   direction: ltr;
   -webkit-font-smoothing: antialiased;
-  font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  font-variation-settings: 'FILL' 1, 'wght' 500, 'GRAD' 0, 'opsz' 20;
   vertical-align: -0.22em;
 }
 
