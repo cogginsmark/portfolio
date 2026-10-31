@@ -309,7 +309,10 @@ export default {
   }
 
   .nav-link {
-    padding: 0.4rem 0.15rem;
+    /* Sizes swapped with the Menu item (Mark's spec,
+       2026-10-30): the nav items take the full hitbox padding
+       the Menu button used to hold, at rest. */
+    padding: 0.4rem 0.5rem;
     font-size: 0.88rem;
   }
 
@@ -326,36 +329,36 @@ export default {
      motion is pure padding and weight. */
   .nav-link.router-link-exact-active {
     animation: nav-active-in 0.3s ease;
-    /* The keyframes own the padding and the weight while the
-       tab becomes current. The general transitions stay out of
-       those two properties here: run together, the animation
-       and the transition recalculated the hitbox against each
-       other and the growth stuttered (Mark's report,
-       2026-10-30). The spacing itself is weight-proof — the
-       hidden bold twin sizes every link at the active weight
-       from the start. */
+    /* The keyframes own the weight while the tab becomes
+       current, so the general transition stays out of it here:
+       run together, animation and transition recalculated
+       against each other and the change stuttered (Mark's
+       report, 2026-10-30). Since the size swap the padding
+       rests at full size anyway; the spacing is weight-proof —
+       the hidden bold twin sizes every link at the active
+       weight from the start. */
     transition: background-color 0.25s ease, box-shadow 0.25s ease, color 0.2s ease;
   }
 
   /* On mobile the bar's two alignments separate (Mark's spec,
      2026-10-30): the nav items centre on their own, and the
      Menu item floats to the side — out of the flow, pinned to
-     the bar's left edge on its padding line and centred
-     vertically. The wrapper stays the panel's hook: positioned
-     here, it carries the dropdown with the button. */
+     the bar's right edge on its padding line and centred
+     vertically (floated right at his word). The wrapper stays
+     the panel's hook: positioned here, it carries the dropdown
+     with the button. */
   .mobile-menu-wrap {
     position: absolute;
-    left: 0.9rem;
+    right: 0.9rem;
     top: 50%;
     transform: translateY(-50%);
   }
 
   .nav-toggle {
     display: inline-flex;
-    /* The mobile links' own sizes, at their full hitbox: the
-       Menu button is always a visible button, so it holds the
-       padding the links grow into on hover. */
-    padding: 0.4rem 0.5rem;
+    /* The other half of the swap (2026-10-30): the Menu item
+       takes the text spacing the nav items used to rest at. */
+    padding: 0.4rem 0.15rem;
     font-size: 0.88rem;
   }
 
@@ -377,11 +380,12 @@ export default {
   .switch-wrap {
     display: none;
     position: absolute;
-    /* A floating card with complete rounded corners, hooked to
-       the Menu button (Mark's calls, 2026-10-30): it anchors to
+    /* A floating pill, hooked to the Menu button (Mark's
+       calls, 2026-10-30): the background behind the light/dark
+       mode is a pill, not a rounded rectangle. It anchors to
        the button's own wrapper, so it drops from directly under
-       the button — its left edge on the button's left edge —
-       wherever the centred bar places them, instead of floating
+       the button — its right edge on the button's right edge,
+       now that the Menu floats right — instead of floating
        loose in the header. One border all around, a solid
        surface — the theme's fallback colour — no gradient. The
        drop clears the bar by the same half rem as before: the
@@ -389,12 +393,13 @@ export default {
        bottom edge down to the bar's bottom, which the wrapper
        does not span. */
     top: calc(100% + 0.5rem + 0.65rem);
-    left: 0;
+    right: 0;
+    left: auto;
     margin: 0;
     padding: 0.6rem 1rem 0.8rem;
     background: var(--fallback-background-color);
     border: 1px solid color-mix(in srgb, var(--main-color) 10%, transparent);
-    border-radius: 1rem;
+    border-radius: 999px;
     box-shadow: 0 1rem 1.5rem rgb(0 0 0 / 0.12);
   }
 
@@ -405,12 +410,14 @@ export default {
 }
 
 @keyframes nav-active-in {
+  /* Weight alone now (2026-10-30): since the size swap the
+     mobile links rest at their full hitbox, so there is no
+     padding left to grow — the motion is the variable weight
+     arriving. */
   from {
-    padding-inline: 0.15rem;
     font-weight: 400;
   }
   to {
-    padding-inline: 0.5rem;
     font-weight: 700;
   }
 }
