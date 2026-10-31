@@ -192,10 +192,16 @@ export default {
    not a line inside it — all caps, centred, and middle-
    justified in every version of the layout. It keeps the
    quiet treatment (small, soft) so the buttons keep the
-   hero's focus, and the -0.75rem pull-up keeps the gap the
-   line had under the CTAs. */
+   hero's focus. */
 .services-section {
-  margin-top: -0.75rem;
+  /* Centred in the band between the CTAs and the first
+     card (Mark's call, 2026-10-30): the band runs from the
+     CTA row's foot to the card's top edge — the row's own
+     2.25rem bottom margin inside the text column, plus the
+     joint's 1.25rem reveal — 63px in all, so the line sits
+     with 21px of air on each side of it. The pull-up that
+     lands it there is -1.1rem. */
+  margin-top: -1.1rem;
   text-align: center;
 }
 
