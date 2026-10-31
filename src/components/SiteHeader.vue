@@ -369,10 +369,6 @@ export default {
     padding-inline: 0.5rem;
   }
 
-  .site-header.nav-roomy .nav-link.router-link-exact-active {
-    animation-name: nav-active-in-roomy;
-  }
-
   /* No hover on a phone (Mark's call, 2026-10-30): the active
      tab makes its change as one animation when it becomes
      current — the variable font's weight and the hitbox growth
@@ -380,22 +376,19 @@ export default {
      hidden bold twin already holds the text's width, so the
      motion is pure padding and weight. */
   .nav-link.router-link-exact-active {
-    /* The current item rests text-defined too, before any tap
-       (bug fix, 2026-10-30): the base stylesheet gives the
-       current link the full .9rem hitbox at every width, and
-       the mobile override that used to mask it went away with
-       the two-state split — so on load the Home item sat at
-       full size among text-defined siblings. The .nav-roomy
-       rule still promotes it to .5 after the first tap. */
-    padding-inline: 0.42rem;
-    animation: nav-active-in 0.3s ease;
-    /* The keyframes own the weight and the last fraction of
-       padding while the tab becomes current, so the general
-       transition stays out of those here: run together,
-       animation and transition recalculated against each other
-       and the change stuttered (Mark's report, 2026-10-30).
-       The spacing is weight-proof — the hidden bold twin sizes
-       every link at the active weight from the start. */
+    /* The current item is always full size (Mark's call,
+       2026-10-30): the full .5 hitbox at rest, tapped or not —
+       the two-state model governs the other items only. And
+       no subtle settle effect on it any more: an item that is
+       always full size has nothing to grow into, so the
+       dip-and-grow keyframes are gone and the state simply
+       applies. */
+    padding-inline: 0.5rem;
+    /* The general transition stays out of the weight here, so
+       becoming current never animates the bold in — the state
+       applies at once (the spacing is weight-proof regardless:
+       the hidden bold twin sizes every link at the active
+       weight from the start). */
     transition: background-color 0.25s ease, box-shadow 0.25s ease, color 0.2s ease;
   }
 
@@ -533,43 +526,11 @@ export default {
   }
 }
 
-@keyframes nav-active-in {
-  /* The incoming tab's settle, in each of the header's two
-     states (2026-10-30): before the first tap the links rest
-     at their text-close .42, so the tab dips under it and
-     grows the last fraction into place alongside the weight. */
-  from {
-    padding-inline: 0.34rem;
-    font-weight: 400;
-  }
-  to {
-    padding-inline: 0.42rem;
-    font-weight: 700;
-  }
-}
-
-@keyframes nav-active-in-roomy {
-  /* The same settle once the header is promoted to its full
-     hitboxes: the dip and growth land on .5 instead. */
-  from {
-    padding-inline: 0.42rem;
-    font-weight: 400;
-  }
-  to {
-    padding-inline: 0.5rem;
-    font-weight: 700;
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
   .site-header,
   .nav-link,
   .nav-toggle {
     transition: none;
-  }
-
-  .nav-link.router-link-exact-active {
-    animation: none;
   }
 }
 </style>
