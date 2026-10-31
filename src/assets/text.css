@@ -44,13 +44,38 @@
   line-height: 1;
   letter-spacing: normal;
   text-transform: none;
-  display: inline-block;
+  /* The button reserves the icon's block (Mark's rule, 2026-10-30):
+     a fixed square at the glyph's final size from first paint, so
+     the button is built expecting the icon. Together with the
+     font's display=block loading, the ligature text never paints
+     and nothing shifts when the glyph arrives. */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 1em;
+  block-size: 1em;
+  flex: none;
+  overflow: hidden;
   white-space: nowrap;
   word-wrap: normal;
   direction: ltr;
   -webkit-font-smoothing: antialiased;
   font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
   vertical-align: -0.22em;
+}
+
+/* The same reserved block for font icons inside buttons: a fixed
+   1em square whether or not the icon font has arrived yet. */
+.styled-button i,
+.minor-button i,
+.video-cta i,
+.video-sound i {
+  inline-size: 1em;
+  block-size: 1em;
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* Was the `Linked` styled.a in Text.ts (defined but not used by any

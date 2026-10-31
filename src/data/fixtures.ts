@@ -7,6 +7,8 @@ export default {
       url: "/cv.pdf",
     cta2: "Journalism",
       url2: "https://csusignal.com/staff_name/mark-coggins/",
+    cta3: "Videos",
+      url3: "/videos",
     links: {
       name: "Resume",
       url: "https://portfolium.com/cogginsmark"
@@ -38,6 +40,7 @@ export default {
       },
       {
         name: "Flux",
+        autoplayMs: 8000,
         medium: "Photoshop · Illustrator · Premiere Pro",
         summary: "Brand creation.",
         copy: [
@@ -91,17 +94,27 @@ export default {
       {
         src: "/logos/bayvalleytech.svg",
         url: "https://www.bayvalleytech.com/",
-        alt: "Bay Valley Tech"
+        alt: "Bay Valley Tech",
+        // The mark's own proportions (its viewBox), carried so
+        // the browser reserves the logo's shape before the file
+        // arrives — the marquee's loop depends on the track's
+        // width never changing mid-flight (2026-10-30).
+        width: 1997,
+        height: 344
       },
       {
         src: "/logos/csustan3.svg",
         url: "https://www.csustan.edu/",
-        alt: "California State University Stanislaus"
+        alt: "California State University Stanislaus",
+        width: 133,
+        height: 42
       },
       {
         src: "/logos/census.svg",
         url: "https://www.census.gov/",
-        alt: "United States Census Bureau"
+        alt: "United States Census Bureau",
+        width: 302,
+        height: 124
       }
   ]
   },

@@ -1,33 +1,30 @@
 <template>
   <button
     type="button"
-    class="light-toggle lg-switch"
-    role="switch"
-    :aria-checked="isDark ? 'true' : 'false'"
-    aria-label="Toggle light and dark mode"
+    class="theme-pill"
+    aria-label="Background"
+    :aria-pressed="isDark ? 'true' : 'false'"
     @click="toggleTheme"
   >
-    <span class="switch-core" aria-hidden="true">
-      <span class="lg-switch__track"></span>
-      <span class="lg-switch__fill"></span>
-      <span class="lg-glass lg-switch__thumb">
-        <span class="lg-switch__face"><i :class="isDark ? 'fas fa-moon' : 'fas fa-sun'"></i></span>
-      </span>
-    </span>
-    <slot />
+    <span class="theme-pill-label">Background</span>
+    <span class="theme-pill-ms" aria-hidden="true">{{ isDark ? 'contrast_inverse' : 'contrast' }}</span>
   </button>
 </template>
 
 <script>
 import { localStore, toggleTheme } from '../theme.js'
 
-// The light/dark control on the Liquid Glass system (branch
-// feat/liquid-glass): the DOM and classes of @zakisheriff/liquid-glass's
-// GlassSwitch — track, fill, and a glass thumb. The library drives
-// the thumb with spring physics in React; here the two resting states
-// are plain CSS transitions on the same elements. The "on" tint is
-// the site's own text colour rather than the library's green, and the
-// thumb's face carries the mode icon (sun in light, moon in dark).
+// The light/dark control as a simple pill (Mark's pick,
+// 2026-10-30) with a fixed face (his Background design, the
+// same day): the label always reads "Background" and the
+// icon is Material Symbols' contrast pair, flipped with the
+// theme — contrast in light, contrast_inverse in dark — so
+// neither the text nor the icon's motif changes on toggle;
+// the pressed treatment and aria-pressed carry the state.
+// One labelled face in both of its homes: a row in the
+// mobile Menu panel, and — on desktop — a floating pill at
+// the page's bottom-right corner, mounted by App.vue (Mark's
+// call, 2026-10-30: out of the header, label restored).
 export default {
   name: 'LightToggle',
   computed: {
@@ -42,53 +39,65 @@ export default {
 </script>
 
 <style scoped>
-.light-toggle {
-  --lg-switch-on: var(--main-color);
+.theme-pill {
   display: inline-flex;
   align-items: center;
-  gap: 0.55rem;
-  width: auto;
-  height: auto;
+  gap: var(--pill-icon-gap);
+  min-height: 2.25rem;
+  margin: 0;
+  /* Wider sides in the Apple-spec sweep (Mark's call,
+     2026-10-30): 1.25rem, the panel rows' new measure —
+     in the panel the header's parity rule sets the exact
+     row metrics over this. */
+  padding: 0.45rem 1.25rem;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--main-color);
+  font: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: background-color 0.2s ease, box-shadow 0.25s ease;
 }
 
-/* The library's switch is a fixed 64x28 box; the core span holds
-   that geometry so the mobile label can flow beside the switch
-   instead of stretching its track. */
-.switch-core {
-  position: relative;
-  flex: none;
-  width: 64px;
-  height: 28px;
-}
-
-.lg-switch__fill {
-  transition: opacity 0.25s ease;
-}
-
-.light-toggle[aria-checked="true"] .lg-switch__fill {
-  opacity: 1;
-}
-
-.lg-switch__thumb {
-  transition: transform 0.3s cubic-bezier(0.32, 0.72, 0.24, 1);
-}
-
-.light-toggle[aria-checked="true"] .lg-switch__thumb {
-  transform: translate(26px, -50%) scale(0.655);
-}
-
-.lg-switch__face {
-  display: flex;
+.theme-pill-ms {
+  font-family: 'Material Symbols Rounded';
+  font-size: 1.15rem;
+  font-style: normal;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  white-space: nowrap;
+  font-variation-settings: 'FILL' 1, 'wght' 500, 'GRAD' 0, 'opsz' 24;
+  /* The reserved block (the site's icon rule, as on the
+     Journalism glyph): a fixed 1em square from first paint,
+     so the button is built at the glyph's final size — and
+     together with the font's display=block loading, the
+     ligature's name text ("contrast") never paints before
+     the icon arrives (Mark's call, 2026-10-30). */
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: 1rem;
-  color: var(--main-color);
+  inline-size: 1em;
+  block-size: 1em;
+  flex: none;
+  overflow: hidden;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .lg-switch__fill,
-  .lg-switch__thumb {
-    transition: none;
+
+
+/* Dark reads as the pressed, current pill — the header's own
+   treatment for the current thing. */
+.theme-pill[aria-pressed="true"] {
+  background: color-mix(in srgb, var(--main-color) 6%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--main-color) 12%, transparent);
+}
+
+@media (hover: hover) {
+  .theme-pill:hover {
+    background: color-mix(in srgb, var(--main-color) 8%, transparent);
   }
 }
 </style>

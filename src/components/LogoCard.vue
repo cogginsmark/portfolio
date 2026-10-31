@@ -1,7 +1,7 @@
 <template>
   <a class="styled-a" v-bind:href="url" target="_blank" v-bind:aria-label="alt">
     <div class="logo-card">
-        <img class="logo" v-bind:src="src" v-bind:alt="alt"/>
+        <img class="logo" v-bind:src="src" v-bind:alt="alt" v-bind:width="width" v-bind:height="height"/>
     </div>
   </a>
 </template>
@@ -11,7 +11,11 @@ export default {
   props: {
     src: String,
     url: String,
-    alt: String
+    alt: String,
+    // The mark's intrinsic proportions, bound onto the img so
+    // its box is reserved before the file loads.
+    width: [Number, String],
+    height: [Number, String]
   }
 }
 </script>
@@ -24,10 +28,13 @@ export default {
   .styled-a {
     margin: 1rem 0.5rem;
   }
-}
-@media screen and (max-width: 600px) {
-  .styled-a {
-    margin: 1rem 0.5rem;
+  /* The card's interior steps down with its margin (the
+     spacing system, 2026-10-30): the desktop 2.66rem side
+     padding was the widest on the site at phone size and
+     never stepped. The identical 600px restatement that
+     used to sit below this block is gone. */
+  .logo-card {
+    padding: 2rem var(--gutter);
   }
 }
 
@@ -40,7 +47,7 @@ export default {
   background: var(--card-background);
   /* background: radial-gradient(118.99% 670.46% at -7.06% -9.5%, #FFFFFF 0%, #F1F1F1 100%); */
   box-shadow: var(--card-box-shadow);
-  border-radius: 20px;
+  border-radius: var(--radius-card);
   padding: 2rem 2.66rem;
   position: relative;
   /* Can't transition radial gradients */
@@ -62,6 +69,14 @@ export default {
 
 .logo {
   height: 100%;
+  /* Width must be stated (fix, 2026-10-30): the width/height
+     attributes added for aspect reservation are presentational
+     hints — with only the height set in CSS, the attribute's
+     width (1997px on the widest mark) stood as the rendered
+     width and the boxes stretched enormously. width: auto
+     overrides the hint, and the attributes' aspect ratio —
+     the part the reservation needs — still applies. */
+  width: auto;
   mix-blend-mode: exclusion;
   filter: invert(1);
   opacity: 0.8;

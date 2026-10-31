@@ -1,49 +1,25 @@
-# Soft Portfolio
+# cogginsmark.com
 
-<img src="./public/softportfolio/screenshot.png" />
+My personal portfolio: graphic design, journalism, and video work, live at [cogginsmark.com](https://www.cogginsmark.com). I design and build this site myself; it runs on Vue 3 and Vite.
 
-A neumorphic inspired personal website and portfolio.
-- Showcase your project screenshots with carousels
-- Link up your social and other links
-- Supports light and dark mode 💡
+## What's here
 
-Demo: https://samxie.net/
-
-## Deploy your own
-
-Clone and deploy with vercel.
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/git/external?repository-url=https%3A%2F%2Fgithub.com%2Fsamzx%2Fsoft-portfolio)
-
-### Configurations
-- Under `src/data/fixtures.ts`, edit to customise copy.
-
-- Under `src/themes`, edit light and dark themes (including background image).
-
-- Render your own 3D model by editing `blender/peregrine-falcon.blend` using [Blender](https://www.blender.org/) for free.
-
-- Download company logos and use [Figma](https://www.figma.com/) to edit and export svg with no borders.
-
-Push your changes to main to auto-deploy to vercel. Pull requests get preview deployments. `vercel.json` pins the Vite build (output `dist`) and rewrites non-file routes to `index.html`, so history-mode routes like `/about` load correctly when visited directly.
+- **Home** — selected design work, and the organizations that have hired me for it.
+- **About** — my background, experience, and awards.
+- **Videos** — video work across news, teaching, and campus media, plus client pieces.
+- **Contact** — email, my résumé, and my profiles.
 
 ## Development
-```
-npm install
-```
 
-### Compiles and hot-reloads for development
-```
+```bash
+npm install
 npm run dev
 ```
 
-### Compiles and minifies for production
-```
+Production build:
+
+```bash
 npm run build
 ```
 
-### Lints files
-```
-npm run lint
-```
-
-Built with Vue 3 + Vite (migrated from Vue 2 + Vue CLI — see the migration PR).
+Pushing to main auto-deploys; pull requests get preview deployments. `vercel.json` pins the Vite build (output `dist`) and rewrites non-file routes to `index.html`, so history-mode routes like `/about` and `/videos` load correctly when visited directly.

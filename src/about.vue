@@ -29,6 +29,17 @@
             </div>
           </dl>
         </section>
+
+        <section class="about-section" data-reveal aria-labelledby="awards-heading">
+          <h2 id="awards-heading" class="about-section-title">Awards</h2>
+          <dl class="experience-list">
+            <div class="experience-item" v-for="item in awards" :key="item.label">
+              <dt>{{ item.label }}</dt>
+              <dd>{{ item.value }}</dd>
+            </div>
+          </dl>
+          <p class="awards-note">{{ awardsNote }} <a v-bind:href="awardsSource.url" target="_blank" rel="noopener">{{ awardsSource.label }}</a></p>
+        </section>
       </div>
       <foot v-bind:author="author" v-bind:footer="footer" />
     </ThemeRoot>
@@ -48,7 +59,7 @@ import baseData from './data/2fixtures.ts'
 // intro with the portrait, a facts grid, and an experience list, all
 // from the structured data in 2fixtures.ts. The theme toggle that used
 // to be pasted into this view lives in the SiteHeader now.
-const { author, role, facts, experience, footer } = baseData
+const { author, role, facts, experience, awards, awardsNote, awardsSource, footer } = baseData
 
 const root = ref(null)
 useReveal(root)
@@ -57,7 +68,6 @@ useReveal(root)
 <style>
 /* Hack until createGlobalStyles comes to vue-styled-components */
 html {
-  background: var(--main-background-color);
   background-color: var(--fallback-background-color);
 }
 
@@ -76,7 +86,7 @@ a {
 .about-wrap {
   max-width: 980px;
   margin: 0 auto;
-  padding: 3rem 1.25rem 1rem;
+  padding: 3rem var(--gutter) 1rem;
 }
 
 .about-intro {
@@ -128,7 +138,15 @@ a {
 .fact-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
-  gap: 1rem;
+  /* Column spacing reconsidered (Mark's call, 2026-10-30):
+     one shared 1rem gap made the Background columns read as
+     a single block — the long Education and Major values sat
+     a body's-width from the next label. The columns now get
+     the About page's own 2rem rhythm (the intro's gap), and
+     wrapped rows keep a smaller 1.5rem, so across reads as
+     separate facts and down reads as a list. */
+  column-gap: 2rem;
+  row-gap: 1.5rem;
   justify-content: center;
   margin: 0;
 }
@@ -158,13 +176,25 @@ a {
 
 .experience-list {
   display: grid;
+  /* One full-width column (fix, 2026-10-30): with no column
+     template the single track shrink-wrapped to the widest
+     entry and justify-content centred it, so the Experience
+     and Awards text sat inset from the page's left edge
+     instead of aligning with the section titles and the
+     Background grid. */
+  grid-template-columns: 1fr;
   gap: 1rem;
-  justify-content: center;
   margin: 0;
 }
 
 .experience-item {
   padding: 0;
+}
+
+.awards-note {
+  margin: 1.1rem 0 0;
+  line-height: 1.55;
+  opacity: 0.8;
 }
 
 [data-reveal] {

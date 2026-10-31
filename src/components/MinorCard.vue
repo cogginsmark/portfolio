@@ -32,10 +32,13 @@ export default {
   flex-direction: column;
   background: var(--card-background);
   box-shadow: var(--card-box-shadow);
-  border-radius: 1.25rem;
+  border-radius: var(--radius-card);
   margin: auto;
   position: relative;
-  margin-bottom: 2.5rem;
+  /* The card owns the stack gap (the spacing system,
+     2026-10-30): the one rate, shared with the major cards.
+     Was 2.5rem (45px against their 40px). */
+  margin-bottom: var(--stack-gap);
   padding: 2rem 3rem;
   /* Can't transition radial gradients */
   /* transition: 0.3s background; */
@@ -59,7 +62,7 @@ export default {
 
 @media screen and (max-width: 61.25rem) {
   .minor-card {
-    padding: 2rem 1.25rem;
+    padding: 2rem var(--gutter);
   }
 }
 /* Disabled for performance issues */
@@ -78,7 +81,9 @@ export default {
 }
 
 .minor-button {
-  display: block;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--pill-icon-gap);
   width: fit-content;
   font-size: 0.7rem;
   letter-spacing: 0.11em;
@@ -88,12 +93,26 @@ export default {
   font-weight: bold;
   margin-right: 1.25rem;
   line-height: 2.5rem;
+  /* (Its phone step-down sits with the other mobile sizing at
+     the end of this style block.) */
   color: var(--theme-text);
   transform: translateY(0px);
   transition: 0.3s all ease-out;
 }
+.minor-button .text-button-text {
+  margin-right: 0;
+}
 .minor-button:hover {
   transform: translateX(2px);
   transition: 0.2s all ease-out;
+}
+
+@media screen and (max-width: 40rem) {
+  /* The minor buttons take the same phone step-down as the
+     site's other buttons (2026-10-30): their tall line steps
+     down with the rest. */
+  .minor-button {
+    line-height: 2rem;
+  }
 }
 </style>
