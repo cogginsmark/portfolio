@@ -672,11 +672,15 @@ export default {
        now that the Menu floats right — instead of floating
        loose in the header. One border all around, a solid
        surface — the theme's fallback colour — no gradient. The
-       drop clears the bar by the same half rem as before: the
-       extra .65 covers the stretch from the centred wrapper's
-       bottom edge down to the bar's bottom, which the wrapper
-       does not span. */
-    top: calc(100% + 0.5rem + 0.65rem);
+       drop gives the stack a clear air margin under the
+       bar — the panel is a floating sheet, not the bar's
+       own dropdown (Mark's call, 2026-10-30): the extra
+       .65 covers the stretch from the centred wrapper's
+       bottom edge down to the bar's bottom, which the
+       wrapper does not span, and each pill carries a drop
+       shadow (below) so the stack reads as floating over
+       the page. */
+    top: calc(100% + 0.75rem + 0.65rem);
     right: 0;
     left: auto;
     margin: 0;
@@ -716,7 +720,7 @@ export default {
     padding: 0.55rem 1rem;
     border-radius: 999px;
     background: var(--fallback-background-color);
-    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--main-color) 10%, transparent);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--main-color) 10%, transparent), 0 12px 32px rgb(0 0 0 / 0.2);
     color: var(--main-color);
     text-decoration: none;
     font-size: 0.95rem;
@@ -747,7 +751,7 @@ export default {
      icon at the ends. */
   .switch-wrap :deep(.theme-pill) {
     background: var(--fallback-background-color);
-    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--main-color) 10%, transparent);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--main-color) 10%, transparent), 0 12px 32px rgb(0 0 0 / 0.2);
     justify-content: space-between;
     /* Panel parity (the spacing system, 2026-10-30): the
        Background row takes the link rows' exact metrics, so
