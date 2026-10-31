@@ -15,7 +15,7 @@
           @click="open = !open"
         >
           <span v-if="!navCentered" class="nav-toggle-label">{{ open ? 'Close' : 'Menu' }}</span>
-          <span v-else class="nav-toggle-glyph" aria-hidden="true">more_vert</span>
+          <span v-else class="nav-toggle-glyph" aria-hidden="true">…</span>
         </button>
 
         <div id="menu-panel" class="switch-wrap" :class="{ 'is-open': open }">
@@ -477,25 +477,24 @@ export default {
     justify-content: flex-end;
   }
 
-  /* The glyph is a variable glyph (Mark's call, 2026-10-30):
-     Material Symbols' more_vert, sharing the text's own
-     weight axis — it rests at the Menu word's 500 and
-     transforms to 700 while the panel is open, the axis
-     animating like the carousel chevrons' does. */
+  /* The glyph is the font's own (Mark's call, 2026-10-30):
+     Manrope has no vertical ellipsis — checked against the
+     files Google serves — but it has the horizontal one, so
+     the dots are that glyph turned a quarter turn. Being text
+     in the variable font, it shares the Menu word's exact
+     behaviour: it rests at weight 500 and transforms to 700
+     while the panel is open, the axis animating as text. */
   .nav-toggle-glyph {
-    font-family: 'Material Symbols Rounded';
-    font-size: 1.3rem;
-    font-style: normal;
+    display: inline-block;
+    font-size: 1.35rem;
+    font-weight: 500;
     line-height: 1;
-    letter-spacing: normal;
-    text-transform: none;
-    white-space: nowrap;
-    font-variation-settings: 'FILL' 1, 'wght' 500, 'GRAD' 0, 'opsz' 24;
-    transition: font-variation-settings 0.25s ease;
+    transform: rotate(90deg);
+    transition: font-weight 0.25s ease;
   }
 
   .nav-toggle[aria-expanded="true"] .nav-toggle-glyph {
-    font-variation-settings: 'FILL' 1, 'wght' 700, 'GRAD' 0, 'opsz' 24;
+    font-weight: 700;
   }
 
   .theme-toggle-label {
