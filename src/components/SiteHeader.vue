@@ -369,7 +369,10 @@ export default {
   }
 
   .header-inner {
-    padding-inline: 0.9rem;
+    /* On the page's line (the spacing system, 2026-10-30):
+       the bar's inset is the site gutter, like the body and
+       the footer it frames. */
+    padding-inline: var(--gutter);
     gap: 0.5rem;
     /* Trying the nav items left-aligned (Mark's call,
        2026-10-30): they sit on the bar's left padding line;
@@ -417,7 +420,7 @@ export default {
      with the button. */
   .mobile-menu-wrap {
     position: absolute;
-    right: 0.9rem;
+    right: var(--gutter);
     top: 50%;
     transform: translateY(-50%);
   }
@@ -583,6 +586,10 @@ export default {
     background: var(--fallback-background-color);
     box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--main-color) 10%, transparent);
     justify-content: space-between;
+    /* Panel parity (the spacing system, 2026-10-30): the
+       Background row takes the link rows' exact metrics, so
+       all six panel rows share a height and a text line. */
+    padding: 0.55rem 1rem;
   }
 }
 

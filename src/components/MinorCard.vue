@@ -32,10 +32,13 @@ export default {
   flex-direction: column;
   background: var(--card-background);
   box-shadow: var(--card-box-shadow);
-  border-radius: 1.25rem;
+  border-radius: var(--radius-card);
   margin: auto;
   position: relative;
-  margin-bottom: 2.5rem;
+  /* The card owns the stack gap (the spacing system,
+     2026-10-30): the one rate, shared with the major cards.
+     Was 2.5rem (45px against their 40px). */
+  margin-bottom: var(--stack-gap);
   padding: 2rem 3rem;
   /* Can't transition radial gradients */
   /* transition: 0.3s background; */
@@ -59,7 +62,7 @@ export default {
 
 @media screen and (max-width: 61.25rem) {
   .minor-card {
-    padding: 2rem 1.25rem;
+    padding: 2rem var(--gutter);
   }
 }
 /* Disabled for performance issues */

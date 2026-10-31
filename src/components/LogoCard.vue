@@ -24,10 +24,13 @@ export default {
   .styled-a {
     margin: 1rem 0.5rem;
   }
-}
-@media screen and (max-width: 600px) {
-  .styled-a {
-    margin: 1rem 0.5rem;
+  /* The card's interior steps down with its margin (the
+     spacing system, 2026-10-30): the desktop 2.66rem side
+     padding was the widest on the site at phone size and
+     never stepped. The identical 600px restatement that
+     used to sit below this block is gone. */
+  .logo-card {
+    padding: 2rem var(--gutter);
   }
 }
 
@@ -40,7 +43,7 @@ export default {
   background: var(--card-background);
   /* background: radial-gradient(118.99% 670.46% at -7.06% -9.5%, #FFFFFF 0%, #F1F1F1 100%); */
   box-shadow: var(--card-box-shadow);
-  border-radius: 20px;
+  border-radius: var(--radius-card);
   padding: 2rem 2.66rem;
   position: relative;
   /* Can't transition radial gradients */

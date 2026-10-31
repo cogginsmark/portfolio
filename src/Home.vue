@@ -98,25 +98,26 @@ export default {
 }
 @media screen and (max-width: 61.25rem) {
   .card-container {
-    margin-top: -5.25rem;
     /* The gutter lives on the container, not on each card
        (2026-10-30): the fluid pass took the cards to width 100%
        with nothing at the sides, so on a phone they ran edge to
-       edge. The site's standard 1.25rem side padding insets the
-       major cards, the minor cards and the logo strip together,
-       under their own caps. */
-    padding-inline: 1.25rem;
-  }
-}
-@media screen and (max-width: 37.5rem) {
-  .card-container {
-    margin-top: -6.5rem;
+       edge. The site gutter insets the major cards, the minor
+       cards and the logo strip together, under their own caps.
+       One hero-to-cards joint at every width (the spacing
+       system, 2026-10-30): the base -5.25rem overlap stands
+       alone now — the narrower -6.5rem step that made small
+       phones flush is gone, so the joint reveals one gutter
+       everywhere. */
+    padding-inline: var(--gutter);
   }
 }
 
 .minor-card-container {
   margin: auto;
-  margin-bottom: 80px;
+  /* 2.5rem (the spacing system, 2026-10-30): the approach to
+     the logo section matches the availability line's 2.5rem
+     on its other side. Was 80px. */
+  margin-bottom: 2.5rem;
   width: 100%;
   max-width: 980px;
   display: flex;
@@ -135,14 +136,21 @@ export default {
     width: 100%;
     flex-direction: column;
   }
+  /* One owner per gap (the spacing system, 2026-10-30): in
+     the stacked column the container adds nothing — each
+     minor card's own margin-bottom (--stack-gap) carries the
+     stack, so the gap is decided in one place. The container
+     used to add 16px top and bottom on top of the card's own
+     margin, and which total rendered depended on the bundle's
+     rule order. */
   .minor-card-container > * {
-    margin: 16px 0px;
+    margin: 0;
   }
   .minor-card-container > *:nth-child(3n+1) {
-    margin: 16px 0px;
+    margin: 0;
   }
   .minor-card-container > *:nth-child(3n+0) {
-    margin: 16px 0px;
+    margin: 0;
   }
 }
 @media screen and (max-width: 600px) {
@@ -164,7 +172,7 @@ export default {
    available signal before the words do. */
 .availability-note {
   margin: 2.5rem auto 0;
-  padding: 0 1.25rem;
+  padding: 0 var(--gutter);
   text-align: center;
   font-size: 0.95rem;
   font-weight: 600;
@@ -181,7 +189,9 @@ export default {
   display: inline-block;
   width: 0.5rem;
   height: 0.5rem;
-  margin-right: 0.55rem;
+  /* The site's icon-to-label gap token (the spacing system,
+     2026-10-30). Was its own 0.55rem. */
+  margin-right: var(--pill-icon-gap);
   border-radius: 50%;
   background: #2f9e63;
   vertical-align: 0.1rem;

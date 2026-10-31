@@ -37,6 +37,17 @@
      the icon centred in a reserved 1em block (see text.css), so
      the token is the gap and every labelled button draws it. */
   --pill-icon-gap: 0.45rem;
+  /* The spacing system (2026-10-30, from the mobile spacing
+     audit): the values the layout already agreed on, named so
+     every file draws the same ones. --gutter is the page's
+     side line — the wraps, the card container, the footer and
+     now the mobile header all sit on it. --stack-gap is the
+     one rate the Home card stack breathes at. --radius-card
+     is the card family's corner (the rem value; the 20px px
+     island in the same family joined it). */
+  --gutter: 1.25rem;
+  --stack-gap: 40px;
+  --radius-card: 1.25rem;
   /* Liquid Glass speaks the site's typeface. Its own theme variables
      (fill, foreground, track) follow its data-theme convention, which
      theme.js already drives on <html>. */

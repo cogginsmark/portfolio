@@ -155,7 +155,7 @@ export default {
   /* Fluid under its authored size (2026-10-30): the column is
      390px where there is room and shrinks with the viewport
      instead of holding a fixed width to the smallest screens. */
-  width: min(390px, calc(100% - 1.25rem));
+  width: min(390px, calc(100% - var(--gutter) * 2));
   margin: 10px;
 
   /* Responsive */
@@ -167,7 +167,7 @@ export default {
        narrower than the CTA pair, so the buttons could only stack
        one per row. The column keeps its desktop measure and simply
        goes fluid under it. */
-    width: min(390px, calc(100% - 1.25rem));
+    width: min(390px, calc(100% - var(--gutter) * 2));
     margin: auto;
   }
 }

@@ -252,7 +252,7 @@ onUnmounted(() => {
      (unbreakable date, smaller size) carries the desktop layout. */
   max-width: 980px;
   margin: 0 auto;
-  padding: 3rem 1.25rem 1rem;
+  padding: 3rem var(--gutter) 1rem;
 }
 
 .videos-intro {
@@ -296,7 +296,12 @@ onUnmounted(() => {
 }
 
 .videos-section-note {
-  margin: 0 0 1.5rem;
+  /* Rule-to-entries totals match About (the spacing system,
+     2026-10-30): 0.35rem to the note plus 0.75rem from it =
+     the same 1.1rem About puts under its ruled titles. Was
+     1.5rem, which made this page's total 33.3px to About's
+     19.8px. */
+  margin: 0 0 0.75rem;
   font-size: 0.95rem;
   opacity: 0.7;
 }
@@ -427,7 +432,12 @@ onUnmounted(() => {
 
   .video-grid--side .video-player {
     width: 100%;
-    max-width: 340px;
+    /* Full column when stacked (the spacing system,
+       2026-10-30): the 340px cap left the player 2.5px
+       inside both edges of the 345px column its text spans.
+       The cap stays for the centred layouts above this
+       width, where centring is the design. */
+    max-width: none;
     margin-inline: auto;
     margin-bottom: 0.85rem;
   }
@@ -483,7 +493,10 @@ onUnmounted(() => {
      and padding. */
   .video-cta {
     font-size: 0.82rem;
-    padding: 0.5rem 0.95rem;
+    /* The StyledButton phone step-down exactly (the spacing
+       system, 2026-10-30): 0.55rem 0.9rem. Was its own
+       near-miss, 0.5rem 0.95rem. */
+    padding: 0.55rem 0.9rem;
   }
 
   .video-sound {

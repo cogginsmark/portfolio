@@ -41,19 +41,23 @@ export default {
   box-sizing: border-box;
   margin: 0 auto;
   margin-top: auto;
-  padding: 3rem 1.25rem 1.5rem;
+  padding: 3rem var(--gutter) 1.5rem;
   display: flex;
   font-weight: bold;
   flex-direction: column;
 }
 
 .author {
-  margin-right: 36px;
+  /* The footer's last px islands join the rem system (the
+     spacing system, 2026-10-30): 36px as 2rem, the icons'
+     8px/16px as 0.45rem/0.9rem — the nearest system values,
+     within a pixel of the originals. */
+  margin-right: 2rem;
 }
 
 .icons {
-  padding: 8px;
-  margin-right: 16px;
+  padding: 0.45rem;
+  margin-right: 0.9rem;
   color: var(--theme-text);
   opacity: 0.5;
   transform: translateY(0px);

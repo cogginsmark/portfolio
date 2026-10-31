@@ -219,7 +219,7 @@ export default {
   max-width: 980px;
   background: var(--card-background);
   box-shadow: var(--card-box-shadow);
-  border-radius: 20px;
+  border-radius: var(--radius-card);
   margin: auto;
   margin-bottom: 80px;
   /* Can't transition radial gradients */
@@ -228,13 +228,10 @@ export default {
 @media screen and (max-width: 980px) {
   .card {
     max-width: 600px;
-    margin-bottom: 40px;
-  }
-}
-@media screen and (max-width: 600px) {
-  .card {
-    max-width: 600px;
-    margin-bottom: 40px;
+    /* The stack's one rate (the spacing system, 2026-10-30).
+       The identical 600px restatement that used to sit below
+       this block is gone — this rule already covers it. */
+    margin-bottom: var(--stack-gap);
   }
 }
 /* Disabled for performance issues */
@@ -246,19 +243,18 @@ export default {
 }
 @media screen and (max-width: 980px) {
   .contents {
-    padding: 40px 20px;
+    /* On the card family's text line (the spacing system,
+       2026-10-30): the side inset is the gutter, so major-card
+       text starts where minor-card text starts. Was the px
+       island 40px 20px. The identical 600px restatement that
+       used to sit below this block is gone. */
+    padding: 2.5rem var(--gutter);
     /* Border-box at the card's full width: content lands at the
        card's width less the padding, the old 560 content-box step
        plus its padding having been the same total by accident. */
     box-sizing: border-box;
     width: 100%;
     margin: 0;
-  }
-}
-@media screen and (max-width: 600px) {
-  .contents {
-    padding: 40px 20px;
-    width: 100%;
   }
 }
 
@@ -280,12 +276,6 @@ export default {
     margin-right: 0;
   }
 }
-@media screen and (max-width: 600px) {
-  .left-container {
-    width: 100%;
-  }
-}
-
 .medium {
   font-weight: 300;
   font-size: 0.75rem;
@@ -302,6 +292,12 @@ export default {
 }
 .button-container {
   margin-top: 0px;
+}
+/* The button's own 20px right margin is zeroed inside card
+   rows too (the spacing system, 2026-10-30) — the hero and
+   Contact already did this; the card row was the holdout. */
+.button-container :deep(.styled-button) {
+  margin-right: 0;
 }
 .button-container.empty {
   margin-top: 32px;

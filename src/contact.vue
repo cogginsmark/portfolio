@@ -56,7 +56,7 @@ export default {
   justify-content: center;
   gap: 2.5rem;
   text-align: center;
-  padding: 6rem 1.25rem 5rem;
+  padding: 6rem var(--gutter) 5rem;
   min-height: 55vh;
 }
 

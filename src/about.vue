@@ -86,7 +86,7 @@ a {
 .about-wrap {
   max-width: 980px;
   margin: 0 auto;
-  padding: 3rem 1.25rem 1rem;
+  padding: 3rem var(--gutter) 1rem;
 }
 
 .about-intro {
