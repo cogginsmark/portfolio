@@ -97,22 +97,7 @@ export default {
         navStore.centered = false
         return
       }
-      if (navStore.centered) return
-      this.measureNavShift()
       navStore.centered = true
-    },
-    // The centred layout moves the nav group by transform —
-    // justify-content cannot animate, so the distance to the
-    // centre is measured and ridden as a variable (Mark's
-    // call, 2026-10-30: the transition should be smooth).
-    measureNavShift() {
-      const nav = document.getElementById('primary-nav')
-      const inner = nav && nav.closest('.header-inner')
-      if (!nav || !inner) return
-      const navRect = nav.getBoundingClientRect()
-      const innerRect = inner.getBoundingClientRect()
-      const shift = (innerRect.width - navRect.width) / 2 - (navRect.left - innerRect.left)
-      nav.style.setProperty('--nav-shift', shift.toFixed(1) + 'px')
     }
   },
   mounted() {
@@ -121,21 +106,9 @@ export default {
     }
     this.onScroll()
     window.addEventListener('scroll', this.onScroll, { passive: true })
-    this.onResize = () => {
-      if (navStore.centered) this.measureNavShift()
-    }
-    window.addEventListener('resize', this.onResize)
-    // The other half of the stale-shift fix: once the real
-    // font has landed, measure again under its metrics.
-    if (document.fonts && document.fonts.ready) {
-      document.fonts.ready.then(() => {
-        if (navStore.centered) this.measureNavShift()
-      })
-    }
   },
   beforeUnmount() {
     window.removeEventListener('scroll', this.onScroll)
-    window.removeEventListener('resize', this.onResize)
   },
   watch: {
     $route() {
@@ -144,14 +117,6 @@ export default {
       // restores the as-is layout too, not just the Home item.
       if (this.$route.path === '/') {
         navStore.centered = false
-      }
-      // The centred shift is a measured pixel value; on other
-      // pages it went stale and the bar sat left of centre
-      // (Mark's bug report, 2026-10-30) — the measurement was
-      // taken under the fallback font's metrics when the tap
-      // came early. Re-measure once the new page has settled.
-      if (navStore.centered) {
-        this.$nextTick(() => this.measureNavShift())
       }
     }
   }
@@ -453,16 +418,24 @@ export default {
   /* The centred layout (Mark's model, 2026-10-30): once a nav
      item has been tapped, the items centre in the bar and the
      Menu text collapses into a stacked three-circle glyph.
-     The centring rides a measured transform — justify-content
-     cannot animate, and the transition should be smooth — and
-     the glyph sits at the button's right edge, on the menu
+     The centring is left: 50% plus translateX(-50%) — both
+     percentages animate, and the pair holds the row's centre
+     on the bar's centre at every frame whatever the row's
+     width is doing. (A measured pixel shift went before it;
+     the active item's padding glide changes the row's width
+     mid-transition, so the fixed offset kept decentering and
+     re-centering the row — Mark's bug report, 2026-10-30.)
+     The glyph sits at the button's right edge, on the menu
      block's own right line below it. */
   .primary-nav {
-    transition: transform 0.4s ease;
+    position: relative;
+    left: 0;
+    transition: left 0.4s ease, transform 0.4s ease;
   }
 
   .site-header.nav-centered .primary-nav {
-    transform: translateX(var(--nav-shift, 0px));
+    left: 50%;
+    transform: translateX(-50%);
   }
 
   .site-header.nav-centered .nav-toggle,
