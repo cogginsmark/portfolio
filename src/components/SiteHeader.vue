@@ -352,7 +352,11 @@ export default {
   padding: 0.45rem 0.25rem;
   -webkit-tap-highlight-color: transparent;
   border-radius: 999px;
-  font-size: 0.95rem;
+  /* Back to the larger text (Mark's call, 2026-10-30): the
+     bar's words at a full 1rem — on phones, where the root
+     is 16px, that restores the size the .88rem step-down
+     had taken away. */
+  font-size: 1rem;
   line-height: 1.25;
   /* The background's slower rate is the fade (Mark's call,
      2026-10-30): a hovered pill arrives quickly (the hover
@@ -559,9 +563,10 @@ export default {
        the taller padding takes each item to a comfortable
        tap height, and the inline spacing tightens to .2rem
        so the items sit closer together for the pill effect.
-       The padding is constant — the pills never expand. */
+       The padding is constant — the pills never expand. The
+       type is the bar's full 1rem again (Mark's call,
+       2026-10-30) — no mobile step-down. */
     padding: 0.55rem 0.2rem;
-    font-size: 0.88rem;
   }
 
   .nav-link:focus-visible {
@@ -599,9 +604,10 @@ export default {
 
   .nav-toggle {
     display: inline-flex;
-    /* Text spacing at rest; opening grows it (below). */
+    /* Text spacing at rest; opening grows it (below). The
+       word matches the links' restored 1rem. */
     padding: 0.55rem 0.15rem;
-    font-size: 0.88rem;
+    font-size: 1rem;
   }
 
   /* Open, the button reads Close — and expands its hotbox to
