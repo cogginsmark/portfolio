@@ -2,6 +2,7 @@
   <button
     type="button"
     class="theme-pill"
+    aria-label="Background"
     :aria-pressed="isDark ? 'true' : 'false'"
     @click="toggleTheme"
   >
@@ -20,8 +21,9 @@ import { localStore, toggleTheme } from '../theme.js'
 // theme — contrast in light, contrast_inverse in dark — so
 // neither the text nor the icon's motif changes on toggle;
 // the pressed treatment and aria-pressed carry the state.
-// One face everywhere it appears: the desktop bar's pill and
-// the Menu panel's item are the same control.
+// In the Menu panel it is a labelled row; in the desktop bar
+// it is the symbol alone (Mark's call, 2026-10-30), with the
+// aria-label carrying the name there.
 export default {
   name: 'LightToggle',
   computed: {
@@ -64,6 +66,28 @@ export default {
   text-transform: none;
   white-space: nowrap;
   font-variation-settings: 'FILL' 1, 'wght' 500, 'GRAD' 0, 'opsz' 24;
+  /* The reserved block (the site's icon rule, as on the
+     Journalism glyph): a fixed 1em square from first paint,
+     so the button is built at the glyph's final size — and
+     together with the font's display=block loading, the
+     ligature's name text ("contrast") never paints before
+     the icon arrives (Mark's call, 2026-10-30). */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 1em;
+  block-size: 1em;
+  flex: none;
+  overflow: hidden;
+}
+
+/* Desktop: the bar's pill is the symbol alone (Mark's call,
+   2026-10-30). The label remains for the Menu panel's row,
+   which only exists at these widths' other side. */
+@media (min-width: 40.01rem) {
+  .theme-pill-label {
+    display: none;
+  }
 }
 
 /* Dark reads as the pressed, current pill — the header's own
