@@ -345,6 +345,12 @@ export default {
   --vc-nav-border-radius: 50%;
   --vc-nav-background: rgb(0 0 0 / 0.28);
   --vc-nav-color: #fff;
+  /* The chevron's colour does not change on hover (Mark's
+     call, 2026-10-30): the library recolours the nav buttons
+     on hover from this variable, whose default is its own
+     dark tone — set it to the resting colour, so on hover
+     only the glyph's variable weight moves. */
+  --vc-nav-color-hover: #fff;
 }
 .styled-carousel :deep(.carousel__prev) {
   inset-inline-start: 0.5rem;
