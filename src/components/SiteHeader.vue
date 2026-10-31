@@ -1,5 +1,5 @@
 <template>
-  <header class="site-header" :class="{ 'is-scrolled': scrolled }">
+  <header class="site-header" :class="{ 'is-scrolled': scrolled, 'nav-centered': navCentered }">
     <div class="header-inner">
       <router-link to="/" class="brand" aria-label="Mark Coggins — home">
         <span class="brand-name">Mark Coggins</span>
@@ -11,9 +11,11 @@
           class="nav-toggle"
           :aria-expanded="open ? 'true' : 'false'"
           aria-controls="menu-panel"
+          :aria-label="open ? 'Close menu' : 'Open menu'"
           @click="open = !open"
         >
-          <span class="nav-toggle-label">{{ open ? 'Close' : 'Menu' }}</span>
+          <span v-if="!navCentered" class="nav-toggle-label">{{ open ? 'Close' : 'Menu' }}</span>
+          <svg v-else class="nav-toggle-glyph" viewBox="0 0 4 20" aria-hidden="true" focusable="false"><circle cx="2" cy="2.5" r="1.7" /><circle cx="2" cy="10" r="1.7" /><circle cx="2" cy="17.5" r="1.7" /></svg>
         </button>
 
         <div id="menu-panel" class="switch-wrap" :class="{ 'is-open': open }">
@@ -27,7 +29,7 @@
         </div>
       </div>
 
-      <nav id="primary-nav" class="primary-nav" aria-label="Primary">
+      <nav id="primary-nav" class="primary-nav" aria-label="Primary" @click="markNavTapped">
         <router-link class="nav-link" to="/"><span class="nav-text" data-text="Home">Home</span></router-link>
         <router-link class="nav-link" to="/about"><span class="nav-text" data-text="About">About</span></router-link>
         <router-link class="nav-link" to="/videos"><span class="nav-text" data-text="Videos">Videos</span></router-link>
@@ -38,7 +40,7 @@
 </template>
 
 <script>
-import { localStore } from '../theme.js'
+import { localStore, navStore } from '../theme.js'
 import LightToggle from './LightToggle.vue'
 import homeData from '../data/fixtures'
 
@@ -64,6 +66,9 @@ export default {
     isDark() {
       return localStore.dark
     },
+    navCentered() {
+      return navStore.centered
+    },
     // The Menu panel's quick actions draw on the same link
     // data as the footer (2026-10-30), so the two never drift.
     emailUrl() {
@@ -75,6 +80,17 @@ export default {
       return order
         .map((name) => homeData.footer.links.find((link) => link.name === name))
         .filter(Boolean)
+    }
+  },
+  methods: {
+    // A tap on a nav item flips the mobile header into its
+    // centred layout (the navStore comment in theme.js carries
+    // the model). Desktop clicks leave it alone — the layout
+    // it drives exists only on small screens.
+    markNavTapped() {
+      if (window.matchMedia('(max-width: 40rem)').matches) {
+        navStore.centered = true
+      }
     }
   },
   mounted() {
@@ -385,6 +401,28 @@ export default {
      transition animates the growth. */
   .nav-toggle[aria-expanded="true"] {
     padding-inline: 0.5rem;
+  }
+
+  /* The centred layout (Mark's model, 2026-10-30): once a nav
+     item has been tapped, the items centre in the bar and the
+     Menu text collapses into a stacked three-circle glyph —
+     one compact button at the same right edge, its open state
+     still carried by the pressed treatment above. The glyph
+     button keeps the toggle's own padding in both states. */
+  .site-header.nav-centered .header-inner {
+    justify-content: center;
+  }
+
+  .site-header.nav-centered .nav-toggle,
+  .site-header.nav-centered .nav-toggle[aria-expanded="true"] {
+    padding: 0.4rem 0.6rem;
+  }
+
+  .nav-toggle-glyph {
+    display: block;
+    width: 0.3rem;
+    height: 1.3rem;
+    fill: currentColor;
   }
 
   .theme-toggle-label {

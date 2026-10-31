@@ -9,6 +9,16 @@ export const localStore = reactive({
   dark: false
 })
 
+// The mobile header's layout state (Mark's model, 2026-10-30):
+// aligned as-is on load — items left, Menu as text — and the
+// first tap on a nav item centres the items and collapses the
+// Menu text into its three-circle glyph, where it stays until
+// a reload. In-memory only, like the state before it: a reload
+// is what resets it.
+export const navStore = reactive({
+  centered: false
+})
+
 export const currentTheme = () => (localStore.dark ? dark : light)
 
 export const mutations = {
