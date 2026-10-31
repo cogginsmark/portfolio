@@ -21,6 +21,25 @@ export default {
       value: "Graphic Design Student Assistant position at Associated Students Inc, at California State University Stanislaus"
     }
   ],
+  // The ACUI awards, verified against the physical certificates and
+  // the conference's own program page (Mark, 2026-10-30): Region I
+  // Conference 2022, "Steal This Idea" — the work sample's March 2023
+  // dating was the error; the certificates print 2022.
+  awards: [
+    {
+      label: "Promotional Campaigns",
+      value: "Third Place — ACUI Region I Conference, Steal This Idea (March 2022). Hispanic Heritage Month social media posts for @sc.stanstate."
+    },
+    {
+      label: "Logos / Brand Identity",
+      value: "Third Place — ACUI Region I Conference, Steal This Idea (March 2022). ASI marketing department identity."
+    }
+  ],
+  awardsNote: "The certificates are signed by the 2022 conference co-chairs, Cecilia Ortiz and Jenny Puccinelli — Puccinelli now serves as ACUI Region I's Regional Director.",
+  awardsSource: {
+    label: "2022 conference program (ACUI)",
+    url: "https://events.rdmobile.com/Events/Info/1621388"
+  },
   footer: {
     tagline: "Mark Coggins — Modesto, California",
     links: [
