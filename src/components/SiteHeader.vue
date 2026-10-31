@@ -1,5 +1,5 @@
 <template>
-  <header class="site-header" :class="{ 'is-scrolled': scrolled, 'nav-centered': navCentered }">
+  <header class="site-header" :class="{ 'is-scrolled': scrolled, 'nav-centered': navCentered, 'has-navigated': hasNavigated }">
     <div class="header-inner">
       <router-link to="/" class="brand" aria-label="Mark Coggins — home">
         <span class="brand-name">Mark Coggins</span>
@@ -69,6 +69,9 @@ export default {
     navCentered() {
       return navStore.centered
     },
+    hasNavigated() {
+      return navStore.navigated
+    },
     // The Menu panel's quick actions draw on the same link
     // data as the footer (2026-10-30), so the two never drift.
     emailUrl() {
@@ -88,6 +91,10 @@ export default {
     // the model). Desktop clicks leave it alone — the layout
     // it drives exists only on small screens.
     markNavTapped(e) {
+      // Navigation starts at the tap (Mark's model,
+      // 2026-10-30): from here on the current item wears its
+      // pill, not just its bold text.
+      navStore.navigated = true
       if (!window.matchMedia('(max-width: 40rem)').matches) return
       // Home is the layout's home (Mark's call, 2026-10-30):
       // tapping through to it restores the as-is alignment and
@@ -143,6 +150,9 @@ export default {
   watch: {
     $route() {
       this.open = false
+      // Any route change after load is navigation (a back
+      // swipe included): the pill state holds from here on.
+      navStore.navigated = true
       // Arriving home by any route — the brand, a back swipe —
       // restores the as-is layout too, not just the Home item.
       if (this.$route.path === '/') {
@@ -239,14 +249,21 @@ export default {
 }
 
 /* The hitbox states: keyboard focus grows the pill to its full
-   width, and the current page's link — whose button is always
-   showing — holds the full hitbox at rest too. Hover grows it
-   as well, but only where hover exists: those rules live in
-   the (hover: hover) block below, because on touch a tap was
+   width, and the current page's link holds the full hitbox at
+   rest too — but only once navigation has happened (Mark's
+   model, 2026-10-30): on load the current item stands as bold
+   text alone, and its button appears during the first
+   navigation and stays for the session; a reload resets it
+   to the bold standing position. Hover grows it as well, but
+   only where hover exists: those rules live in the
+   (hover: hover) block below, because on touch a tap was
    flashing the hover pill for a frame before the route changed
    (Mark's report, 2026-10-30). */
-.nav-link:focus-visible,
-.nav-link.router-link-exact-active {
+.nav-link:focus-visible {
+  padding-inline: 0.9rem;
+}
+
+.site-header.has-navigated .nav-link.router-link-exact-active {
   padding-inline: 0.9rem;
 }
 
@@ -285,14 +302,19 @@ export default {
   }
 }
 
-/* The current page is carried by the bold text. The pill itself sits
-   faded and only comes fully forward on hover or press. */
+/* The current page is always carried by the bold text — that
+   is its standing position, on load and after. The pill
+   itself (the faded fill and ring) joins only once the
+   header has navigated, per the model above. */
 .nav-link.router-link-exact-active {
-  background: color-mix(in srgb, var(--main-color) 6%, transparent);
   color: var(--main-color);
   font-weight: 700;
-  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--main-color) 12%, transparent);
   transition: background-color 0.25s ease, box-shadow 0.25s ease, color 0.2s ease, padding 0.25s ease, font-weight 0.25s ease;
+}
+
+.site-header.has-navigated .nav-link.router-link-exact-active {
+  background: color-mix(in srgb, var(--main-color) 6%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--main-color) 12%, transparent);
 }
 
 .nav-link.router-link-exact-active:active {
@@ -410,11 +432,13 @@ export default {
     padding-inline: 0.5rem;
   }
 
-  /* The current item: full hitbox, reached reactively — the
-     base transition animates the padding and the variable
-     weight together as the item becomes current, the same
-     glide the desktop bar has always had. */
-  .nav-link.router-link-exact-active {
+  /* The current item: full hitbox once the header has
+     navigated, reached reactively — the base transition
+     animates the padding and the variable weight together
+     as the item becomes current, the same glide the desktop
+     bar has always had. Before any navigation the item
+     stands as bold text at its text spacing. */
+  .site-header.has-navigated .nav-link.router-link-exact-active {
     padding-inline: 0.5rem;
   }
 

@@ -9,15 +9,19 @@ export const localStore = reactive({
   dark: false
 })
 
-// The mobile header's layout state (Mark's model, 2026-10-30):
-// aligned as-is on load — items left, Menu as text — and the
-// first tap on a nav item centres the items and collapses the
-// Menu text into its three-circle glyph. Home is the layout's
-// home: arriving there by any route restores the as-is
-// alignment and expands the Menu text again. In-memory only;
-// a reload resets it too.
+// The header's session state (Mark's models, 2026-10-30).
+// centered: the mobile layout — aligned as-is on load (items
+// left, Menu as text), and the first tap on a nav item centres
+// the items and collapses the Menu text into its three-circle
+// glyph; arriving Home by any route restores the as-is layout.
+// navigated: on load the current page's nav item stands as
+// bold text alone — its pill (fill, ring, full hitbox) appears
+// only once navigation has happened, from the first tap or
+// route change on, and stays for the rest of the session.
+// Both are in-memory only; a page reload resets them.
 export const navStore = reactive({
-  centered: false
+  centered: false,
+  navigated: false
 })
 
 export const currentTheme = () => (localStore.dark ? dark : light)
