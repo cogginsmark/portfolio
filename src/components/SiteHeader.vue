@@ -320,6 +320,20 @@ export default {
   display: flex;
   align-items: center;
   gap: 0.35rem;
+  /* The gap is live (below): it glides when the pill's
+     presence changes it. Reduced motion stands it down
+     with the rest in the block at the file's foot. */
+  transition: gap 0.4s ease;
+}
+
+/* The spacing BETWEEN the items answers the pill too
+   (Mark's call, 2026-10-30): while the pill is present the
+   row breathes open — the gaps widen alongside the current
+   item's own in-flow growth, so the whole row makes room
+   for the pill, not just the item it sits under. On load,
+   with no pill, the row rests at its tighter spacing. */
+.site-header.has-navigated .primary-nav {
+  gap: 0.6rem;
 }
 
 .nav-link {
@@ -406,7 +420,10 @@ export default {
 
 /* Measuring the pill's target (updatePill) stands the
    links' transitions down for one synchronous read, so the
-   geometry is the end state, never a mid-glide frame. */
+   geometry is the end state, never a mid-glide frame. The
+   row's own gap glide stands down too — the item's offset
+   depends on the gaps before it. */
+.primary-nav.pill-measuring,
 .primary-nav.pill-measuring .nav-link {
   transition: none !important;
 }
@@ -555,6 +572,15 @@ export default {
      current item's hitbox padding, in the flow. */
   .site-header.has-navigated .nav-link.router-link-exact-active {
     padding-inline: 0.5rem;
+  }
+
+  /* And the gaps between the items open with it (Mark's
+     call, 2026-10-30), from the tight resting .1rem the
+     pill effect wanted to a breathed .3rem. The centred
+     layout holds its centre at any row width, so the row
+     widens around its middle. */
+  .site-header.has-navigated .primary-nav {
+    gap: 0.3rem;
   }
 
   /* On mobile the bar's two alignments separate (Mark's spec,
