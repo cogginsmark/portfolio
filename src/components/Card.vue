@@ -6,9 +6,9 @@
           <h1 class="text-main-title">{{name}}</h1>
           <div class="medium">{{medium}}</div>
           <div class="carousel-container" v-if="windowWidth <= 980">
-            <div v-if="images" class="carousel-shell" @pointerdown.capture="onNavPress">
+            <div v-if="images" class="carousel-shell" :class="{ 'navs-revealed': navsRevealed, 'navs-active': navsActive }" :style="{ '--nav-dur': navEffect === 'fade' ? '1200ms' : '450ms' }" @pointerdown.capture="onNavPress">
               <div class="carousel-bed" :style="{ backgroundColor: bedColor }" aria-hidden="true"></div>
-              <Carousel class="styled-carousel" :items-to-show="1" :autoplay="autoplay" :wrap-around="true" :pause-autoplay-on-hover="true" :slide-effect="navEffect" :transition="navEffect === 'fade' ? 1200 : 450" @slide-end="onSlideEnd">
+              <Carousel class="styled-carousel" :items-to-show="1" :autoplay="autoplay" :wrap-around="true" :pause-autoplay-on-hover="true" :slide-effect="navEffect" :transition="navEffect === 'fade' ? 1200 : 450" @slide-start="onSlideStart" @slide-end="onSlideEnd">
                 <Slide v-for="(image, index) in images" :key="index">
                   <img class="carousel-image" loading="lazy" v-bind:src="image"/>
                 </Slide>
@@ -43,9 +43,9 @@
         </div>
       </div>
       <div class="carousel-container" v-if="windowWidth > 980">
-        <div v-if="images" class="carousel-shell" @pointerdown.capture="onNavPress">
+        <div v-if="images" class="carousel-shell" :class="{ 'navs-revealed': navsRevealed, 'navs-active': navsActive }" :style="{ '--nav-dur': navEffect === 'fade' ? '1200ms' : '450ms' }" @pointerdown.capture="onNavPress">
           <div class="carousel-bed" :style="{ backgroundColor: bedColor }" aria-hidden="true"></div>
-          <Carousel class="styled-carousel" :items-to-show="1" :autoplay="autoplay" :wrap-around="true" :pause-autoplay-on-hover="true" :slide-effect="navEffect" :transition="navEffect === 'fade' ? 1200 : 450" @slide-end="onSlideEnd">
+          <Carousel class="styled-carousel" :items-to-show="1" :autoplay="autoplay" :wrap-around="true" :pause-autoplay-on-hover="true" :slide-effect="navEffect" :transition="navEffect === 'fade' ? 1200 : 450" @slide-start="onSlideStart" @slide-end="onSlideEnd">
             <Slide v-for="(image, index) in images" :key="index">
               <img class="carousel-image" loading="lazy" v-bind:src="image"/>
             </Slide>
@@ -128,7 +128,13 @@ export default {
         // fallback until they are measured, or if one cannot be.
         bedColor: '#101216',
         avgColors: [],
-        currentSlide: 0
+        currentSlide: 0,
+        // The chevron navs' presence (Mark's call, 2026-10-30):
+        // absent on load, revealed by the first transition,
+        // swelling while a transition runs and settling back to
+        // a sheerer rest — see the nav rules below.
+        navsRevealed: false,
+        navsActive: false
     }
   },
   methods: {
@@ -140,7 +146,12 @@ export default {
         this.navEffect = 'slide'
       }
     },
+    onSlideStart() {
+      this.navsRevealed = true
+      this.navsActive = true
+    },
     onSlideEnd(payload) {
+      this.navsActive = false
       const len = (this.images || []).length
       if (len) {
         const raw = payload && (payload.currentSlideIndex ?? payload.currentSlide ?? 0)
@@ -337,9 +348,9 @@ export default {
   --vc-pgn-active-color: rgb(127 127 127 / 35%);
   --vc-png-bottom: 0.6rem;
   /* The overlaid prev/next controls, kept subtle (Mark's call,
-     2026-10-30): small dark circles, white chevrons, sitting at
-     half strength until the carousel is hovered or they are
-     focused. */
+     2026-10-30): small dark circles, white chevrons. Their
+     presence follows the carousel's motion — the opacity rules
+     below the shell styles carry that. */
   --vc-nav-width: 2rem;
   --vc-nav-height: 2rem;
   --vc-nav-border-radius: 50%;
@@ -358,9 +369,26 @@ export default {
 .styled-carousel :deep(.carousel__next) {
   inset-inline-end: 0.5rem;
 }
+/* Nav presence follows the carousel's own motion (Mark's
+   call, 2026-10-30): no chevrons on load — the buttons sit at
+   opacity 0 until the first transition reveals them. While a
+   transition runs they swell to near-full; when it settles
+   they rest at a sheerer third. The opacity animation lasts
+   exactly the transition's own duration (--nav-dur rides the
+   shell from the same fade/slide values the carousel gets),
+   so the chevrons breathe in sync with the slides. */
 .styled-carousel :deep(.carousel__prev),
 .styled-carousel :deep(.carousel__next) {
-  opacity: 0.55;
+  opacity: 0;
+  transition: opacity var(--nav-dur, 1200ms) ease;
+}
+.carousel-shell.navs-revealed .styled-carousel :deep(.carousel__prev),
+.carousel-shell.navs-revealed .styled-carousel :deep(.carousel__next) {
+  opacity: 0.35;
+}
+.carousel-shell.navs-active .styled-carousel :deep(.carousel__prev),
+.carousel-shell.navs-active .styled-carousel :deep(.carousel__next) {
+  opacity: 0.9;
 }
 /* Emphasis is the icon's variable weight, not colour (Mark's
    call, 2026-10-30): the chevrons are Material Symbols, and
