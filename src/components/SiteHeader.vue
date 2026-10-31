@@ -15,7 +15,7 @@
           @click="open = !open"
         >
           <span v-if="!navCentered" class="nav-toggle-label">{{ open ? 'Close' : 'Menu' }}</span>
-          <svg v-else class="nav-toggle-glyph" viewBox="0 0 6 26" aria-hidden="true" focusable="false"><circle cx="3" cy="3" r="2.8" /><circle cx="3" cy="13" r="2.8" /><circle cx="3" cy="23" r="2.8" /></svg>
+          <span v-else class="nav-toggle-glyph" aria-hidden="true">more_vert</span>
         </button>
 
         <div id="menu-panel" class="switch-wrap" :class="{ 'is-open': open }">
@@ -87,9 +87,17 @@ export default {
     // centred layout (the navStore comment in theme.js carries
     // the model). Desktop clicks leave it alone — the layout
     // it drives exists only on small screens.
-    markNavTapped() {
-      if (navStore.centered) return
+    markNavTapped(e) {
       if (!window.matchMedia('(max-width: 40rem)').matches) return
+      // Home is the layout's home (Mark's call, 2026-10-30):
+      // tapping through to it restores the as-is alignment and
+      // expands the Menu text again, rather than centring.
+      const a = e && e.target && e.target.closest ? e.target.closest('a') : null
+      if (a && new URL(a.href).pathname === '/') {
+        navStore.centered = false
+        return
+      }
+      if (navStore.centered) return
       this.measureNavShift()
       navStore.centered = true
     },
@@ -125,6 +133,11 @@ export default {
   watch: {
     $route() {
       this.open = false
+      // Arriving home by any route — the brand, a back swipe —
+      // restores the as-is layout too, not just the Home item.
+      if (this.$route.path === '/') {
+        navStore.centered = false
+      }
     }
   }
 }
@@ -443,11 +456,25 @@ export default {
     justify-content: flex-end;
   }
 
+  /* The glyph is a variable glyph (Mark's call, 2026-10-30):
+     Material Symbols' more_vert, sharing the text's own
+     weight axis — it rests at the Menu word's 500 and
+     transforms to 700 while the panel is open, the axis
+     animating like the carousel chevrons' does. */
   .nav-toggle-glyph {
-    display: block;
-    width: 0.31rem;
-    height: 1.35rem;
-    fill: currentColor;
+    font-family: 'Material Symbols Rounded';
+    font-size: 1.3rem;
+    font-style: normal;
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
+    white-space: nowrap;
+    font-variation-settings: 'FILL' 1, 'wght' 500, 'GRAD' 0, 'opsz' 24;
+    transition: font-variation-settings 0.25s ease;
+  }
+
+  .nav-toggle[aria-expanded="true"] .nav-toggle-glyph {
+    font-variation-settings: 'FILL' 1, 'wght' 700, 'GRAD' 0, 'opsz' 24;
   }
 
   .theme-toggle-label {

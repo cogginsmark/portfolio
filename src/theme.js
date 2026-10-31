@@ -12,9 +12,10 @@ export const localStore = reactive({
 // The mobile header's layout state (Mark's model, 2026-10-30):
 // aligned as-is on load — items left, Menu as text — and the
 // first tap on a nav item centres the items and collapses the
-// Menu text into its three-circle glyph, where it stays until
-// a reload. In-memory only, like the state before it: a reload
-// is what resets it.
+// Menu text into its three-circle glyph. Home is the layout's
+// home: arriving there by any route restores the as-is
+// alignment and expands the Menu text again. In-memory only;
+// a reload resets it too.
 export const navStore = reactive({
   centered: false
 })
