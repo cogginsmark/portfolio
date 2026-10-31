@@ -69,6 +69,14 @@ export default {
 
 .logo {
   height: 100%;
+  /* Width must be stated (fix, 2026-10-30): the width/height
+     attributes added for aspect reservation are presentational
+     hints — with only the height set in CSS, the attribute's
+     width (1997px on the widest mark) stood as the rendered
+     width and the boxes stretched enormously. width: auto
+     overrides the hint, and the attributes' aspect ratio —
+     the part the reservation needs — still applies. */
+  width: auto;
   mix-blend-mode: exclusion;
   filter: invert(1);
   opacity: 0.8;
