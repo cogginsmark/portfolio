@@ -417,9 +417,12 @@ export default {
    (Mark's call, 2026-10-30): the pill's presence affects
    the row's spacing — the neighbours make room for it, the
    links' own transition gliding the change. The travelling
-   pill underneath is exactly this grown box. */
+   pill underneath is exactly this grown box. The measure
+   is generous, Apple-spec style (Mark's call, 2026-10-30):
+   a wide capsule around the word, in the segmented-control
+   spirit, not a tight highlight. */
 .site-header.has-navigated .nav-link.router-link-exact-active {
-  padding-inline: 0.9rem;
+  padding-inline: 1.25rem;
 }
 
 /* Measuring the pill's target (updatePill) stands the
@@ -574,9 +577,10 @@ export default {
   }
 
   /* The pill's presence moves the spacing here too: the
-     current item's hitbox padding, in the flow. */
+     current item's hitbox padding, in the flow — the wider
+     Apple-spec measure, scaled to the bar. */
   .site-header.has-navigated .nav-link.router-link-exact-active {
-    padding-inline: 0.5rem;
+    padding-inline: 0.75rem;
   }
 
   /* And the gaps between the items open with it (Mark's
