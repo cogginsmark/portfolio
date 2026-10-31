@@ -10,14 +10,26 @@
           type="button"
           class="nav-toggle"
           :aria-expanded="open ? 'true' : 'false'"
-          aria-controls="theme-switch"
+          aria-controls="menu-panel"
           @click="open = !open"
         >
           <span class="nav-toggle-label">{{ open ? 'Close' : 'Menu' }}</span>
         </button>
 
-        <div id="theme-switch" class="switch-wrap" :class="{ 'is-open': open }">
+        <div id="menu-panel" class="switch-wrap" :class="{ 'is-open': open }">
           <LightToggle><span class="theme-toggle-label">{{ isDark ? 'Dark' : 'Light' }} mode</span></LightToggle>
+
+          <nav class="panel-links" aria-label="Quick actions" @click="open = false">
+            <a class="panel-link" href="/cv.pdf" target="_blank" rel="noopener">
+              <i class="fas fa-arrow-down" aria-hidden="true"></i><span>Resume / CV</span>
+            </a>
+            <a class="panel-link" :href="emailUrl">
+              <i class="fa fa-envelope" aria-hidden="true"></i><span>Email</span>
+            </a>
+            <a v-for="link in socialLinks" :key="link.name" class="panel-link" :href="link.url" target="_blank" rel="noopener">
+              <i :class="link.fa" aria-hidden="true"></i><span>{{ link.name }}</span>
+            </a>
+          </nav>
         </div>
       </div>
 
@@ -34,6 +46,7 @@
 <script>
 import { localStore } from '../theme.js'
 import LightToggle from './LightToggle.vue'
+import homeData from '../data/fixtures'
 
 // The site header. Replaces the three bare router-links that App.vue
 // used to render: a real <header> landmark with the brand, the primary
@@ -56,6 +69,18 @@ export default {
   computed: {
     isDark() {
       return localStore.dark
+    },
+    // The Menu panel's quick actions draw on the same link
+    // data as the footer (2026-10-30), so the two never drift.
+    emailUrl() {
+      const email = homeData.footer.links.find((link) => link.name === 'Email')
+      return email ? email.url : 'mailto:cogginsmark@icloud.com'
+    },
+    socialLinks() {
+      const order = ['Github', 'Linkedin', 'Medium']
+      return order
+        .map((name) => homeData.footer.links.find((link) => link.name === name))
+        .filter(Boolean)
     }
   },
   mounted() {
@@ -249,6 +274,12 @@ export default {
   margin: 0;
 }
 
+/* The panel's quick-action links exist only in the mobile
+   dropdown; the desktop bar's switch wrap never shows them. */
+.panel-links {
+  display: none;
+}
+
 /* No hamburger iconography: on mobile the menu is a labelled pill
    that reads Menu, and Close while the panel is open. */
 .nav-toggle {
@@ -415,7 +446,8 @@ export default {
     right: 0;
     left: auto;
     margin: 0;
-    padding: 0.6rem 1rem 0.8rem;
+    min-width: 12.5rem;
+    padding: 0.6rem;
     background: var(--fallback-background-color);
     border: 1px solid color-mix(in srgb, var(--main-color) 10%, transparent);
     border-radius: 999px;
@@ -424,7 +456,49 @@ export default {
 
   .switch-wrap.is-open {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.25rem;
+  }
+
+  /* The quick actions (Mark's pick, 2026-10-30): Resume / CV,
+     Email, Github, Linkedin, Medium — rows in the site's pill
+     language under the theme toggle, divided from it by a
+     hairline. Their data is the footer's, so the two agree. */
+  .panel-links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    border-top: 1px solid color-mix(in srgb, var(--main-color) 10%, transparent);
+    padding-top: 0.45rem;
+    margin-top: 0.2rem;
+  }
+
+  .panel-link {
+    display: flex;
+    align-items: center;
+    gap: var(--pill-icon-gap);
+    padding: 0.55rem 0.9rem;
+    border-radius: 999px;
+    color: var(--main-color);
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 600;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .panel-link i {
+    flex: none;
+    width: 1rem;
+    text-align: center;
+    font-size: 0.9rem;
+    line-height: 1;
+  }
+
+  @media (hover: hover) {
+    .panel-link:hover {
+      background: color-mix(in srgb, var(--main-color) 8%, transparent);
+    }
   }
 }
 
