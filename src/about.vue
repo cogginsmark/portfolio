@@ -138,7 +138,15 @@ a {
 .fact-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
-  gap: 1rem;
+  /* Column spacing reconsidered (Mark's call, 2026-10-30):
+     one shared 1rem gap made the Background columns read as
+     a single block — the long Education and Major values sat
+     a body's-width from the next label. The columns now get
+     the About page's own 2rem rhythm (the intro's gap), and
+     wrapped rows keep a smaller 1.5rem, so across reads as
+     separate facts and down reads as a list. */
+  column-gap: 2rem;
+  row-gap: 1.5rem;
   justify-content: center;
   margin: 0;
 }

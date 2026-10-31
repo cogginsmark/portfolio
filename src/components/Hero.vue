@@ -233,22 +233,24 @@ export default {
   flex-wrap: nowrap;
   justify-content: flex-start;
   gap: 1rem;
-  /* The row is wider than the text column it starts in (Mark's
-     call, 2026-10-30: the three buttons side-by-side). At the
-     shared token width they needed ~465px the 390px column
-     doesn't have, so the third always wrapped; the row now
-     breaks out to its own measure and the trio takes equal
-     thirds of it on one line. */
-  width: min(36rem, calc(100vw - 2.5rem));
+  /* The buttons keep their defined widths (Mark's call,
+     2026-10-30): each button is the width its own type and
+     padding define — the row sizes to that content and never
+     stretches a button wider. The row may outgrow the 390px
+     text column it starts in, capped only by the viewport
+     itself; where the viewport cannot hold the defined
+     widths, the buttons compress (flex-shrink below) rather
+     than wrapping or stacking. */
+  width: max-content;
+  max-width: calc(100vw - var(--gutter) * 2);
 }
 
 .cta-section :deep(.styled-button) {
   margin-right: 0;
-  /* Equal thirds of the broken-out row, labels centred, no
-     wrapping: Resume / CV, Journalism and Videos in one line. */
-  flex: 1 1 0;
-  width: auto;
-  max-width: 100%;
+  /* Defined width, compressible: no growth past the button's
+     own measure, shrink allowed when the row is capped. */
+  flex: 0 1 auto;
+  min-width: 0;
   white-space: nowrap;
   display: flex;
   align-items: center;
@@ -256,12 +258,17 @@ export default {
   text-align: center;
 }
 
+.cta-section :deep(.text-button-text) {
+  min-width: 0;
+}
+
 /* Videos travels by the router, not a hard link (Mark's call,
-   2026-10-30): its wrapper is the row's third, laid out exactly
-   like the buttons it sits between, and the button inside fills
-   it — so the trio's geometry is unchanged by the swap. */
+   2026-10-30): its wrapper is laid out exactly like the
+   buttons it sits between — defined width, compressible —
+   and the button inside fills it, so the trio's geometry is
+   unchanged by the swap. */
 .cta-nav-link {
-  flex: 1 1 0;
+  flex: 0 1 auto;
   display: flex;
   min-width: 0;
   color: inherit;
@@ -270,38 +277,6 @@ export default {
 
 .cta-nav-link :deep(.styled-button) {
   flex: 1 1 auto;
-}
-
-/* On mobile the row stops being a fixed-width flex row and
-   becomes two true columns (Mark's "build out to the right",
-   2026-10-30): at the shared token width the pair plus its gap
-   is 360px of furniture, which physically cannot fit columns
-   narrower than that — narrower phones, page zoom, an app
-   webview — so it stacked. As columns, each button takes half
-   of whatever width the hero actually has and the pair always
-   builds exactly to the right edge; the single row of three
-   governs wide screens. The third button keeps the 2-over-1 shape, taking the
-   first column of the next row at the same width as the pair. */
-@media screen and (max-width: 61.25rem) {
-  .cta-section {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .cta-section :deep(.styled-button) {
-    width: auto;
-    max-width: none;
-  }
-
-  .cta-section :deep(.styled-button:nth-child(3)) {
-    grid-column: 1;
-  }
-
-  /* The Videos wrapper is the grid's third item now; pin it to
-     the first column like the button it replaced. */
-  .cta-section > .cta-nav-link {
-    grid-column: 1;
-  }
 }
 
 @media screen and (max-width: 40rem) {
@@ -352,6 +327,30 @@ export default {
 
   .hero-text-container {
     width: min(390px, calc(100% - var(--gutter)));
+  }
+
+  /* The hero's own type steps down on phones (Mark's call,
+     2026-10-30 — the reduction he asked for was the hero's,
+     not the header's or the page's): the name to the
+     standard mobile display measure, the subtitle and
+     description to the standard body measure. Scoped to
+     the hero — nothing else on the page moves. */
+  .hero-heading {
+    font-size: 2rem;
+  }
+
+  .hero-text-container .text-paragraph {
+    font-size: 0.9rem;
+  }
+
+  /* The CTA row tightens so the trio's defined widths fit
+     more viewports before compression has to start. */
+  .cta-section {
+    gap: 0.5rem;
+  }
+
+  .cta-section :deep(.styled-button) {
+    padding-inline: 0.7rem;
   }
 }
 </style>
