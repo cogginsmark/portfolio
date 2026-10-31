@@ -10,6 +10,7 @@
           <StyledButton glass v-if="cta2" secondary :color="'#363636'" v-bind:href="cta2Url" target="_blank" rel="noopener"><span class="text-button-text">{{cta2}}</span><span class="journalism-icon" aria-hidden="true">history_edu</span></StyledButton>
           <router-link v-if="cta3" :to="cta3Url" class="cta-nav-link"><StyledButton glass secondary :color="'#363636'"><span class="text-button-text">{{cta3}}</span><i class="fas fa-play"></i></StyledButton></router-link>
         </div>
+        <p class="hero-services">Design · Video editing · Motion graphics · Social</p>
       </div>
     </div>
   </div>
@@ -182,6 +183,18 @@ export default {
   .hero-heading {
     font-size: 2.625rem;
   }
+}
+
+/* The services line (2026-10-30): a quiet naming of the work
+   under the calls to action — Design · Video editing · Motion
+   graphics · Social — kept small and soft so the buttons keep
+   the hero's focus. */
+.hero-services {
+  margin-top: -0.75rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  opacity: 0.75;
 }
 
 .cta-section {

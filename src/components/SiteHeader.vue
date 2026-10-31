@@ -20,15 +20,9 @@
           <LightToggle><span class="theme-toggle-label">{{ isDark ? 'Dark' : 'Light' }} mode</span></LightToggle>
 
           <nav class="panel-links" aria-label="Quick actions" @click="open = false">
-            <a class="panel-link" href="/cv.pdf" target="_blank" rel="noopener">
-              <i class="fas fa-arrow-down" aria-hidden="true"></i><span>Resume / CV</span>
-            </a>
-            <a class="panel-link" :href="emailUrl">
-              <i class="fa fa-envelope" aria-hidden="true"></i><span>Email</span>
-            </a>
-            <a v-for="link in socialLinks" :key="link.name" class="panel-link" :href="link.url" target="_blank" rel="noopener">
-              <i :class="link.fa" aria-hidden="true"></i><span>{{ link.name }}</span>
-            </a>
+            <a class="panel-link" href="/cv.pdf" target="_blank" rel="noopener"><span>Resume / CV</span></a>
+            <a class="panel-link" :href="emailUrl"><span>Email</span></a>
+            <a v-for="link in socialLinks" :key="link.name" class="panel-link" :href="link.url" target="_blank" rel="noopener"><span>{{ link.name }}</span></a>
           </nav>
         </div>
       </div>
@@ -447,39 +441,41 @@ export default {
     left: auto;
     margin: 0;
     min-width: 12.5rem;
-    padding: 0.6rem;
-    background: var(--fallback-background-color);
-    border: 1px solid color-mix(in srgb, var(--main-color) 10%, transparent);
-    border-radius: 999px;
-    box-shadow: 0 1rem 1.5rem rgb(0 0 0 / 0.12);
+    /* No container card any more (Mark's call, 2026-10-30):
+       the panel is just the stack — each item is separated
+       and carries its own pill. */
+    padding: 0;
+    background: transparent;
+    border: 0;
+    box-shadow: none;
   }
 
   .switch-wrap.is-open {
     display: flex;
     flex-direction: column;
     align-items: stretch;
-    gap: 0.25rem;
+    gap: 0.5rem;
   }
 
   /* The quick actions (Mark's pick, 2026-10-30): Resume / CV,
-     Email, Github, Linkedin, Medium — rows in the site's pill
-     language under the theme toggle, divided from it by a
-     hairline. Their data is the footer's, so the two agree. */
+     Email, Github, Linkedin, Medium. No icons in the menu and
+     every item its own separated pill — words alone, centred,
+     on the panel's solid surface with its hairline ring. Their
+     data is the footer's, so the two agree. */
   .panel-links {
     display: flex;
     flex-direction: column;
-    gap: 0.15rem;
-    border-top: 1px solid color-mix(in srgb, var(--main-color) 10%, transparent);
-    padding-top: 0.45rem;
-    margin-top: 0.2rem;
+    gap: 0.5rem;
   }
 
   .panel-link {
     display: flex;
     align-items: center;
-    gap: var(--pill-icon-gap);
-    padding: 0.55rem 0.9rem;
+    justify-content: center;
+    padding: 0.55rem 1rem;
     border-radius: 999px;
+    background: var(--fallback-background-color);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--main-color) 10%, transparent);
     color: var(--main-color);
     text-decoration: none;
     font-size: 0.95rem;
@@ -487,18 +483,22 @@ export default {
     -webkit-tap-highlight-color: transparent;
   }
 
-  .panel-link i {
-    flex: none;
-    width: 1rem;
-    text-align: center;
-    font-size: 0.9rem;
-    line-height: 1;
-  }
-
   @media (hover: hover) {
     .panel-link:hover {
-      background: color-mix(in srgb, var(--main-color) 8%, transparent);
+      background: color-mix(in srgb, var(--main-color) 8%, var(--fallback-background-color));
     }
+  }
+
+  /* The theme toggle wears the same separated pill in the
+     panel, its icon stood down with the rest. */
+  .switch-wrap :deep(.theme-pill) {
+    background: var(--fallback-background-color);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--main-color) 10%, transparent);
+    justify-content: center;
+  }
+
+  .switch-wrap :deep(.theme-pill i) {
+    display: none;
   }
 }
 
