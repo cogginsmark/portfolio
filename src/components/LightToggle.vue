@@ -21,9 +21,12 @@ import { localStore, toggleTheme } from '../theme.js'
 // aria-pressed — no track, no sliding knob. Simpler and more
 // accessible than the switch it replaces: a full-height tap
 // target, a state that reads at a glance, and a pressed state
-// assistive tech announces. The Menu panel passes its longer
-// "Light mode / Dark mode" label through the slot and hides
-// the short word (SiteHeader's styles).
+// assistive tech announces. In the Menu panel the control is
+// a Background item instead (Mark's call, 2026-10-30): the
+// slot carries a fixed "Background" label and the dark_mode
+// symbol, and the pill's own swapping icon and word stand
+// down there (SiteHeader's styles), so nothing about the
+// item's face changes on toggle.
 export default {
   name: 'LightToggle',
   computed: {

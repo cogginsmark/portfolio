@@ -19,7 +19,7 @@
         </button>
 
         <div id="menu-panel" class="switch-wrap" :class="{ 'is-open': open }">
-          <LightToggle><span class="theme-toggle-label">{{ isDark ? 'Dark' : 'Light' }} mode</span></LightToggle>
+          <LightToggle><span class="theme-toggle-label">Background</span><span class="theme-toggle-ms" aria-hidden="true">dark_mode</span></LightToggle>
 
           <nav class="panel-links" aria-label="Quick actions" @click="open = false">
             <a class="panel-link" href="/cv.pdf" target="_blank" rel="noopener"><span>Resume / CV</span><i class="fas fa-arrow-down" aria-hidden="true"></i></a>
@@ -580,14 +580,31 @@ export default {
   }
 
   /* The theme toggle wears the same separated pill in the
-     panel, laid out like the links (Mark's call, 2026-10-30:
-     icons back in the menu, text left, icon rightmost) — the
-     row reverses so its icon lands on the right. */
+     panel, laid out like the links — text left, icon rightmost
+     — but it is a Background item now (Mark's call,
+     2026-10-30): a fixed label and Material Symbols' true
+     dark_mode icon, neither of which changes on toggle; only
+     the pressed treatment carries the state. Its own swapping
+     sun/moon and word stand down in the panel. */
   .switch-wrap :deep(.theme-pill) {
     background: var(--fallback-background-color);
     box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--main-color) 10%, transparent);
-    flex-direction: row-reverse;
     justify-content: space-between;
+  }
+
+  .switch-wrap :deep(.theme-pill i) {
+    display: none;
+  }
+
+  .theme-toggle-ms {
+    font-family: 'Material Symbols Rounded';
+    font-size: 1.15rem;
+    font-style: normal;
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
+    white-space: nowrap;
+    font-variation-settings: 'FILL' 1, 'wght' 500, 'GRAD' 0, 'opsz' 24;
   }
 }
 
