@@ -634,12 +634,16 @@ export default {
   .site-header.nav-centered .nav-toggle[aria-expanded="true"] {
     /* The collapsed pill is form-fitted to the dots (Mark's
        call, 2026-10-30, superseding the full-text block):
-       no min-width — the button hugs the glyph at a pill's
-       padding, and the faded word leaves the layout (below)
-       so the stack sizes to the dots alone. The right edge
-       does not move: the wrap is anchored to the gutter
-       line, and the panel below keys off the same edge. */
-    padding: 0.4rem 0.6rem;
+       no min-width — the button hugs the glyph, and the
+       faded word leaves the layout (below) so the stack
+       sizes to the dots alone. Its inline padding is the
+       panel rows' own 1rem inset, so the dots sit on the
+       same right-hand line as the rows' icons below (Mark's
+       call, 2026-10-30); the background already matched the
+       rows and is untouched. The right edge does not move:
+       the wrap is anchored to the gutter line, and the
+       panel below keys off the same edge. */
+    padding: 0.4rem 1rem;
     min-width: 0;
     justify-content: center;
   }
