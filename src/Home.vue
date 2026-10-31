@@ -60,7 +60,6 @@
         <p class="logo-list-text"><template v-for="(logo, i) in (logoSection.logos || []).slice(0, 3)" :key="logo.alt"><span class="logo-list-name">{{ logo.alt }}</span><span v-if="i < (logoSection.logos || []).slice(0, 3).length - 1" class="logo-list-sep" aria-hidden="true"> · </span></template></p>
       </div>
     </div>
-    <p class="availability-note"><router-link to="/contact"><span class="availability-dot" aria-hidden="true"></span>Available for contract design and video work</router-link></p>
     <foot v-bind:author="author" v-bind:footer="footer" />
     </ThemeRoot>
   </div>
@@ -118,9 +117,8 @@ export default {
 
 .minor-card-container {
   margin: auto;
-  /* 2.5rem (the spacing system, 2026-10-30): the approach to
-     the logo section matches the availability line's 2.5rem
-     on its other side. Was 80px. */
+  /* 2.5rem (the spacing system, 2026-10-30): a calmer
+     approach to the logo section than the old 80px. */
   margin-bottom: 2.5rem;
   width: 100%;
   max-width: 980px;
@@ -172,43 +170,6 @@ export default {
   text-align: center;
   width: 100%;
   max-width: 980px;
-}
-
-/* The closing line (2026-10-30): availability, stated once at
-   the foot of the page where a hirer finishes reading, and a
-   link through to Contact. A small green dot carries the
-   available signal before the words do. */
-.availability-note {
-  margin: 2.5rem auto 0;
-  padding: 0 var(--gutter);
-  text-align: center;
-  font-size: 0.95rem;
-  font-weight: 600;
-}
-
-.availability-note a {
-  color: var(--main-color);
-  text-decoration: none;
-  border-bottom: 1px solid color-mix(in srgb, var(--main-color) 35%, transparent);
-  padding-bottom: 0.15rem;
-}
-
-.availability-dot {
-  display: inline-block;
-  width: 0.5rem;
-  height: 0.5rem;
-  /* The site's icon-to-label gap token (the spacing system,
-     2026-10-30). Was its own 0.55rem. */
-  margin-right: var(--pill-icon-gap);
-  border-radius: 50%;
-  background: #2f9e63;
-  vertical-align: 0.1rem;
-}
-
-@media (hover: hover) {
-  .availability-note a:hover {
-    border-bottom-color: var(--main-color);
-  }
 }
 
 .logo-container {
