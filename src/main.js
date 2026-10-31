@@ -2,9 +2,11 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
 import { initTheme } from './theme.js'
-// Liquid Glass experiment (branch feat/liquid-glass): the stylesheet
-// of @zakisheriff/liquid-glass, imported before the site's own CSS so
-// site rules win where they must.
+// Liquid Glass (branch feat/liquid-glass, rebuilt from main): the
+// stylesheet of @zakisheriff/liquid-glass v0.3.13, imported before
+// the site's own CSS so site rules win where they must. The Vue
+// components live under src/components/liquid-glass/ — a direct
+// translation of the library's React components, engine included.
 import '@zakisheriff/liquid-glass/styles.css'
 import './assets/global.css'
 import './assets/text.css'

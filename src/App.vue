@@ -1,21 +1,27 @@
 <template>
   <div id="app">
     <LiquidGlassFilter />
+    <div class="page-background" aria-hidden="true"></div>
+    <div class="watercolor-layer" :class="{ 'is-away': $route.path !== '/' }" aria-hidden="true"></div>
     <a class="skip-link" href="#main">Skip to content</a>
     <SiteHeader />
     <main id="main">
       <router-view v-slot="{ Component }">
-        <Transition name="page" mode="out-in">
+        <Transition :name="transitionName" mode="out-in">
           <component :is="Component" />
         </Transition>
       </router-view>
     </main>
+    <div class="theme-float" ref="themeFloat" :class="{ 'theme-float--compact': floatCompact }">
+      <LightToggle />
+    </div>
   </div>
 </template>
 
 <script>
 import SiteHeader from './components/SiteHeader.vue'
-import LiquidGlassFilter from './components/LiquidGlassFilter.vue'
+import LightToggle from './components/LightToggle.vue'
+import LiquidGlassFilter from './components/liquid-glass/filters/LiquidGlassFilter.vue'
 
 // The app shell: skip link, the shared SiteHeader, and the routed page
 // inside a <main> landmark with a short fade/slide between routes.
@@ -23,22 +29,179 @@ export default {
   name: 'App',
   components: {
     SiteHeader,
+    LightToggle,
     LiquidGlassFilter
   },
+  data() {
+    return {
+      // The floating Background control collapses to its
+      // Material Symbol alone when it would overlay page
+      // content (Mark's call, 2026-10-30); measureFloat keeps
+      // this current as the page scrolls and resizes.
+      floatCompact: false,
+      floatFullWidth: 0,
+      floatRaf: 0
+    }
+  },
   mounted() {
-    // Liquid Glass refraction is a Chromium-only backdrop capability
-    // (the library's own canRefractBackdrop test); only there do the
-    // glass surfaces gain the SVG filter. Everywhere else they keep
-    // the frosted blur the stylesheet gives them.
-    const ua = navigator.userAgent
-    if (/Chrom(e|ium)\/|Edg\//.test(ua) && !/CriOS|FxiOS|EdgiOS/.test(ua)) {
-      document.documentElement.style.setProperty('--lg-filter', 'url(#liquid-glass-refract-3)')
+    this.measureFloat()
+    window.addEventListener('scroll', this.scheduleFloatMeasure, { passive: true })
+    window.addEventListener('resize', this.scheduleFloatMeasure)
+  },
+  beforeUnmount() {
+    window.removeEventListener('scroll', this.scheduleFloatMeasure)
+    window.removeEventListener('resize', this.scheduleFloatMeasure)
+    if (this.floatRaf) cancelAnimationFrame(this.floatRaf)
+  },
+  watch: {
+    $route() {
+      // The routed content changes under the float; remeasure
+      // once the swap has painted and again after the route
+      // transition settles.
+      this.$nextTick(() => {
+        this.measureFloat()
+        setTimeout(this.measureFloat, 350)
+      })
+    }
+  },
+  methods: {
+    scheduleFloatMeasure() {
+      if (this.floatRaf) return
+      this.floatRaf = requestAnimationFrame(() => {
+        this.floatRaf = 0
+        this.measureFloat()
+      })
+    },
+    measureFloat() {
+      const el = this.$refs.themeFloat
+      if (!el) return
+      const rect = el.getBoundingClientRect()
+      if (!rect.width) return
+      if (!this.floatCompact) this.floatFullWidth = rect.width
+      // Probe with the expanded footprint even while compact
+      // (the compact box alone would never touch anything, so
+      // it could never earn its label back), and ask for a few
+      // pixels of clearance before expanding again so the
+      // state cannot flap on a boundary.
+      const width = this.floatFullWidth || rect.width
+      const clearance = this.floatCompact ? 10 : 0
+      const probe = {
+        left: rect.right - width + clearance,
+        right: rect.right - clearance,
+        top: rect.top + clearance,
+        bottom: rect.bottom - clearance
+      }
+      const targets = document.querySelectorAll(
+        '#main .card, #main .minor-card, #main .logo-card, #main section, #main .app-footer'
+      )
+      let hit = false
+      targets.forEach((target) => {
+        if (hit || target.closest('.hero-background')) return
+        const box = target.getBoundingClientRect()
+        if (
+          box.width &&
+          box.left < probe.right &&
+          box.right > probe.left &&
+          box.top < probe.bottom &&
+          box.bottom > probe.top
+        ) {
+          hit = true
+        }
+      })
+      this.floatCompact = hit
+    }
+  },
+  computed: {
+    // Contact does not fade in (Mark's call, 2026-10-30): its
+    // navigation swaps instantly and the page's own delayed
+    // title does the arriving. Every other route keeps the
+    // fade/slide.
+    transitionName() {
+      return this.$route.path === '/contact' ? 'page-none' : 'page'
     }
   }
 }
 </script>
 
 <style scoped>
+/* The theme gradient lives on this fixed, viewport-sized layer
+   instead of on <html> (Mark's background-shift bug, 2026-10-30):
+   a gradient's geometry derives from the box it is painted on,
+   and html's box is the whole document, so the wash stretched on
+   long pages (Home) and compressed on short ones (About) and
+   visibly jumped between them. Locked to the viewport, the
+   gradient is the same size, angle and stop positions on every
+   page. It sits behind everything (negative z-index over the
+   flat fallback colour html now carries) and never takes
+   pointer events. background-attachment: fixed on html would
+   say the same thing in one line, but iOS Safari handles fixed
+   root backgrounds badly, so the layer does it instead. */
+.page-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  /* Sized once to the LARGE viewport instead of inset: 0
+     (2026-10-30, Mark's report): tied to the visual viewport, the
+     layer resized and repainted as iOS Safari's bars came and
+     went, so the gradient chased the scroll — and the strip
+     behind Safari's bar fell outside the layer entirely. 100lvh
+     is the stable maximum viewport, bars hidden, so the layer
+     keeps one size while scrolling and the gradient runs behind
+     the bars. The 100vh line is the fallback for older engines. */
+  height: 100vh;
+  height: 100lvh;
+  z-index: -1;
+  background: var(--main-background-color);
+  pointer-events: none;
+}
+
+/* On phones the layer swaps the live gradient for the
+   offline-rendered picture of it (Mark's call, 2026-10-30):
+   the CSS gradient never did manage the Safari bar, so the
+   background is a rendered image here, sized to cover, with
+   theme.js keeping the bar's own theme-color matched to the
+   gradient's end. */
+@media screen and (max-width: 40rem) {
+  .page-background {
+    background-image: url("/bg-gradient-light.png");
+    background-size: cover;
+    background-position: center;
+  }
+
+  :root[data-theme="dark"] .page-background {
+    background-image: url("/bg-gradient-dark.png");
+  }
+}
+
+/* The watercolor is present on all pages (Mark's call,
+   2026-10-30, as corrected by him the same day): this fixed
+   layer paints the same cover the hero uses, over the gradient
+   and behind the content, at full strength on Home — and when
+   navigation leaves Home it fades to 30%, the opacity
+   transition doing the fading as the route changes. The light
+   theme's inverted painting is set in global.css, beside the
+   hero's own. */
+.watercolor-layer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  height: 100lvh;
+  z-index: -1;
+  background-image: var(--hero-background-image);
+  background-size: cover;
+  background-position: 50%;
+  opacity: 1;
+  transition: opacity 0.45s ease;
+  pointer-events: none;
+}
+
+.watercolor-layer.is-away {
+  opacity: 0.3;
+}
+
 /* Sticky-footer shell: the column always fills the viewport, <main>
    takes whatever height is left, and each routed page stretches to
    fill it — so on short pages the footer ends at the bottom of the
@@ -62,6 +225,58 @@ export default {
   min-height: 0;
 }
 
+/* The desktop Background control floats (Mark's call,
+   2026-10-30): out of the header, fixed to the bottom-right
+   corner on the page's own gutter lines, away from the
+   content — full circle to where the toggle lived before
+   the header era. It wears the menu pills' solid surface so
+   it reads over any content, with a soft lift from the
+   wrapper's shadow; the pressed treatment blends onto that
+   surface the way it did in the bar. Mobile never renders
+   it: there the toggle stays a row in the Menu panel. */
+.theme-float {
+  display: none;
+}
+
+@media (min-width: 40.01rem) {
+  .theme-float {
+    display: block;
+    position: fixed;
+    right: var(--gutter);
+    bottom: var(--gutter);
+    z-index: 900;
+    border-radius: 999px;
+    box-shadow: 0 12px 32px rgb(0 0 0 / 0.16);
+  }
+
+  .theme-float :deep(.theme-pill) {
+    background: var(--fallback-background-color);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--main-color) 10%, transparent);
+  }
+
+  .theme-float :deep(.theme-pill[aria-pressed="true"]) {
+    background: color-mix(in srgb, var(--main-color) 6%, var(--fallback-background-color));
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--main-color) 12%, transparent);
+  }
+
+  /* The collapse to the symbol alone (Mark's call,
+     2026-10-30): when the float would overlay content the
+     label stands down and the pill tightens around the
+     glyph; the padding transition softens the change, and
+     the button keeps its "Background" accessible name. */
+  .theme-float :deep(.theme-pill) {
+    transition: padding 0.3s ease, background-color 0.2s ease, box-shadow 0.2s ease, color 0.2s ease;
+  }
+
+  .theme-float--compact :deep(.theme-pill-label) {
+    display: none;
+  }
+
+  .theme-float--compact :deep(.theme-pill) {
+    padding-inline: 0.78rem;
+  }
+}
+
 .skip-link {
   position: absolute;
   left: 1rem;
@@ -83,6 +298,11 @@ export default {
   transition: opacity 0.22s ease, transform 0.22s ease;
 }
 
+.page-none-enter-active,
+.page-none-leave-active {
+  transition: none;
+}
+
 .page-enter-from {
   opacity: 0;
   transform: translateY(8px);
@@ -96,7 +316,8 @@ export default {
 @media (prefers-reduced-motion: reduce) {
   .page-enter-active,
   .page-leave-active,
-  .skip-link {
+  .skip-link,
+  .watercolor-layer {
     transition: none;
   }
 

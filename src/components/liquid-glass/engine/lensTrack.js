@@ -1,0 +1,468 @@
+/**
+ * Vue port of engine/lensTrack.ts from @zakisheriff/liquid-glass v0.3.13
+ * (MIT). Logic, constants and comments are verbatim; TypeScript type
+ * annotations and interfaces were stripped (kept as JSDoc typedefs), and
+ * the React `useLensTrack` hook became a Vue composable with the same
+ * signature. The original's `latest` ref pattern is preserved: a plain
+ * holder refreshed from the options source (a plain object or a getter),
+ * so option changes update behaviour without re-running the setup effect;
+ * only `count` re-runs it, as in the original's dependency list.
+ */
+import { watchEffect, onWatcherCleanup } from 'vue';
+import { guardSelection } from './selection.js';
+import { SPRINGS, clamp, createJelly, createSpring, rubberband, springFrom } from './spring.js';
+import { haptic } from './haptics.js';
+
+/** Resolves a Vue Ref object (its `.value`) or a getter function to its current value. */
+const resolveRef = (input) => (typeof input === 'function' ? input() : input?.value ?? input);
+
+/**
+ * Shared behaviour for tab bars and segmented controls.
+ *
+ * At rest the selection is a flat pill. Touch it and the pill inflates into a
+ * clear refracting lens that rides above the bar, follows the finger (leaning
+ * and stretching with speed), magnifies and tints what passes beneath it, then
+ * drops into the nearest slot with a wobble.
+ */
+
+/** Finger-following feel for the bar's pull, as on buttons. */
+const FOLLOW = springFrom(0.2, 0.82);
+
+/**
+ * @typedef {object} LensTrackRefs
+ * @property {object} bar
+ * @property {object} lens
+ * @property {object} select
+ * @property {object} glass
+ */
+
+/**
+ * @typedef {object} LensTrackOptions
+ * @property {number} count
+ * @property {number} index
+ * @property {(index: number) => void} onSelect
+ * @property {number} overhang How far past the bar's height the lifted lens reaches (px).
+ * @property {number} spread Extra width (as a fraction of a slot) the lifted lens gains.
+ * @property {number} [contentZoom] Magnification applied by the backdrop filter to the original glyphs.
+ * @property {boolean} [copied] The lens draws a magnified copy of the bar (Safari, Firefox). The real
+ *  glyphs then fade out beneath the lens so they don't show doubled through
+ *  its clear glass.
+ * @property {number} swell How much the whole bar swells while touched (px on its long side).
+ */
+
+export function useLensTrack(refs, optionsInput) {
+  const latest = { current: resolveRef(optionsInput) };
+  const api = { current: null };
+
+  watchEffect(() => {
+    const resolvedOptions = resolveRef(optionsInput);
+    if (resolvedOptions) latest.current = resolvedOptions;
+    void latest.current?.count;
+    const bar = resolveRef(refs.bar);
+    const lens = resolveRef(refs.lens);
+    const glass = resolveRef(refs.glass);
+    const select = resolveRef(refs.select);
+    if (!bar || !lens || !glass || !select) return;
+
+    // The swell and pull move the whole component. A bar that is the only
+    // thing inside a glass shell (a dock that frosts the page for it) moves
+    // with that shell; otherwise its own glass would stay put while the
+    // icons and labels moved.
+    const parent = bar.parentElement;
+    const shell = parent?.classList.contains('lg-glass') && parent.childElementCount === 1 ? parent : bar;
+
+    let slot = 0;
+    let height = 0;
+    let pad = 0;
+    let padY = 0;
+    // The lens is laid out at its full lifted size (W×H) and only scaled
+    // *down* toward the resting pill. At full lift it renders 1:1: true pill
+    // curves and a pixel-sharp baked rim, never a stretched bitmap.
+    let W = 0;
+    let H = 0;
+    const state = { x: 0, lift: 0, swell: 0, squash: 0, pull: 0 };
+    let current = latest.current.index;
+    let gesture = null;
+    let dropTimer = 0;
+    let suppressClick = false;
+    // Direct children only: a copied lens (Safari) holds inert clones of them.
+    const buttons = Array.from(bar.querySelectorAll(':scope > [data-lg-item]'));
+    let glyphs = [];
+    const preview = (index) => {
+      if (index === undefined) delete bar.dataset.previewing;
+      else bar.dataset.previewing = '';
+      buttons.forEach((button, i) => button.toggleAttribute('data-lg-preview', i === index));
+    };
+
+    const measure = () => {
+      const style = getComputedStyle(bar);
+      pad = parseFloat(style.paddingLeft) || 0;
+      padY = parseFloat(style.paddingTop) || 0;
+      slot = (bar.clientWidth - pad - (parseFloat(style.paddingRight) || 0)) / latest.current.count;
+      height = bar.clientHeight - padY - (parseFloat(style.paddingBottom) || 0);
+      const { overhang, spread } = latest.current;
+      H = Math.round(bar.offsetHeight + overhang);
+      // Give narrow segments the same lifted clearance at their sides as
+      // above/below. A percentage alone leaves short labels tightly boxed.
+      W = Math.round(Math.max(slot * (1 + spread), slot + H - height));
+      lens.style.width = `${W}px`;
+      lens.style.height = `${H}px`;
+      lens.style.left = `${pad + (slot - W) / 2}px`;
+      lens.style.top = `${padY + (height - H) / 2}px`;
+      select.style.width = `${slot}px`;
+      select.style.left = `${pad}px`;
+      glyphs = buttons.flatMap((button) =>
+        Array.from(button.querySelectorAll('.lg-nav__label, .lg-nav__icon > .lg-symbol')).map((node) => {
+          // Symbols are already masked to their shape, so their hide mask
+          // goes on the icon box around them.
+          const label = node.classList.contains('lg-nav__label');
+          const host = label ? node : node.parentElement;
+          const n = node.getBoundingClientRect();
+          const h = host.getBoundingClientRect();
+          return {
+            node,
+            x: button.offsetLeft + node.offsetLeft - pad,
+            y: node.offsetTop,
+            width: node.offsetWidth,
+            height: node.offsetHeight,
+            label,
+            host,
+            dx: n.left - h.left,
+            dy: n.top - h.top,
+          };
+        }),
+      );
+    };
+
+    const paint = () => {
+      const { swell, squash } = state;
+      const x = state.x;
+      const lift = clamp(state.lift, 0, 1.08);
+      if (!W || !H) return;
+      const kx = ((slot + (W - slot) * lift) / W) * (1 + squash);
+      const ky = ((height + (H - height) * lift) / H) * (1 - squash * 0.6);
+      const grow = 1 + (latest.current.swell / Math.max(bar.offsetWidth, 1)) * swell;
+      // The bar is held by the finger like a button, but only vertically:
+      // sideways drags move the lens, never the bar. Pulled up or down it
+      // leans a few px and draws out a little that way, thinning across.
+      const pull = state.pull;
+      const ey = Math.abs(pull) / Math.max(bar.offsetHeight, 1);
+      const transform = `translateX(${x}px) scale(${kx}, ${ky})`;
+      lens.style.transform = transform;
+      select.style.transform = `translateX(${x}px)`;
+      lens.style.opacity = String(clamp(lift * 4, 0, 1));
+      shell.style.scale = `${grow * (1 - ey * 0.15)} ${grow * (1 + ey * 0.5)}`;
+      shell.style.translate = `0px ${pull / 2}px`;
+      lens.style.setProperty('--lg-lift', String(clamp(lift, 0, 1)));
+      bar.style.setProperty('--lg-lift', String(clamp(lift, 0, 1)));
+      // Paint a true capsule over each original glyph. A single horizontal
+      // gradient turns an icon blue in a rectangular strip before the curved
+      // end reaches it. Account for the filter's source magnification too.
+      for (const glyph of glyphs) {
+        if (lift <= 0.02 && !gesture) {
+          glyph.node.style.removeProperty('--lg-content-tint');
+          glyph.node.style.removeProperty('transform');
+          glyph.host.style.removeProperty('--lg-content-hide');
+          continue;
+        }
+        if (latest.current.copied) {
+          // Cut the lens's true footprint out of the real glyph.
+          const hy = H * ky / 2;
+          const hx = H * kx / 2;
+          const run = Math.max(0, (W - H) * kx / 2);
+          const ccx = x + slot / 2 - glyph.x + glyph.dx;
+          const ccy = height / 2 - glyph.y + glyph.dy;
+          const fade = clamp(lift * 3, 0, 1);
+          const solid = `rgb(0 0 0 / ${fade})`;
+          glyph.host.style.setProperty('--lg-content-hide', [
+            'linear-gradient(#000, #000)',
+            `radial-gradient(ellipse ${hx}px ${hy}px at ${ccx - run}px ${ccy}px, ${solid} calc(100% - 1px), transparent 100%)`,
+            `radial-gradient(ellipse ${hx}px ${hy}px at ${ccx + run}px ${ccy}px, ${solid} calc(100% - 1px), transparent 100%)`,
+            `linear-gradient(${solid}, ${solid}) ${ccx - run}px ${ccy - hy}px / ${run * 2}px ${hy * 2}px no-repeat`,
+          ].join(', '));
+        }
+        const zoom = latest.current.contentZoom ?? 1;
+        const ry = H * ky / (2 * zoom);
+        const rx = H * kx / (2 * zoom);
+        const straight = Math.max(0, (W - H) * kx / (2 * zoom));
+        const dy = clamp(Math.abs(glyph.y + glyph.height / 2 - height / 2) / ry, 0, 1);
+        const half = straight + rx * Math.sqrt(1 - dy * dy);
+        const from = x + slot / 2 - half - glyph.x;
+        const to = x + slot / 2 + half - glyph.x;
+        const normal = 'var(--lg-fg)';
+        const active = 'var(--lg-track-active, var(--lg-accent))';
+        const coverage = clamp((Math.min(glyph.width, to) - Math.max(0, from)) / Math.max(1, glyph.width), 0, 1);
+        const scale = 1 + clamp(lift, 0, 1) * coverage * (glyph.label ? 0.035 : 0.08);
+        const cx = (x + slot / 2 - glyph.x - glyph.width / 2) / scale + glyph.width / 2;
+        const cy = (height / 2 - glyph.y - glyph.height / 2) / scale + glyph.height / 2;
+        const left = cx - straight / scale;
+        const right = cx + straight / scale;
+        const radiusX = rx / scale;
+        const radiusY = ry / scale;
+        glyph.node.style.setProperty('--lg-content-tint', [
+          `radial-gradient(ellipse ${radiusX}px ${radiusY}px at ${left}px ${cy}px, ${active} calc(100% - 0.5px), transparent 100%)`,
+          `radial-gradient(ellipse ${radiusX}px ${radiusY}px at ${right}px ${cy}px, ${active} calc(100% - 0.5px), transparent 100%)`,
+          `linear-gradient(${active}, ${active}) ${left}px ${cy - radiusY}px / ${right - left}px ${radiusY * 2}px no-repeat`,
+          `linear-gradient(${normal}, ${normal})`,
+        ].join(', '));
+        glyph.node.style.transform = `scale(${scale})`;
+      }
+      if (!gesture && lift < 0.02) delete bar.dataset.lifted;
+    };
+
+    // Travel stretches the droplet along its path, more the faster it goes,
+    // and it jiggles back to round when the drag slows or stops.
+    const jelly = createJelly((value) => {
+      state.squash = value;
+      paint();
+    }, 0.13, 1600);
+    const x = createSpring(current * slot, SPRINGS.snap, (value, velocity) => {
+      state.x = value;
+      jelly.feed(velocity);
+      paint();
+    });
+    const lift = createSpring(0, SPRINGS.lift, (value) => {
+      state.lift = value;
+      paint();
+    });
+    const swell = createSpring(0, SPRINGS.press, (value) => {
+      state.swell = value;
+      paint();
+    });
+    const pullY = createSpring(0, SPRINGS.release, (value) => {
+      state.pull = value;
+      paint();
+    });
+    const pull = (dy) => {
+      // Saturating reach (rubber band): a long drag barely adds to it, so the
+      // bar gives like a droplet held in place and never slides away.
+      pullY.tune(FOLLOW);
+      pullY.set(rubberband(dy, Math.min(10, bar.offsetHeight * 0.2), 0.5));
+    };
+    const letGo = () => {
+      pullY.tune(SPRINGS.release);
+      pullY.set(0);
+    };
+
+    const place = (index, instant = false) => {
+      current = index;
+      if (!gesture) {
+        x.tune(SPRINGS.snap);
+        x.set(index * slot, instant);
+      }
+    };
+
+    const position = (clientX) => {
+      if (!gesture) return 0;
+      const raw = gesture.anchor + (clientX - gesture.startX) * bar.offsetWidth / Math.max(1, gesture.box.width);
+      const max = slot * (latest.current.count - 1);
+      // iOS gives only a few points of overscroll past the end segments.
+      const give = Math.min(14, slot * 0.12);
+      if (raw < 0) return rubberband(raw, give, 0.55);
+      if (raw > max) return max + rubberband(raw - max, give, 0.55);
+      return raw;
+    };
+
+    const light = (clientX, box) => {
+      glass.style.setProperty('--lg-x', `${clamp(((clientX - box.left) / box.width) * 100, 0, 100)}%`);
+      lens.style.setProperty('--lg-x', `${clamp(((clientX - box.left - pad - state.x) / slot) * 100, 0, 100)}%`);
+    };
+
+    const itemAt = (event) => {
+      const target = event.target.closest('[data-lg-item]');
+      return target && bar.contains(target) ? Number(target.dataset.lgItem) : -1;
+    };
+
+    const onDown = (event) => {
+      delete bar.dataset.keyboard;
+      if (!event.isPrimary || event.button !== 0 || gesture) return;
+      const index = itemAt(event);
+      if (index < 0) return;
+      clearTimeout(dropTimer);
+      measure();
+      const box = bar.getBoundingClientRect();
+      gesture = { id: event.pointerId, startX: event.clientX, startY: event.clientY, anchor: index * slot, moved: false, box, hovered: index, startedAt: performance.now() };
+      suppressClick = false;
+      bar.dataset.lifted = '';
+      preview(index);
+      lens.dataset.pressed = '';
+      light(event.clientX, box);
+      haptic();
+      lift.tune(SPRINGS.lift);
+      lift.set(1);
+      swell.tune(SPRINGS.press);
+      swell.set(1);
+      // The lens slides out of the old selection toward the finger.
+      x.tune(SPRINGS.snap);
+      x.set(index * slot);
+      paint();
+    };
+
+    const onMove = (event) => {
+      if (event.pointerId !== gesture?.id) return;
+      if (!gesture.moved && Math.abs(event.clientX - gesture.startX) > 5) {
+        gesture.moved = true;
+        try {
+          bar.setPointerCapture(event.pointerId);
+        } catch {
+          /* already released */
+        }
+      }
+      light(event.clientX, gesture.box);
+      pull(event.clientY - gesture.startY);
+      if (!gesture.moved) return;
+      const at = position(event.clientX);
+      x.tune(SPRINGS.drag);
+      x.set(at);
+      const hovered = clamp(Math.round(at / slot), 0, latest.current.count - 1);
+      if (hovered !== gesture.hovered) {
+        gesture.hovered = hovered;
+        preview(hovered);
+        haptic();
+      }
+    };
+
+    const finish = (event, commit) => {
+      if (event.pointerId !== gesture?.id) return;
+      const { moved, box, startedAt } = gesture;
+      const at = moved ? position(event.clientX) : gesture.anchor;
+      const index = clamp(Math.round(at / slot), 0, latest.current.count - 1);
+      gesture = null;
+      preview();
+      delete lens.dataset.pressed;
+      if (bar.hasPointerCapture?.(event.pointerId)) bar.releasePointerCapture(event.pointerId);
+      const inside = event.clientY >= box.top - 30 && event.clientY <= box.bottom + 30;
+      // A quick tap should show the full lift, just like holding the tab.
+      // Drags still settle immediately when the pointer is released.
+      const drop = () => {
+        lift.tune(SPRINGS.settle);
+        lift.set(0);
+      };
+      const hold = commit && !moved ? Math.max(0, 200 - (performance.now() - startedAt)) : 0;
+      if (hold) dropTimer = window.setTimeout(drop, hold);
+      else drop();
+      swell.tune(SPRINGS.release);
+      swell.set(0);
+      letGo();
+      x.tune(SPRINGS.snap);
+      if (commit && (moved || inside)) {
+        suppressClick = true;
+        current = index;
+        x.set(index * slot);
+        if (index !== latest.current.index) latest.current.onSelect(index);
+      } else {
+        x.set(current * slot);
+      }
+    };
+
+    const onUp = (event) => finish(event, true);
+    const onCancel = (event) => finish(event, false);
+    const onBlur = () => {
+      clearTimeout(dropTimer);
+      if (!gesture) {
+        lift.tune(SPRINGS.settle);
+        lift.set(0);
+        return;
+      }
+      const id = gesture.id;
+      gesture = null;
+      preview();
+      delete lens.dataset.pressed;
+      if (bar.hasPointerCapture(id)) bar.releasePointerCapture(id);
+      lift.tune(SPRINGS.settle);
+      lift.set(0);
+      swell.tune(SPRINGS.release);
+      swell.set(0);
+      letGo();
+      x.tune(SPRINGS.snap);
+      x.set(current * slot);
+    };
+
+    const onClick = (event) => {
+      if (suppressClick && event.detail !== 0) {
+        suppressClick = false;
+        event.preventDefault();
+        event.stopPropagation();
+        return;
+      }
+      const target = event.target.closest('[data-lg-item]');
+      if (!target) return;
+      const index = Number(target.dataset.lgItem);
+      if (index !== latest.current.index) latest.current.onSelect(index);
+    };
+
+    const onKey = (event) => {
+      const keys = ['ArrowLeft', 'ArrowRight', 'Home', 'End'];
+      if (!keys.includes(event.key)) return;
+      bar.dataset.keyboard = '';
+      event.preventDefault();
+      const { count, index } = latest.current;
+      const next =
+        event.key === 'Home'
+          ? 0
+          : event.key === 'End'
+            ? count - 1
+            : (index + (event.key === 'ArrowRight' ? 1 : count - 1)) % count;
+      latest.current.onSelect(next);
+      bar.querySelector(`[data-lg-item="${next}"]`)?.focus();
+    };
+
+    const onTouchMove = (event) => {
+      // Holding the lens owns the gesture: the page must not scroll under it.
+      if (gesture && event.cancelable) event.preventDefault();
+    };
+
+    const observer = new ResizeObserver(() => {
+      measure();
+      if (!gesture) x.set(current * slot, true);
+    });
+
+    measure();
+    x.set(current * slot, true);
+    bar.dataset.ready = '';
+    observer.observe(bar);
+    const unguard = guardSelection(bar);
+    bar.addEventListener('pointerdown', onDown);
+    window.addEventListener('pointermove', onMove);
+    window.addEventListener('pointerup', onUp);
+    window.addEventListener('pointercancel', onCancel);
+    window.addEventListener('blur', onBlur);
+    bar.addEventListener('click', onClick, true);
+    bar.addEventListener('keydown', onKey);
+    bar.addEventListener('touchmove', onTouchMove, { passive: false });
+
+    api.current = { setIndex: place };
+
+    onWatcherCleanup(() => {
+      clearTimeout(dropTimer);
+      api.current = null;
+      [x, lift, swell, pullY, jelly].forEach((s) => s.stop());
+      shell.style.removeProperty('scale');
+      shell.style.removeProperty('translate');
+      unguard();
+      observer.disconnect();
+      bar.removeEventListener('pointerdown', onDown);
+      window.removeEventListener('pointermove', onMove);
+      window.removeEventListener('pointerup', onUp);
+      window.removeEventListener('pointercancel', onCancel);
+      window.removeEventListener('blur', onBlur);
+      bar.removeEventListener('click', onClick, true);
+      bar.removeEventListener('keydown', onKey);
+      bar.removeEventListener('touchmove', onTouchMove);
+      delete bar.dataset.ready;
+      delete bar.dataset.lifted;
+      preview();
+      glyphs.forEach(({ node, host }) => {
+        node.style.removeProperty('--lg-content-tint');
+        node.style.removeProperty('transform');
+        host.style.removeProperty('--lg-content-hide');
+      });
+    });
+  });
+
+  watchEffect(() => {
+    const resolvedOptions = resolveRef(optionsInput);
+    if (resolvedOptions) latest.current = resolvedOptions;
+    api.current?.setIndex(latest.current.index);
+  });
+}

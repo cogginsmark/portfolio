@@ -1,7 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from './Home.vue'
 import About from './about.vue'
+import Videos from './videos.vue'
 import Contact from './contact.vue'
+import LiquidGlassShowcase from './liquid-glass-showcase.vue'
 
 // Was vue-router 3 `new Router({ mode: 'history', ... })` — history mode preserved.
 export default createRouter({
@@ -29,9 +31,23 @@ export default createRouter({
       component: About
     },
     {
+      path: '/videos',
+      name: 'videos',
+      component: Videos
+    },
+    {
       path: '/contact',
       name: 'contact',
       component: Contact
+    },
+    {
+      // Branch-only (feat/liquid-glass): the component bench for
+      // the translated Liquid Glass library. Not linked from the
+      // nav; it exists so every ported component can be exercised
+      // live on the branch preview.
+      path: '/liquid-glass',
+      name: 'liquid-glass-showcase',
+      component: LiquidGlassShowcase
     }
   ]
 })

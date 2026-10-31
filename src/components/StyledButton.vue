@@ -1,8 +1,11 @@
 <template>
   <a
+    ref="root"
     class="styled-button"
     :class="{ primary, secondary, 'lg-glass': glass, 'lg-button': glass, 'lg-button--glass': glass }"
     :style="primary ? { '--btn-primary-bg': color } : {}"
+    :data-liquid-glass="glass ? '' : undefined"
+    @pointerdown="onPointerDown"
   >
     <span v-if="glass" class="lg-button__label"><slot /></span>
     <slot v-else />
@@ -10,6 +13,11 @@
 </template>
 
 <script>
+import { ref } from 'vue'
+import { usePress } from './liquid-glass/engine/press.js'
+import { useRefraction } from './liquid-glass/engine/refraction.js'
+import { haptic } from './liquid-glass/engine/haptics.js'
+
 // The card button. Was `styled('a', btnProps)` from vue-styled-components in
 // Card.vue (and re-exported for Hero.vue). Theme-driven values now come from
 // the CSS variables ThemeRoot sets; the `color` prop (primary background)
@@ -20,9 +28,31 @@ export default {
     primary: Boolean,
     secondary: Boolean,
     color: String,
-    // Liquid Glass experiment (branch feat/liquid-glass): render on
-    // the @zakisheriff/liquid-glass button system instead.
+    // Liquid Glass (branch feat/liquid-glass): render on the
+    // @zakisheriff/liquid-glass button system instead — the classes
+    // above, plus the library's press and refraction behaviour
+    // wired in setup() below, with the same arguments its own
+    // GlassButton uses at the default size. The hero trio and the
+    // Contact stack pass it; card buttons do not.
     glass: Boolean
+  },
+  setup(props) {
+    const root = ref(null)
+    // The glass flag is fixed for the life of every instance in
+    // this app (a given button is always glass or never), so the
+    // engine wiring is attached once, only where it applies.
+    if (props.glass) {
+      usePress(root)
+      useRefraction(root, {
+        kind: 'surface',
+        strength: 1,
+        bezel: Math.min(44 * 0.36, 22)
+      })
+    }
+    const onPointerDown = () => {
+      if (props.glass) haptic()
+    }
+    return { root, onPointerDown }
   }
 }
 </script>
@@ -32,7 +62,10 @@ export default {
   font-size: 0.66rem;
   letter-spacing: 1.2px;
   text-transform: uppercase;
-  padding: 0.75rem 1.5rem;
+  /* Wider side margins (Mark's call, 2026-10-30): the
+     site-wide Apple-spec pill sweep — every button the
+     site makes breathes at 1.75rem a side. */
+  padding: 0.75rem 1.75rem;
   font-weight: bold;
   margin-right: 20px;
   border-radius: 24px;
@@ -54,7 +87,9 @@ export default {
 
 /* Glass variant: the library owns the surface (fill, blur, edge,
    shadow, typography); the legacy declarations above are stood down
-   where they would fight it. */
+   where they would fight it. (Carried over from the first Liquid
+   Glass pass, fd70778; the surface metrics are unchanged, only the
+   engine underneath them is now the library's own.) */
 .styled-button.lg-button {
   background: transparent;
   box-shadow: var(--lg-glass-shadow, var(--lg-shadow)), inset 0 0 0 0.5px var(--lg-edge);
@@ -93,5 +128,19 @@ export default {
 .styled-button:hover::before {
   opacity: var(--card-button-hover-intensity);
   transition: 0.3s opacity ease-in-out, 0.3s background;
+}
+
+@media screen and (max-width: 40rem) {
+  /* The mobile step-down (Mark's call, 2026-10-30), in the one
+     place every button the site makes shares: every metric
+     down from the button's own values — type, line, padding —
+     the same approach the hero trio's fix established, now
+     applied site-wide instead of only there. */
+  .styled-button {
+    font-size: 0.6rem;
+    line-height: 1.6rem;
+    /* The sweep's phone measure: 1.25rem a side. */
+    padding: 0.55rem 1.25rem;
+  }
 }
 </style>
