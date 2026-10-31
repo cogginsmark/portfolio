@@ -19,7 +19,7 @@
         </button>
 
         <div id="menu-panel" class="switch-wrap" :class="{ 'is-open': open }">
-          <LightToggle><span class="theme-toggle-label">Background</span><span class="theme-toggle-dot" aria-hidden="true"></span></LightToggle>
+          <LightToggle><span class="theme-toggle-label">Background</span><span class="theme-toggle-ms" aria-hidden="true">{{ isDark ? 'contrast_inverse' : 'contrast' }}</span></LightToggle>
 
           <nav class="panel-links" aria-label="Quick actions" @click="open = false">
             <a class="panel-link" href="/cv.pdf" target="_blank" rel="noopener"><span>Resume / CV</span><i class="fas fa-arrow-down" aria-hidden="true"></i></a>
@@ -94,10 +94,40 @@ export default {
       // expands the Menu text again, rather than centring.
       const a = e && e.target && e.target.closest ? e.target.closest('a') : null
       if (a && new URL(a.href).pathname === '/') {
-        navStore.centered = false
+        this.setCentered(false)
         return
       }
-      navStore.centered = true
+      this.setCentered(true)
+    },
+    // FLIP the row between its two layouts (Mark's bug report,
+    // 2026-10-30: the CSS-transition version was not smooth).
+    // Measure where the row sits, change the layout, measure
+    // again, then animate the difference away — composed over
+    // the new layout's own transform, so the row starts
+    // exactly where it was and glides to exactly where the
+    // new layout puts it.
+    setCentered(value) {
+      if (navStore.centered === value) return
+      const nav = document.getElementById('primary-nav')
+      const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+      if (!nav || typeof nav.animate !== 'function' || reduced) {
+        navStore.centered = value
+        return
+      }
+      const before = nav.getBoundingClientRect()
+      navStore.centered = value
+      this.$nextTick(() => {
+        const after = nav.getBoundingClientRect()
+        const dx = (before.left + before.width / 2) - (after.left + after.width / 2)
+        if (!dx) return
+        nav.animate(
+          [
+            { transform: value ? `translateX(calc(-50% + ${dx}px))` : `translateX(${dx}px)` },
+            { transform: value ? 'translateX(-50%)' : 'translateX(0px)' }
+          ],
+          { duration: 400, easing: 'ease' }
+        )
+      })
     }
   },
   mounted() {
@@ -116,7 +146,7 @@ export default {
       // Arriving home by any route — the brand, a back swipe —
       // restores the as-is layout too, not just the Home item.
       if (this.$route.path === '/') {
-        navStore.centered = false
+        this.setCentered(false)
       }
     }
   }
@@ -418,19 +448,15 @@ export default {
   /* The centred layout (Mark's model, 2026-10-30): once a nav
      item has been tapped, the items centre in the bar and the
      Menu text collapses into a stacked three-circle glyph.
-     The centring is left: 50% plus translateX(-50%) — both
-     percentages animate, and the pair holds the row's centre
-     on the bar's centre at every frame whatever the row's
-     width is doing. (A measured pixel shift went before it;
-     the active item's padding glide changes the row's width
-     mid-transition, so the fixed offset kept decentering and
-     re-centering the row — Mark's bug report, 2026-10-30.)
-     The glyph sits at the button's right edge, on the menu
-     block's own right line below it. */
+     The end state is left: 50% plus translateX(-50%) — self-
+     centring at any width — and the move itself is a FLIP
+     animation run from setCentered (the CSS-transition
+     version of this move was not smooth: Mark's bug report,
+     2026-10-30). The glyph sits at the button's right edge,
+     on the menu block's own right line below it. */
   .primary-nav {
     position: relative;
     left: 0;
-    transition: left 0.4s ease, transform 0.4s ease;
   }
 
   .site-header.nav-centered .primary-nav {
@@ -441,12 +467,13 @@ export default {
   .site-header.nav-centered .nav-toggle,
   .site-header.nav-centered .nav-toggle[aria-expanded="true"] {
     /* The dots stay anchored right within the original Menu
-       block (Mark's call, 2026-10-30): the button keeps the
-       measure and text spacing the word's block had, and the
-       glyph right-aligns inside it, instead of the button
+       block at its full-text size (Mark's call, 2026-10-30):
+       the button keeps the full hitbox padding and the
+       measure fitted to the wider word (the Close block), and
+       the glyph right-aligns inside it, instead of the button
        shrinking down around the dots. */
-    padding: 0.4rem 0.15rem;
-    min-width: 2.55rem;
+    padding: 0.4rem 0.5rem;
+    min-width: 3.75rem;
     justify-content: flex-end;
   }
 
@@ -589,23 +616,21 @@ export default {
     display: none;
   }
 
-  /* The Background item's icon is a background colour itself
-     (Mark's call, 2026-10-30 — the Books and reader-apps
-     pattern): a circle filled with the other theme's
-     background, the site's own black while the light theme is
-     up and white in the dark, with a hairline ring so each
-     reads against the panel it sits on. */
-  .theme-toggle-dot {
-    flex: none;
-    width: 1.05rem;
-    height: 1.05rem;
-    border-radius: 50%;
-    background: #1a1a1a;
-    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--main-color) 25%, transparent);
+  /* The Background item's icon (Mark's call, 2026-10-30):
+     Material Symbols' contrast pair, flipped with the theme
+     by the template — contrast in the light theme,
+     contrast_inverse in the dark — so the half-filled circle
+     keeps its balance on either panel. */
+  .theme-toggle-ms {
+    font-family: 'Material Symbols Rounded';
+    font-size: 1.15rem;
+    font-style: normal;
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
+    white-space: nowrap;
+    font-variation-settings: 'FILL' 1, 'wght' 500, 'GRAD' 0, 'opsz' 24;
   }
-
-  /* The dark theme's white circle lives in global.css beside
-     the other data-theme rules (see the note there). */
 }
 
 @media (prefers-reduced-motion: reduce) {
