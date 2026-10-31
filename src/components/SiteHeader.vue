@@ -452,7 +452,13 @@ export default {
 
   .site-header.nav-centered .nav-toggle,
   .site-header.nav-centered .nav-toggle[aria-expanded="true"] {
-    padding: 0.4rem 0.6rem;
+    /* The dots stay anchored right within the original Menu
+       block (Mark's call, 2026-10-30): the button keeps the
+       measure and text spacing the word's block had, and the
+       glyph right-aligns inside it, instead of the button
+       shrinking down around the dots. */
+    padding: 0.4rem 0.15rem;
+    min-width: 2.55rem;
     justify-content: flex-end;
   }
 
