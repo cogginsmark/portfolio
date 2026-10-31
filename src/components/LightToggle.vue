@@ -1,15 +1,13 @@
 <template>
   <button
     type="button"
-    class="light-toggle"
-    role="switch"
-    :aria-checked="isDark ? 'true' : 'false'"
-    aria-label="Toggle light and dark mode"
+    class="theme-pill"
+    :aria-pressed="isDark ? 'true' : 'false'"
+    aria-label="Dark mode"
     @click="toggleTheme"
   >
-    <span class="switch-track" aria-hidden="true">
-      <span class="switch-knob"><i :class="isDark ? 'fas fa-moon' : 'fas fa-sun'"></i></span>
-    </span>
+    <i :class="isDark ? 'fas fa-moon' : 'fas fa-sun'" aria-hidden="true"></i>
+    <span class="theme-pill-word">{{ isDark ? 'Dark' : 'Light' }}</span>
     <slot />
   </button>
 </template>
@@ -17,11 +15,15 @@
 <script>
 import { localStore, toggleTheme } from '../theme.js'
 
-// The light/dark control as a real switch (Mark, 2026-10-29: "a
-// thoughtful toggle"): role="switch" with aria-checked, a track and
-// a sliding knob that carries the current mode's icon — sun in light
-// mode, moon in dark. Replaces the bare bulb button, whose floated
-// position styles from the vue-styled-components era are gone.
+// The light/dark control as a simple pill (Mark's pick,
+// 2026-10-30): the current mode's icon and word on a pill in
+// the header's own button language, state carried by
+// aria-pressed — no track, no sliding knob. Simpler and more
+// accessible than the switch it replaces: a full-height tap
+// target, a state that reads at a glance, and a pressed state
+// assistive tech announces. The Menu panel passes its longer
+// "Light mode / Dark mode" label through the slot and hides
+// the short word (SiteHeader's styles).
 export default {
   name: 'LightToggle',
   computed: {
@@ -36,55 +38,45 @@ export default {
 </script>
 
 <style scoped>
-.light-toggle {
+.theme-pill {
   display: inline-flex;
   align-items: center;
-  gap: 0.55rem;
-  border: none;
-  background: transparent;
-  padding: 0.25rem;
-  font: inherit;
-  color: var(--main-color);
-  cursor: pointer;
-}
-
-.switch-track {
-  position: relative;
-  flex: none;
-  width: 3.25rem;
-  height: 1.75rem;
+  gap: var(--pill-icon-gap);
+  min-height: 2.25rem;
+  margin: 0;
+  padding: 0.45rem 0.9rem;
+  border: 0;
   border-radius: 999px;
-  background: color-mix(in srgb, var(--main-color) 16%, transparent);
-  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--main-color) 24%, transparent);
-  transition: background-color 0.25s ease;
-}
-
-.switch-knob {
-  position: absolute;
-  top: 50%;
-  left: 0.1875rem;
-  transform: translateY(-50%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 1.375rem;
-  height: 1.375rem;
-  border-radius: 50%;
-  background: var(--main-background-color);
+  background: transparent;
   color: var(--main-color);
-  font-size: 0.7rem;
-  box-shadow: 0 1px 3px rgb(0 0 0 / 0.3);
-  transition: left 0.25s ease;
+  font: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: background-color 0.2s ease, box-shadow 0.25s ease;
 }
 
-.light-toggle[aria-checked="true"] .switch-knob {
-  left: calc(100% - 1.375rem - 0.1875rem);
+/* The icon's block is reserved at its final size — the site's
+   standing rule for button icons. */
+.theme-pill i {
+  flex: none;
+  width: 1rem;
+  text-align: center;
+  font-size: 0.9rem;
+  line-height: 1;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .switch-track,
-  .switch-knob {
-    transition: none;
+/* Dark reads as the pressed, current pill — the header's own
+   treatment for the current thing. */
+.theme-pill[aria-pressed="true"] {
+  background: color-mix(in srgb, var(--main-color) 6%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--main-color) 12%, transparent);
+}
+
+@media (hover: hover) {
+  .theme-pill:hover {
+    background: color-mix(in srgb, var(--main-color) 8%, transparent);
   }
 }
 </style>

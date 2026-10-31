@@ -245,7 +245,7 @@ export default {
   margin-left: 0.35rem;
 }
 
-.switch-wrap :deep(.light-toggle) {
+.switch-wrap :deep(.theme-pill) {
   margin: 0;
 }
 
@@ -373,13 +373,23 @@ export default {
 
   .theme-toggle-label {
     display: inline;
-    margin-left: 0.5rem;
+    /* The pill's own gap spaces the label now (2026-10-30):
+       the margin that once separated it from the switch would
+       double the space. */
+    margin-left: 0;
     font-size: 0.95rem;
     font-weight: 600;
     letter-spacing: 0.01em;
     /* One line in the popup (Mark's call, 2026-10-30): "Light
        mode" never wraps; the panel sizes to fit it. */
     white-space: nowrap;
+  }
+
+  /* In the panel the toggle speaks in its long form — the
+     slot's "Light mode / Dark mode" — so the pill's own short
+     word stands down there. */
+  .switch-wrap :deep(.theme-pill-word) {
+    display: none;
   }
 
   /* The Menu panel holds only the switch now. It stays opaque like
