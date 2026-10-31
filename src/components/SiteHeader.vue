@@ -390,24 +390,25 @@ export default {
 }
 
 @keyframes nav-pill-fade {
-  /* The pill arrives the way the Menu toggle's does (Mark's
-     call, 2026-10-30): it grows in — fill, ring and padding
-     together, from the text spacing — holds a beat at full
-     strength, then dims to the reduced standing pill. */
+  /* The pill's background arrives the way the Menu toggle's
+     does (Mark's call, 2026-10-30) — the fill and ring fade
+     in, hold a beat at full strength, then dim to the
+     reduced standing pill. The hitbox does not take part
+     (Mark's call, 2026-10-30): the gated rule below holds
+     the padding at its end state from the first frame, so
+     the item's target is full-size throughout the arrival
+     and only the background animates. */
   0% {
     background-color: transparent;
     box-shadow: inset 0 0 0 1px transparent;
-    padding-inline: 0.25rem;
   }
   22%, 58% {
     background-color: color-mix(in srgb, var(--main-color) 6%, transparent);
     box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--main-color) 12%, transparent);
-    padding-inline: 0.9rem;
   }
   100% {
     background-color: color-mix(in srgb, var(--main-color) 3%, transparent);
     box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--main-color) 6%, transparent);
-    padding-inline: 0.9rem;
   }
 }
 
@@ -552,23 +553,24 @@ export default {
   .site-header.has-navigated .nav-link.router-link-exact-active {
     padding-inline: 0.5rem;
     animation: nav-pill-fade-mobile 1.6s ease forwards;
+    transition-property: background-color, color, padding, font-weight;
+    transition-duration: 0.45s, 0.2s, 0s, 0.25s;
   }
 
   @keyframes nav-pill-fade-mobile {
+    /* Background only, as on desktop: the hitbox sits at
+       its end state (.5rem, the gated rule) throughout. */
     0% {
       background-color: transparent;
       box-shadow: inset 0 0 0 1px transparent;
-      padding-inline: 0.3rem;
     }
     22%, 58% {
       background-color: color-mix(in srgb, var(--main-color) 6%, transparent);
       box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--main-color) 12%, transparent);
-      padding-inline: 0.5rem;
     }
     100% {
       background-color: color-mix(in srgb, var(--main-color) 3%, transparent);
       box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--main-color) 6%, transparent);
-      padding-inline: 0.5rem;
     }
   }
 
