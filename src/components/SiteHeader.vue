@@ -289,7 +289,7 @@ export default {
   font-size: 0.95rem;
   font-weight: 500;
   cursor: pointer;
-  transition: background-color 0.2s ease, box-shadow 0.25s ease, padding 0.25s ease;
+  transition: background-color 0.2s ease, box-shadow 0.25s ease;
 }
 
 /* Built like the nav links it sits beside (Mark's call,
@@ -381,19 +381,17 @@ export default {
 
   .nav-toggle {
     display: inline-flex;
-    /* The other half of the swap (2026-10-30): the Menu item
-       takes the text spacing the nav items used to rest at. */
-    padding: 0.4rem 0.15rem;
+    justify-content: center;
+    /* One constant box in both states (bug fix, 2026-10-30):
+       the button used to rest at text spacing and expand its
+       hotbox when it read Close — right-anchored, the growth
+       slid the label leftward under the finger on every tap,
+       a jitter in the hitbox itself. It now always wears the
+       full hitbox the open state wanted, sized to the wider
+       word, and only the label swaps inside the stable box. */
+    padding: 0.4rem 0.5rem;
+    min-width: 3.75rem;
     font-size: 0.88rem;
-  }
-
-  /* Open, the button reads Close — and expands its hotbox to
-     the full hitbox (Mark's call, 2026-10-30): the wider word
-     gets the nav items' own padding to sit in, and the target
-     grows with it. The base rule's transition animates the
-     growth. */
-  .nav-toggle[aria-expanded="true"] {
-    padding-inline: 0.5rem;
   }
 
   .theme-toggle-label {
