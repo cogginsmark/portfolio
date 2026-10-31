@@ -65,6 +65,19 @@ html {
   box-sizing: border-box;
 }
 
+/* Phones run the standard root (Mark's call, 2026-10-30 —
+   back on the table and picked, paired with the gentler
+   hero step in Hero.vue): the 18px desktop root made every
+   rem on mobile run large. At the browser-standard 16px
+   the whole rem system scales down together. (Media
+   queries measure rem against the initial size, so no
+   breakpoint moves.) */
+@media (max-width: 40rem) {
+  html {
+    font-size: 16px;
+  }
+}
+
 body {
   margin: 0;
   line-height: var(--leading-text);

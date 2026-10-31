@@ -331,18 +331,17 @@ export default {
     width: min(390px, calc(100% - var(--gutter)));
   }
 
-  /* The hero's own type steps down on phones (Mark's call,
-     2026-10-30 — the reduction he asked for was the hero's,
-     not the header's or the page's): the name to the
-     standard mobile display measure, the subtitle and
-     description to the standard body measure. Scoped to
-     the hero — nothing else on the page moves. */
+  /* The hero's own step on phones, gentled to pair with
+     the 16px phone root (Mark's pick, 2026-10-30 — "Root +
+     gentler hero step"): the root already brings the
+     subtitle and description to the standard 16px body
+     measure, so they need no cut of their own here; the
+     name alone takes a step, 2.25rem, which at the phone
+     root lands on the same 36px it held under the hero-only
+     reduction — the general scale goes down around it
+     without the hero shrinking twice. */
   .hero-heading {
-    font-size: 2rem;
-  }
-
-  .hero-text-container .text-paragraph {
-    font-size: 0.9rem;
+    font-size: 2.25rem;
   }
 
   /* The CTA row tightens so the trio's defined widths fit
