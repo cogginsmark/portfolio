@@ -15,16 +15,16 @@
           @click="open = !open"
         >
           <span v-if="!navCentered" class="nav-toggle-label">{{ open ? 'Close' : 'Menu' }}</span>
-          <svg v-else class="nav-toggle-glyph" viewBox="0 0 4 20" aria-hidden="true" focusable="false"><circle cx="2" cy="2.5" r="1.7" /><circle cx="2" cy="10" r="1.7" /><circle cx="2" cy="17.5" r="1.7" /></svg>
+          <svg v-else class="nav-toggle-glyph" viewBox="0 0 6 26" aria-hidden="true" focusable="false"><circle cx="3" cy="3" r="2.8" /><circle cx="3" cy="13" r="2.8" /><circle cx="3" cy="23" r="2.8" /></svg>
         </button>
 
         <div id="menu-panel" class="switch-wrap" :class="{ 'is-open': open }">
           <LightToggle><span class="theme-toggle-label">{{ isDark ? 'Dark' : 'Light' }} mode</span></LightToggle>
 
           <nav class="panel-links" aria-label="Quick actions" @click="open = false">
-            <a class="panel-link" href="/cv.pdf" target="_blank" rel="noopener"><span>Resume / CV</span></a>
-            <a class="panel-link" :href="emailUrl"><span>Email</span></a>
-            <a v-for="link in socialLinks" :key="link.name" class="panel-link" :href="link.url" target="_blank" rel="noopener"><span>{{ link.name }}</span></a>
+            <a class="panel-link" href="/cv.pdf" target="_blank" rel="noopener"><span>Resume / CV</span><i class="fas fa-arrow-down" aria-hidden="true"></i></a>
+            <a class="panel-link" :href="emailUrl"><span>Email</span><i class="fa fa-envelope" aria-hidden="true"></i></a>
+            <a v-for="link in socialLinks" :key="link.name" class="panel-link" :href="link.url" target="_blank" rel="noopener"><span>{{ link.name }}</span><i :class="link.fa" aria-hidden="true"></i></a>
           </nav>
         </div>
       </div>
@@ -88,9 +88,23 @@ export default {
     // the model). Desktop clicks leave it alone — the layout
     // it drives exists only on small screens.
     markNavTapped() {
-      if (window.matchMedia('(max-width: 40rem)').matches) {
-        navStore.centered = true
-      }
+      if (navStore.centered) return
+      if (!window.matchMedia('(max-width: 40rem)').matches) return
+      this.measureNavShift()
+      navStore.centered = true
+    },
+    // The centred layout moves the nav group by transform —
+    // justify-content cannot animate, so the distance to the
+    // centre is measured and ridden as a variable (Mark's
+    // call, 2026-10-30: the transition should be smooth).
+    measureNavShift() {
+      const nav = document.getElementById('primary-nav')
+      const inner = nav && nav.closest('.header-inner')
+      if (!nav || !inner) return
+      const navRect = nav.getBoundingClientRect()
+      const innerRect = inner.getBoundingClientRect()
+      const shift = (innerRect.width - navRect.width) / 2 - (navRect.left - innerRect.left)
+      nav.style.setProperty('--nav-shift', shift.toFixed(1) + 'px')
     }
   },
   mounted() {
@@ -99,9 +113,14 @@ export default {
     }
     this.onScroll()
     window.addEventListener('scroll', this.onScroll, { passive: true })
+    this.onResize = () => {
+      if (navStore.centered) this.measureNavShift()
+    }
+    window.addEventListener('resize', this.onResize)
   },
   beforeUnmount() {
     window.removeEventListener('scroll', this.onScroll)
+    window.removeEventListener('resize', this.onResize)
   },
   watch: {
     $route() {
@@ -405,23 +424,29 @@ export default {
 
   /* The centred layout (Mark's model, 2026-10-30): once a nav
      item has been tapped, the items centre in the bar and the
-     Menu text collapses into a stacked three-circle glyph —
-     one compact button at the same right edge, its open state
-     still carried by the pressed treatment above. The glyph
-     button keeps the toggle's own padding in both states. */
-  .site-header.nav-centered .header-inner {
-    justify-content: center;
+     Menu text collapses into a stacked three-circle glyph.
+     The centring rides a measured transform — justify-content
+     cannot animate, and the transition should be smooth — and
+     the glyph sits at the button's right edge, on the menu
+     block's own right line below it. */
+  .primary-nav {
+    transition: transform 0.4s ease;
+  }
+
+  .site-header.nav-centered .primary-nav {
+    transform: translateX(var(--nav-shift, 0px));
   }
 
   .site-header.nav-centered .nav-toggle,
   .site-header.nav-centered .nav-toggle[aria-expanded="true"] {
     padding: 0.4rem 0.6rem;
+    justify-content: flex-end;
   }
 
   .nav-toggle-glyph {
     display: block;
-    width: 0.3rem;
-    height: 1.3rem;
+    width: 0.31rem;
+    height: 1.35rem;
     fill: currentColor;
   }
 
@@ -487,9 +512,10 @@ export default {
   }
 
   /* The quick actions (Mark's pick, 2026-10-30): Resume / CV,
-     Email, Github, Linkedin, Medium. No icons in the menu and
-     every item its own separated pill — words alone, centred,
-     on the panel's solid surface with its hairline ring. Their
+     Email, Github, Linkedin, Medium — every item its own
+     separated pill on the panel's solid surface with its
+     hairline ring, text left and its icon rightmost (icons
+     returned at his word after a brief icon-less pass). Their
      data is the footer's, so the two agree. */
   .panel-links {
     display: flex;
@@ -500,7 +526,7 @@ export default {
   .panel-link {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     padding: 0.55rem 1rem;
     border-radius: 999px;
     background: var(--fallback-background-color);
@@ -512,6 +538,14 @@ export default {
     -webkit-tap-highlight-color: transparent;
   }
 
+  .panel-link i {
+    flex: none;
+    width: 1rem;
+    text-align: center;
+    font-size: 0.9rem;
+    line-height: 1;
+  }
+
   @media (hover: hover) {
     .panel-link:hover {
       background: color-mix(in srgb, var(--main-color) 8%, var(--fallback-background-color));
@@ -519,22 +553,22 @@ export default {
   }
 
   /* The theme toggle wears the same separated pill in the
-     panel, its icon stood down with the rest. */
+     panel, laid out like the links (Mark's call, 2026-10-30:
+     icons back in the menu, text left, icon rightmost) — the
+     row reverses so its icon lands on the right. */
   .switch-wrap :deep(.theme-pill) {
     background: var(--fallback-background-color);
     box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--main-color) 10%, transparent);
-    justify-content: center;
-  }
-
-  .switch-wrap :deep(.theme-pill i) {
-    display: none;
+    flex-direction: row-reverse;
+    justify-content: space-between;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .site-header,
   .nav-link,
-  .nav-toggle {
+  .nav-toggle,
+  .primary-nav {
     transition: none;
   }
 }
