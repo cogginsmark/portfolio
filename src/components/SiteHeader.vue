@@ -170,13 +170,17 @@ export default {
         return
       }
       // The pill's end state is the item's full hitbox
-      // (Mark's model): the item's own box plus the
-      // expansion a state pill used to grow into — .65rem a
-      // side at desktop widths, .3rem on mobile, matching
-      // the measures the per-item pills had.
-      const extra = window.matchMedia('(max-width: 40rem)').matches ? 5.4 : 11.7
-      const toX = active.offsetLeft - extra
-      const toW = active.offsetWidth + extra * 2
+      // (Mark's model): the gated rule grows the current
+      // item's own padding to the hitbox measure, so the
+      // pill's presence moves the row's spacing — and the
+      // pill is that grown box exactly. The final geometry
+      // is measured with the links' transitions briefly
+      // stood down, so a mid-glide padding cannot give a
+      // half-grown measure.
+      nav.classList.add('pill-measuring')
+      const toX = active.offsetLeft
+      const toW = active.offsetWidth
+      nav.classList.remove('pill-measuring')
       const fromX = this.pillX
       const fromW = this.pillW
       const firstShow = !this.pillShow
@@ -193,8 +197,9 @@ export default {
         // one the collapsed Menu icon's pill background
         // makes): the pill grows from the item's text box
         // to its full hitbox with a spring's overshoot.
-        const startX = active.offsetLeft
-        const startW = active.offsetWidth
+        const text = active.querySelector('.nav-text')
+        const startW = text ? text.offsetWidth : toW
+        const startX = toX + (toW - startW) / 2
         this.$nextTick(() => {
           pill.animate(
             [
@@ -389,6 +394,23 @@ export default {
   transition: background-color 0.25s ease, box-shadow 0.25s ease, color 0.2s ease, padding 0.25s ease, font-weight 0.25s ease;
 }
 
+/* Once the pill exists (a nav item has been clicked), the
+   current item takes its full hitbox padding in the flow
+   (Mark's call, 2026-10-30): the pill's presence affects
+   the row's spacing — the neighbours make room for it, the
+   links' own transition gliding the change. The travelling
+   pill underneath is exactly this grown box. */
+.site-header.has-navigated .nav-link.router-link-exact-active {
+  padding-inline: 0.9rem;
+}
+
+/* Measuring the pill's target (updatePill) stands the
+   links' transitions down for one synchronous read, so the
+   geometry is the end state, never a mid-glide frame. */
+.primary-nav.pill-measuring .nav-link {
+  transition: none !important;
+}
+
 /* The pill is one travelling element (Mark's model,
    2026-10-30): a single background that lives under the
    current item at its full hitbox measure. It appears only
@@ -527,6 +549,12 @@ export default {
 
   .nav-link:focus-visible {
     background: color-mix(in srgb, var(--main-color) 8%, transparent);
+  }
+
+  /* The pill's presence moves the spacing here too: the
+     current item's hitbox padding, in the flow. */
+  .site-header.has-navigated .nav-link.router-link-exact-active {
+    padding-inline: 0.5rem;
   }
 
   /* On mobile the bar's two alignments separate (Mark's spec,
