@@ -41,6 +41,8 @@
                 v-bind:src="logo.src"
                 v-bind:url="logo.url"
                 v-bind:alt="logo.alt"
+                v-bind:width="logo.width"
+                v-bind:height="logo.height"
               />
             </div>
             <div class="logo-set" aria-hidden="true" inert>
@@ -49,6 +51,8 @@
                 v-bind:src="logo.src"
                 v-bind:url="logo.url"
                 v-bind:alt="logo.alt"
+                v-bind:width="logo.width"
+                v-bind:height="logo.height"
               />
             </div>
           </div>
@@ -136,21 +140,25 @@ export default {
     width: 100%;
     flex-direction: column;
   }
-  /* One owner per gap (the spacing system, 2026-10-30): in
-     the stacked column the container adds nothing — each
-     minor card's own margin-bottom (--stack-gap) carries the
-     stack, so the gap is decided in one place. The container
-     used to add 16px top and bottom on top of the card's own
-     margin, and which total rendered depended on the bundle's
-     rule order. */
+  /* One owner per gap (the spacing system, 2026-10-30) —
+     and the owner is THIS rule: it is the one the bundle's
+     cascade actually applies to the card roots (the card's
+     own margin-bottom in MinorCard.vue loses to it), so the
+     stack rate lives here, as a bottom margin only. An
+     earlier version of this pass zeroed these margins
+     expecting the card's own to carry the gap — the cards
+     rendered flush, no gap at all (Mark's report). The
+     nth-child rules carry the same value: their higher
+     specificity would otherwise override the bottom margin
+     on the first and third cards. */
   .minor-card-container > * {
-    margin: 0;
+    margin: 0 0 var(--stack-gap);
   }
   .minor-card-container > *:nth-child(3n+1) {
-    margin: 0;
+    margin: 0 0 var(--stack-gap);
   }
   .minor-card-container > *:nth-child(3n+0) {
-    margin: 0;
+    margin: 0 0 var(--stack-gap);
   }
 }
 @media screen and (max-width: 600px) {

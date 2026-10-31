@@ -195,6 +195,9 @@ export default {
   font-weight: 600;
   letter-spacing: 0.01em;
   opacity: 0.75;
+  /* Middle-aligned (Mark's call, 2026-10-30): the line
+     centres in the hero column. */
+  text-align: center;
 }
 
 .cta-section {

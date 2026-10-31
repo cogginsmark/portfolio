@@ -1,7 +1,7 @@
 <template>
   <a class="styled-a" v-bind:href="url" target="_blank" v-bind:aria-label="alt">
     <div class="logo-card">
-        <img class="logo" v-bind:src="src" v-bind:alt="alt"/>
+        <img class="logo" v-bind:src="src" v-bind:alt="alt" v-bind:width="width" v-bind:height="height"/>
     </div>
   </a>
 </template>
@@ -11,7 +11,11 @@ export default {
   props: {
     src: String,
     url: String,
-    alt: String
+    alt: String,
+    // The mark's intrinsic proportions, bound onto the img so
+    // its box is reserved before the file loads.
+    width: [Number, String],
+    height: [Number, String]
   }
 }
 </script>
