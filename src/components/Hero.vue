@@ -11,9 +11,6 @@
           <router-link v-if="cta3" :to="cta3Url" class="cta-nav-link"><StyledButton glass secondary :color="'#363636'"><span class="text-button-text">{{cta3}}</span><i class="fas fa-play"></i></StyledButton></router-link>
         </div>
       </div>
-      <section class="services-section" aria-label="Services">
-        <p class="services-line">Design · Video editing · Motion graphics · Social</p>
-      </section>
     </div>
   </div>
 
@@ -185,33 +182,6 @@ export default {
   .hero-heading {
     font-size: 2.625rem;
   }
-}
-
-/* The services line is its own section (Mark's call,
-   2026-10-30): a separate band under the hero's text column,
-   not a line inside it — all caps, centred, and middle-
-   justified in every version of the layout. It keeps the
-   quiet treatment (small, soft) so the buttons keep the
-   hero's focus. */
-.services-section {
-  /* Centred in the band between the CTAs and the first
-     card (Mark's call, 2026-10-30): the band runs from the
-     CTA row's foot to the card's top edge — the row's own
-     2.25rem bottom margin inside the text column, plus the
-     joint's 1.25rem reveal — 63px in all, so the line sits
-     with 21px of air on each side of it. The pull-up that
-     lands it there is -1.1rem. */
-  margin-top: -1.1rem;
-  text-align: center;
-}
-
-.services-line {
-  margin: 0;
-  font-size: 0.85rem;
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  opacity: 0.75;
 }
 
 .cta-section {

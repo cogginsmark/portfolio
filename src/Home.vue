@@ -13,6 +13,9 @@
       v-bind:cta3-url="hero.url3"
     />
     <div class="card-container" id="products">
+      <section class="services-section" aria-label="Services">
+        <p class="services-line">Design · Video editing · Motion graphics · Social</p>
+      </section>
       <card
         v-for="(product, index) in products.featured" :key="index"
         v-bind:name="product.name"
@@ -98,6 +101,29 @@ export default {
 <style scoped>
 .card-container {
   margin-top: -5.25rem;
+}
+
+/* The services line is its own section (Mark's call,
+   2026-10-30), and it lands above the first card (his
+   correction the same night): the card column's first row,
+   drawn into the hero-to-cards joint by the column's own
+   overlap, centred over the card's measure — all caps, the
+   eyebrow tracking, and the quiet treatment it had when it
+   lived in the hero. */
+.services-section {
+  width: 100%;
+  max-width: 980px;
+  margin: 0 auto 1.25rem;
+  text-align: center;
+}
+
+.services-line {
+  margin: 0;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0.75;
 }
 @media screen and (max-width: 61.25rem) {
   .card-container {
