@@ -425,6 +425,18 @@ export default {
   padding-inline: 1.25rem;
 }
 
+/* The row's left end holds one-sided padding at rest
+   (Mark's call, 2026-10-30): with no pill under it, Home
+   keeps its left padding only — that padding pins the
+   word's distance from the bar's left line, and the
+   spacing on to the next item is the row's gap alone.
+   When the pill is Home's, the gated rule above outranks
+   this and the full capsule returns. (The pill element is
+   a span, so the first link is the first of its type.) */
+.primary-nav > .nav-link:first-of-type {
+  padding-right: 0;
+}
+
 /* Measuring the pill's target (updatePill) stands the
    links' transitions down for one synchronous read, so the
    geometry is the end state, never a mid-glide frame. The
@@ -609,8 +621,13 @@ export default {
   .nav-toggle {
     display: inline-flex;
     /* Text spacing at rest; opening grows it (below). The
-       word matches the links' restored 1rem. */
-    padding: 0.55rem 0.15rem;
+       word matches the links' restored 1rem. The rest
+       padding is right-side only (Mark's call, 2026-10-30):
+       the wrap is anchored to the bar's right line, so the
+       right padding pins the word's distance from the edge
+       and the left carries none until the Close pill grows
+       it — the mirror of Home's left-only rest padding. */
+    padding: 0.55rem 0.15rem 0.55rem 0;
     font-size: 1rem;
   }
 
