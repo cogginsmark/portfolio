@@ -6,7 +6,7 @@
     <SiteHeader />
     <main id="main">
       <router-view v-slot="{ Component }">
-        <Transition name="page" mode="out-in">
+        <Transition :name="transitionName" mode="out-in">
           <component :is="Component" />
         </Transition>
       </router-view>
@@ -23,6 +23,15 @@ export default {
   name: 'App',
   components: {
     SiteHeader
+  },
+  computed: {
+    // Contact does not fade in (Mark's call, 2026-10-30): its
+    // navigation swaps instantly and the page's own delayed
+    // title does the arriving. Every other route keeps the
+    // fade/slide.
+    transitionName() {
+      return this.$route.path === '/contact' ? 'page-none' : 'page'
+    }
   }
 }
 </script>
@@ -148,6 +157,11 @@ export default {
 .page-enter-active,
 .page-leave-active {
   transition: opacity 0.22s ease, transform 0.22s ease;
+}
+
+.page-none-enter-active,
+.page-none-leave-active {
+  transition: none;
 }
 
 .page-enter-from {

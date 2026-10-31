@@ -125,6 +125,13 @@ export default {
       if (navStore.centered) this.measureNavShift()
     }
     window.addEventListener('resize', this.onResize)
+    // The other half of the stale-shift fix: once the real
+    // font has landed, measure again under its metrics.
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(() => {
+        if (navStore.centered) this.measureNavShift()
+      })
+    }
   },
   beforeUnmount() {
     window.removeEventListener('scroll', this.onScroll)
@@ -137,6 +144,14 @@ export default {
       // restores the as-is layout too, not just the Home item.
       if (this.$route.path === '/') {
         navStore.centered = false
+      }
+      // The centred shift is a measured pixel value; on other
+      // pages it went stale and the bar sat left of centre
+      // (Mark's bug report, 2026-10-30) — the measurement was
+      // taken under the fallback font's metrics when the tap
+      // came early. Re-measure once the new page has settled.
+      if (navStore.centered) {
+        this.$nextTick(() => this.measureNavShift())
       }
     }
   }
@@ -602,23 +617,23 @@ export default {
     display: none;
   }
 
-  /* The Background item's icon is the background itself
+  /* The Background item's icon is a background colour itself
      (Mark's call, 2026-10-30 — the Books and reader-apps
-     pattern): a circle filled with the current background
-     colour, white in the light theme and the site's own black
-     in the dark, with a hairline ring so each reads against
-     the panel it sits on. */
+     pattern): a circle filled with the other theme's
+     background, the site's own black while the light theme is
+     up and white in the dark, with a hairline ring so each
+     reads against the panel it sits on. */
   .theme-toggle-dot {
     flex: none;
     width: 1.05rem;
     height: 1.05rem;
     border-radius: 50%;
-    background: #ffffff;
+    background: #1a1a1a;
     box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--main-color) 25%, transparent);
   }
 
   :global(html[data-theme='dark']) .theme-toggle-dot {
-    background: #1a1a1a;
+    background: #ffffff;
   }
 }
 

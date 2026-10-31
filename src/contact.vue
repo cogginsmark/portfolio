@@ -70,6 +70,28 @@ export default {
   line-height: 1.15;
   color: var(--main-color);
   margin: 0;
+  /* The page itself arrives instantly (App's route transition
+     skips Contact), so the title does the arriving alone —
+     delayed a beat, then a short fade in (Mark's call,
+     2026-10-30). */
+  animation: contact-title-in 0.5s ease 0.35s both;
+}
+
+@keyframes contact-title-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .contact-title {
+    animation: none;
+  }
 }
 
 /* Linktree-style: the actions are a single stacked column of
