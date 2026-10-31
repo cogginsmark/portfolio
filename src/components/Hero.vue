@@ -343,9 +343,15 @@ export default {
 
 @media screen and (max-width: 40rem) {
   /* Smaller margins on phones (Mark's call, 2026-10-30):
-     the hero's breathing room tightens at both ends. */
+     the hero's breathing room tightens at both ends, and
+     the column runs wider — half the gutter at each side
+     instead of the full page line. */
   .hero-container {
     padding: 2rem 0 4rem;
+  }
+
+  .hero-text-container {
+    width: min(390px, calc(100% - var(--gutter)));
   }
 }
 </style>

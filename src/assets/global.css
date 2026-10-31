@@ -58,6 +58,19 @@ html {
   font-family: 'Manrope', -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   font-optical-sizing: auto;
   font-size: 18px;
+}
+
+/* Phones run the standard root (Mark's call, 2026-10-30):
+   the 18px desktop root made every rem on mobile run
+   large — the header included. At the browser-standard
+   16px the whole rem system scales down together. (Media
+   queries measure rem against the initial size, so no
+   breakpoint moves.) */
+@media (max-width: 40rem) {
+  html {
+    font-size: 16px;
+  }
+}
   -ms-text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
   -moz-osx-font-smoothing: grayscale;
