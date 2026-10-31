@@ -1,0 +1,79 @@
+/* ————————————————————————————————————————————————————————————
+   Liquid Glass — optical balancing (this port's own addition,
+   patch 005). NOT part of @zakisheriff/liquid-glass: the package
+   stylesheet is imported unchanged, before this file.
+
+   Library first: the pills keep the library's construction and
+   metrics. What this file translates — from Apple's published
+   method (SF Symbols sized relative to cap height, centred on
+   it, weight-matched; the Dynamic Island's balanced, snug
+   elements) and from measurements of this site's actual fonts —
+   is what three metrics are proportional TO: the text, not the
+   pill's frame.
+
+   The measurements (fontTools, 2026-10-31):
+   - Manrope Medium cap height = 0.720em (11.52px at 16px);
+     caps sit ≈ 0.4px from centre at line-height 1.
+   - FontAwesome 5.13: every glyph used here has its ink
+     centred on its em box in both axes (≈ 0 offset), but ink
+     heights differ per glyph — at one shared font size they
+     ran 1.17×–1.61× cap height. Alignment was never broken;
+     optical size was.
+   ———————————————————————————————————————————————————————————— */
+
+/* The cap height of the element's own text, as a token: the
+   one figure the whole system derives from. 0.72 is Manrope's
+   measured cap-height ratio; if the site's font changes, this
+   token is the single place to re-derive. */
+.lg-button,
+.theme-pill {
+  --lg-cap: calc(1em * 0.72);
+}
+
+/* Padding proportional to the text instead of the frame: the
+   library's 0.42 × height becomes 2 × the button's own font
+   size — at the standard 16px that is 32px a side (the site's
+   sweep measure, 1.75rem ≈ 31.5px, reproduced from inside the
+   library's proportional logic), scaling to 28px at the
+   library's small size on its own. Icon-only buttons keep
+   their circular form. */
+.lg-button:not([data-icon-only]) {
+  padding-inline: 2em;
+}
+
+/* Glyphs sized by ink, not by the box: the icon box keeps its
+   library seat (the fixed block — a glyph renders within it
+   however long its name text is), and each glyph's font size
+   is derived so its INK height equals cap height × 1.3 — the
+   large-symbol end of Apple's published scale band, where
+   these pills' glyphs have always sat. The divisors are the
+   glyphs' measured ink heights as fractions of their em.
+   FontAwesome 5.13, ink heights in em units: */
+.lg-button__icon .fa-arrow-down,
+.lg-button__icon .fa-linkedin {
+  font-size: calc(var(--lg-cap) * 1.3 / 0.875); /* 448/512 → 17.1px */
+}
+.lg-button__icon .fa-play {
+  font-size: calc(var(--lg-cap) * 1.3 / 1.027); /* 526/512 → 14.6px */
+}
+.lg-button__icon .fa-envelope,
+.lg-button__icon .fa-medium {
+  font-size: calc(var(--lg-cap) * 1.3 / 0.75); /* 384/512 → 20.0px */
+}
+.lg-button__icon .fa-volume-up,
+.lg-button__icon .fa-github {
+  font-size: calc(var(--lg-cap) * 1.3 / 0.947); /* ≈485/512 → 15.9px */
+}
+.lg-button__icon .fa-volume-off {
+  font-size: calc(var(--lg-cap) * 1.3 / 0.766); /* 392/512 → 19.6px */
+}
+
+/* Material Symbols take the same formula with the design
+   grid's live-area fraction (≈ 20 of 24 units → 0.83): the
+   Journalism glyph in glass buttons, and the Background
+   pill's contrast pair. The font stays the variable font,
+   instances stay weight 500 / opsz 20 at their own rules. */
+.lg-button__icon .journalism-icon,
+.theme-pill-ms {
+  font-size: calc(var(--lg-cap) * 1.3 / 0.83);
+}

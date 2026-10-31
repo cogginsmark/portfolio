@@ -18,18 +18,6 @@
    em, so it scales with the type it sits next to instead of being
    re-tuned per component. */
 
-/* Liquid Glass: FontAwesome glyphs seated in a library icon box
-   (patch 003) — the package stylesheet stretches svg and mask
-   children of .lg-button__icon to fill the box, so font glyphs
-   take their balanced size explicitly, the same 18px patch 002
-   set for the StyledButton instances. This rule covers buttons
-   rendered by the library's own components — the Videos sound
-   pill is the first. */
-.lg-button__icon > i {
-  font-size: 18px;
-  line-height: 1;
-}
-
 :root {
   /* Liquid Glass (branch feat/liquid-glass): the library's font
      token mapped to the site's Manrope stack — the one mapping the

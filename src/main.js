@@ -8,6 +8,10 @@ import { initTheme } from './theme.js'
 // components live under src/components/liquid-glass/ — a direct
 // translation of the library's React components, engine included.
 import '@zakisheriff/liquid-glass/styles.css'
+// This port's own optical balancing layer (patch 005): cap-height
+// derived padding and glyph sizing for the library's pills,
+// imported with the port, after the package stylesheet.
+import './components/liquid-glass/optical.css'
 import './assets/global.css'
 import './assets/text.css'
 

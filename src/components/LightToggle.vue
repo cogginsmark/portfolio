@@ -73,11 +73,10 @@ export default {
 
 .theme-pill-ms {
   font-family: 'Material Symbols Rounded';
-  /* Seated in the icon box (patch 003): 20px, the size the box
-     pattern uses for symbols; its weight axis was already 500,
-     and the optical size now matches the seat, as on the
-     Journalism glyph in patch 002. */
-  font-size: 20px;
+  /* Size comes from the port's optical balancing layer
+     (patch 005): cap-height derived, like every other glyph in
+     the glass pills; the instance below stays the glyph's own —
+     weight 500, opsz 20. */
   font-style: normal;
   line-height: 1;
   letter-spacing: normal;

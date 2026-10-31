@@ -110,7 +110,6 @@ export default {
   font-weight: 500;
   letter-spacing: -0.01em;
   text-transform: none;
-  padding: 0 1.75rem;
   height: var(--lg-h, 44px);
 }
 
@@ -118,21 +117,12 @@ export default {
   display: none;
 }
 
-/* The library's icon box, with this site's font glyphs in it
-   (patch 002): the package stylesheet stretches svg and
-   .lg-symbol children of .lg-button__icon to fill the box, but
-   these buttons' glyphs are webfont elements, so they are seated
-   explicitly — FontAwesome at the balanced 18px from the weight
-   check, the Material symbol at 20px (its reserved 1em square
-   scales with its font size), both centred by the box's grid. */
-.styled-button.lg-button .lg-button__icon > i {
-  font-size: 18px;
-  line-height: 1;
-}
-
-.styled-button.lg-button .lg-button__icon .journalism-icon {
-  font-size: 20px;
-}
+/* The library's icon box, with this site's font glyphs in it:
+   padding and glyph sizing for these pills live in the port's
+   optical balancing layer (patch 005,
+   components/liquid-glass/optical.css) — library first, with
+   the metrics derived from the text's cap height rather than
+   set per component here. */
 
 .styled-button.lg-button .text-button-text {
   margin-right: 0;
@@ -169,13 +159,6 @@ export default {
     line-height: 1.6rem;
     /* The sweep's phone measure: 1.25rem a side. */
     padding: 0.55rem 1.25rem;
-  }
-
-  /* Glass pills keep their library height and type at this size;
-     only the inline padding steps down, to the same phone
-     measure as every other button the site makes. */
-  .styled-button.lg-button {
-    padding: 0 1.25rem;
   }
 }
 </style>
