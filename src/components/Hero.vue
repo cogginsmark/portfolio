@@ -317,12 +317,14 @@ export default {
 }
 
 @media screen and (max-width: 40rem) {
-  /* Smaller margins on phones (Mark's call, 2026-10-30):
-     the hero's breathing room tightens at both ends, and
-     the column runs wider — half the gutter at each side
-     instead of the full page line. */
+  /* Phone margins (Mark's calls, 2026-10-30): the column
+     runs wider — half the gutter at each side instead of
+     the full page line — and the vertical padding, after a
+     tighter pass, gets a step back up at both ends, still
+     inside the tablet range's 3.5/6.5. The bottom keeps
+     the larger share: the card stack overlaps into it. */
   .hero-container {
-    padding: 2rem 0 4rem;
+    padding: 3rem 0 5rem;
   }
 
   .hero-text-container {
