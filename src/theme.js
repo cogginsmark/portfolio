@@ -9,17 +9,6 @@ export const localStore = reactive({
   dark: false
 })
 
-// The mobile nav items' hitbox state (Mark's model,
-// 2026-10-30): the items start with their hitbox defined by
-// the text, and the first tap on a nav item promotes them to
-// their full button hitboxes, where they stay until a reload.
-// The Menu button is not part of it — it keeps its constant
-// box. Plain in-memory state on purpose — storage would
-// survive the reload that is supposed to reset it.
-export const navStore = reactive({
-  roomy: false
-})
-
 export const currentTheme = () => (localStore.dark ? dark : light)
 
 export const mutations = {

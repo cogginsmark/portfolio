@@ -1,5 +1,5 @@
 <template>
-  <header class="site-header" :class="{ 'is-scrolled': scrolled, 'nav-roomy': roomy }">
+  <header class="site-header" :class="{ 'is-scrolled': scrolled }">
     <div class="header-inner">
       <router-link to="/" class="brand" aria-label="Mark Coggins — home">
         <span class="brand-name">Mark Coggins</span>
@@ -27,7 +27,7 @@
         </div>
       </div>
 
-      <nav id="primary-nav" class="primary-nav" aria-label="Primary" @click="markNavUsed">
+      <nav id="primary-nav" class="primary-nav" aria-label="Primary">
         <router-link class="nav-link" to="/"><span class="nav-text" data-text="Home">Home</span></router-link>
         <router-link class="nav-link" to="/about"><span class="nav-text" data-text="About">About</span></router-link>
         <router-link class="nav-link" to="/videos"><span class="nav-text" data-text="Videos">Videos</span></router-link>
@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import { localStore, navStore } from '../theme.js'
+import { localStore } from '../theme.js'
 import LightToggle from './LightToggle.vue'
 import homeData from '../data/fixtures'
 
@@ -64,9 +64,6 @@ export default {
     isDark() {
       return localStore.dark
     },
-    roomy() {
-      return navStore.roomy
-    },
     // The Menu panel's quick actions draw on the same link
     // data as the footer (2026-10-30), so the two never drift.
     emailUrl() {
@@ -78,14 +75,6 @@ export default {
       return order
         .map((name) => homeData.footer.links.find((link) => link.name === name))
         .filter(Boolean)
-    }
-  },
-  methods: {
-    // The first tap on any menu nav item promotes the header
-    // to its full hitboxes for the rest of the load (the
-    // navStore comment in theme.js carries the model).
-    markNavUsed() {
-      navStore.roomy = true
     }
   },
   mounted() {
@@ -300,7 +289,7 @@ export default {
   font-size: 0.95rem;
   font-weight: 500;
   cursor: pointer;
-  transition: background-color 0.2s ease, box-shadow 0.25s ease;
+  transition: background-color 0.2s ease, box-shadow 0.25s ease, padding 0.25s ease;
 }
 
 /* Built like the nav links it sits beside (Mark's call,
@@ -346,9 +335,11 @@ export default {
   }
 
   .nav-link {
-    /* Text-defined hitboxes until the first nav tap (Mark's
-       model, 2026-10-30): the items rest at the close padding,
-       their targets hugging the words. */
+    /* Text-defined at rest (Mark's call, 2026-10-30: reactive
+       again): the items hug their words, and state changes —
+       becoming current, focus — grow the pill through the
+       links' own padding and weight transitions. The two-state
+       promotion tried earlier today is gone. */
     padding: 0.4rem 0.42rem;
     font-size: 0.88rem;
   }
@@ -357,39 +348,12 @@ export default {
     padding-inline: 0.5rem;
   }
 
-  /* Promoted (the .nav-roomy rules): once a nav item has been
-     tapped, the items take their full button hitboxes and
-     keep them until a reload — the growth animates once, on
-     that first tap, through the links' own padding
-     transition, and never moves again. Route changes are not
-     reloads, so the state rides along in memory. The Menu
-     button is not part of this (Mark's correction,
-     2026-10-30) — it keeps its constant box below. */
-  .site-header.nav-roomy .nav-link {
-    padding-inline: 0.5rem;
-  }
-
-  /* No hover on a phone (Mark's call, 2026-10-30): the active
-     tab makes its change as one animation when it becomes
-     current — the variable font's weight and the hitbox growth
-     running together — instead of arriving pre-grown. The
-     hidden bold twin already holds the text's width, so the
-     motion is pure padding and weight. */
+  /* The current item: full hitbox, reached reactively — the
+     base transition animates the padding and the variable
+     weight together as the item becomes current, the same
+     glide the desktop bar has always had. */
   .nav-link.router-link-exact-active {
-    /* The current item is always full size (Mark's call,
-       2026-10-30): the full .5 hitbox at rest, tapped or not —
-       the two-state model governs the other items only. And
-       no subtle settle effect on it any more: an item that is
-       always full size has nothing to grow into, so the
-       dip-and-grow keyframes are gone and the state simply
-       applies. */
     padding-inline: 0.5rem;
-    /* The general transition stays out of the weight here, so
-       becoming current never animates the bold in — the state
-       applies at once (the spacing is weight-proof regardless:
-       the hidden bold twin sizes every link at the active
-       weight from the start). */
-    transition: background-color 0.25s ease, box-shadow 0.25s ease, color 0.2s ease;
   }
 
   /* On mobile the bar's two alignments separate (Mark's spec,
@@ -408,16 +372,19 @@ export default {
 
   .nav-toggle {
     display: inline-flex;
-    justify-content: center;
-    /* The Menu button stands outside the two-state model
-       (Mark's correction, 2026-10-30: the menu nav was fine):
-       it keeps its one constant box — the full hitbox padding
-       and a measure fitted to the wider word — so Menu and
-       Close swap inside a stable target and its taps never
-       move anything. */
-    padding: 0.4rem 0.5rem;
-    min-width: 3.75rem;
+    /* Text spacing at rest; opening grows it (below). */
+    padding: 0.4rem 0.15rem;
     font-size: 0.88rem;
+  }
+
+  /* Open, the button reads Close — and expands its hotbox to
+     the full hitbox (Mark's call, 2026-10-30, restored after
+     the constant-box detour: the menu-to-Close growth was
+     better): the wider word gets the nav items' own padding
+     to sit in, and the target grows with it. The base rule's
+     transition animates the growth. */
+  .nav-toggle[aria-expanded="true"] {
+    padding-inline: 0.5rem;
   }
 
   .theme-toggle-label {
