@@ -11,7 +11,7 @@
           class="nav-toggle"
           :aria-expanded="open ? 'true' : 'false'"
           aria-controls="menu-panel"
-          @click="markNavUsed(); open = !open"
+          @click="open = !open"
         >
           <span class="nav-toggle-label">{{ open ? 'Close' : 'Menu' }}</span>
         </button>
@@ -19,7 +19,7 @@
         <div id="menu-panel" class="switch-wrap" :class="{ 'is-open': open }">
           <LightToggle><span class="theme-toggle-label">{{ isDark ? 'Dark' : 'Light' }} mode</span></LightToggle>
 
-          <nav class="panel-links" aria-label="Quick actions" @click="markNavUsed(); open = false">
+          <nav class="panel-links" aria-label="Quick actions" @click="open = false">
             <a class="panel-link" href="/cv.pdf" target="_blank" rel="noopener"><span>Resume / CV</span></a>
             <a class="panel-link" :href="emailUrl"><span>Email</span></a>
             <a v-for="link in socialLinks" :key="link.name" class="panel-link" :href="link.url" target="_blank" rel="noopener"><span>{{ link.name }}</span></a>
@@ -357,23 +357,20 @@ export default {
     padding-inline: 0.5rem;
   }
 
-  /* Promoted (the .nav-roomy rules): once any menu nav item
-     has been tapped, the whole header takes its full button
-     hitboxes and keeps them until a reload — the growth
-     animates once, on that first tap, through the links' own
-     padding transition, and never moves again. Route changes
-     are not reloads, so the state rides along in memory. */
+  /* Promoted (the .nav-roomy rules): once a nav item has been
+     tapped, the items take their full button hitboxes and
+     keep them until a reload — the growth animates once, on
+     that first tap, through the links' own padding
+     transition, and never moves again. Route changes are not
+     reloads, so the state rides along in memory. The Menu
+     button is not part of this (Mark's correction,
+     2026-10-30) — it keeps its constant box below. */
   .site-header.nav-roomy .nav-link {
     padding-inline: 0.5rem;
   }
 
   .site-header.nav-roomy .nav-link.router-link-exact-active {
     animation-name: nav-active-in-roomy;
-  }
-
-  .site-header.nav-roomy .nav-toggle {
-    padding-inline: 0.5rem;
-    min-width: 3.75rem;
   }
 
   /* No hover on a phone (Mark's call, 2026-10-30): the active
@@ -411,18 +408,15 @@ export default {
   .nav-toggle {
     display: inline-flex;
     justify-content: center;
-    /* Text-defined like the links (Mark's model, 2026-10-30),
-       superseding the constant full box tried earlier today:
-       tight spacing on load, with the measure already fitted
-       to the wider word so Menu and Close swap inside one
-       stable box and a tap never moves the target. The
-       .nav-roomy rule promotes it to the full hitbox on the
-       first nav tap; padding and measure transition here so
-       that single promotion is one smooth growth. */
-    padding: 0.4rem 0.15rem;
-    min-width: 2.65rem;
+    /* The Menu button stands outside the two-state model
+       (Mark's correction, 2026-10-30: the menu nav was fine):
+       it keeps its one constant box — the full hitbox padding
+       and a measure fitted to the wider word — so Menu and
+       Close swap inside a stable target and its taps never
+       move anything. */
+    padding: 0.4rem 0.5rem;
+    min-width: 3.75rem;
     font-size: 0.88rem;
-    transition: background-color 0.2s ease, box-shadow 0.25s ease, padding 0.25s ease, min-width 0.25s ease;
   }
 
   .theme-toggle-label {
