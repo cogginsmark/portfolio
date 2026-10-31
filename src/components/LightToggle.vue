@@ -23,10 +23,11 @@ import { localStore, toggleTheme } from '../theme.js'
 // target, a state that reads at a glance, and a pressed state
 // assistive tech announces. In the Menu panel the control is
 // a Background item instead (Mark's call, 2026-10-30): the
-// slot carries a fixed "Background" label and the dark_mode
-// symbol, and the pill's own swapping icon and word stand
-// down there (SiteHeader's styles), so nothing about the
-// item's face changes on toggle.
+// slot carries a fixed "Background" label and a circle of
+// the current background colour (the reader-apps pattern),
+// and the pill's own swapping icon and word stand down there
+// (SiteHeader's styles), so nothing about the item's face
+// changes on toggle.
 export default {
   name: 'LightToggle',
   computed: {
