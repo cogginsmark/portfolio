@@ -88,8 +88,16 @@ export default {
 /* Glass variant: the library owns the surface (fill, blur, edge,
    shadow, typography); the legacy declarations above are stood down
    where they would fight it. (Carried over from the first Liquid
-   Glass pass, fd70778; the surface metrics are unchanged, only the
-   engine underneath them is now the library's own.) */
+   Glass pass, fd70778; the engine underneath them is now the
+   library's own.) One metric is deliberately NOT the library's:
+   the inline padding. Its 0.42 × height measure (~1.16rem) sat
+   under the site-wide pill sweep and crowded the trailing icons
+   these buttons carry (Mark's report from the branch preview,
+   2026-10-31), so glass pills take the sweep's own measures —
+   1.75rem a side here, 1.25rem in the phone block below — and
+   the text-to-icon gap is the site's standing 0.5em (the
+   .text-button-text margin in text.css, stood down below),
+   stated on the label that now carries the spacing. */
 .styled-button.lg-button {
   background: transparent;
   box-shadow: var(--lg-glass-shadow, var(--lg-shadow)), inset 0 0 0 0.5px var(--lg-edge);
@@ -98,12 +106,16 @@ export default {
   font-weight: 500;
   letter-spacing: -0.01em;
   text-transform: none;
-  padding: 0 calc(var(--lg-h, 44px) * 0.42);
+  padding: 0 1.75rem;
   height: var(--lg-h, 44px);
 }
 
 .styled-button.lg-button::before {
   display: none;
+}
+
+.styled-button.lg-button .lg-button__label {
+  gap: 0.5em;
 }
 
 .styled-button.lg-button .text-button-text {
@@ -141,6 +153,13 @@ export default {
     line-height: 1.6rem;
     /* The sweep's phone measure: 1.25rem a side. */
     padding: 0.55rem 1.25rem;
+  }
+
+  /* Glass pills keep their library height and type at this size;
+     only the inline padding steps down, to the same phone
+     measure as every other button the site makes. */
+  .styled-button.lg-button {
+    padding: 0 1.25rem;
   }
 }
 </style>

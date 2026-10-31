@@ -297,7 +297,17 @@ export default {
      fill, backdrop blur/saturate, edge, shadow — comes from the
      library's .lg-glass on the header element, so the bar's old
      background/backdrop declarations stand down; the hairline
-     bottom border stays as the site's own divider. */
+     bottom border stays as the site's own divider. The library's
+     own edge treatment stands down with them (Mark's report from
+     the branch preview, 2026-10-31: an inner glow/stroke in dark
+     theme): its inset 0.5px ring and rim-light gradient are tuned
+     for small floating pieces, and on this full-width bar they
+     read as a second, inner border stacked on the site's own.
+     Its resting drop shadow goes too — the bar's only shadow is
+     the scrolled one below. The glass fill and blur stay. */
+  --lg-edge: transparent;
+  --lg-rim-opacity: 0;
+  --lg-glass-shadow: 0 0 0 0 rgb(0 0 0 / 0);
   border-bottom: 1px solid color-mix(in srgb, var(--main-color) 10%, transparent);
   transition: box-shadow 0.25s ease;
 }
