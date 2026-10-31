@@ -18,10 +18,11 @@ export const localStore = reactive({
 // bold text alone — its pill appears only after a nav item
 // has been clicked (set in the header's click handler, never
 // by a route change alone), and stays for the session. The
-// pill never expands: it is a background only, at the item's
-// constant padding — it arrives at full strength, holds a
-// beat, then settles to a quieter standing pill at a reduced
-// background opacity, which the item keeps.
+// pill is one travelling element under the current item, at
+// its full hitbox measure: it springs in on the first click,
+// travels to the next item when the page changes (duration
+// from the distance, at a constant velocity), and dims to a
+// reduced standing opacity after its beat.
 // Both are in-memory only; a page reload resets them.
 export const navStore = reactive({
   centered: false,

@@ -31,7 +31,8 @@
         </div>
       </div>
 
-      <nav id="primary-nav" class="primary-nav" aria-label="Primary" @click="markNavTapped" @animationend="onNavPillSettled">
+      <nav id="primary-nav" class="primary-nav" aria-label="Primary" @click="markNavTapped">
+        <span class="nav-pill" ref="navPill" aria-hidden="true" :class="{ 'is-shown': pillShow, 'is-dim': pillDim }" :style="{ left: pillX + 'px', width: pillW + 'px' }"></span>
         <router-link class="nav-link" to="/"><span class="nav-text" data-text="Home">Home</span></router-link>
         <router-link class="nav-link" to="/about"><span class="nav-text" data-text="About">About</span></router-link>
         <router-link class="nav-link" to="/videos"><span class="nav-text" data-text="Videos">Videos</span></router-link>
@@ -69,7 +70,16 @@ export default {
     // watcher uses this flag to say so (2026-10-30 fix: with
     // the first firing counted, the active pill appeared on
     // every cold load, defeating the standing state).
-    routeReady: false
+    routeReady: false,
+    // The travelling pill's committed geometry (its
+    // animations FLIP from these values) and its light
+    // state: shown once a nav item has been clicked, at
+    // full strength, then dimmed to the reduced standing
+    // opacity after its beat.
+    pillX: 0,
+    pillW: 0,
+    pillShow: false,
+    pillDim: false
   }),
   computed: {
     isDark() {
@@ -104,6 +114,11 @@ export default {
       // 2026-10-30): from here on the current item wears its
       // pill, not just its bold text.
       navStore.navigated = true
+      // The pill answers the tap: it springs in at the
+      // tapped item (or brightens where it stands, when the
+      // tap is on the current page's own item — the route
+      // watcher runs the travel when the page changes).
+      this.$nextTick(() => this.updatePill(true))
       if (!window.matchMedia('(max-width: 40rem)').matches) return
       // Home is the layout's home (Mark's call, 2026-10-30):
       // tapping through to it restores the as-is alignment and
@@ -145,19 +160,70 @@ export default {
         )
       })
     },
-    onNavPillSettled(event) {
-      // The arrival has finished: hand its end state (the
-      // reduced standing pill) to a real class with the
-      // same values and stand the animation down. While the animation's fill was the last word,
-      // it outranked every hover style and the pill snapped
-      // instead of transitioning (Mark's bug report,
-      // 2026-10-30); as plain styles, the settled values
-      // transition smoothly in and out of hover from here.
-      if (!event.animationName || !event.animationName.startsWith('nav-pill-fade')) return
-      const link = event.target
-      if (link.classList && link.classList.contains('router-link-exact-active')) {
-        link.classList.add('pill-settled')
+    updatePill(travel) {
+      const nav = document.getElementById('primary-nav')
+      const pill = this.$refs.navPill
+      if (!nav || !pill) return
+      const active = nav.querySelector('.router-link-exact-active')
+      if (!navStore.navigated || !active) {
+        this.pillShow = false
+        return
       }
+      // The pill's end state is the item's full hitbox
+      // (Mark's model): the item's own box plus the
+      // expansion a state pill used to grow into — .65rem a
+      // side at desktop widths, .3rem on mobile, matching
+      // the measures the per-item pills had.
+      const extra = window.matchMedia('(max-width: 40rem)').matches ? 5.4 : 11.7
+      const toX = active.offsetLeft - extra
+      const toW = active.offsetWidth + extra * 2
+      const fromX = this.pillX
+      const fromW = this.pillW
+      const firstShow = !this.pillShow
+      this.pillX = toX
+      this.pillW = toW
+      this.pillShow = true
+      this.pillDim = false
+      if (this.pillDimTimer) clearTimeout(this.pillDimTimer)
+      this.pillDimTimer = setTimeout(() => { this.pillDim = true }, 950)
+      const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+      if (reduced || typeof pill.animate !== 'function') return
+      if (firstShow) {
+        // The spring appear (Mark's call, 2026-10-30 — the
+        // one the collapsed Menu icon's pill background
+        // makes): the pill grows from the item's text box
+        // to its full hitbox with a spring's overshoot.
+        const startX = active.offsetLeft
+        const startW = active.offsetWidth
+        this.$nextTick(() => {
+          pill.animate(
+            [
+              { transform: `translateX(${startX - toX}px)`, width: `${startW}px`, opacity: 0 },
+              { transform: 'translateX(0px)', width: `${toW}px`, opacity: 1 }
+            ],
+            { duration: 480, easing: 'cubic-bezier(0.34, 1.45, 0.64, 1)' }
+          )
+        })
+        return
+      }
+      if (!travel) return
+      const dist = Math.abs((toX + toW / 2) - (fromX + fromW / 2))
+      if (!dist) return
+      // Travel at a constant velocity (Mark's call,
+      // 2026-10-30): the duration is the distance at
+      // 1.1px per millisecond, clamped so a short hop
+      // still reads and a full traverse never dawdles —
+      // with a spring kept in the landing.
+      const duration = Math.min(600, Math.max(180, dist / 1.1))
+      this.$nextTick(() => {
+        pill.animate(
+          [
+            { transform: `translateX(${fromX - toX}px)`, width: `${fromW}px` },
+            { transform: 'translateX(0px)', width: `${toW}px` }
+          ],
+          { duration, easing: 'cubic-bezier(0.3, 1.25, 0.4, 1)' }
+        )
+      })
     }
   },
   mounted() {
@@ -166,24 +232,31 @@ export default {
     }
     this.onScroll()
     window.addEventListener('scroll', this.onScroll, { passive: true })
+    // The pill's geometry is measured from the live row:
+    // keep it honest across resizes and the font's arrival.
+    this.onResizePill = () => this.updatePill(false)
+    window.addEventListener('resize', this.onResizePill)
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(() => this.updatePill(false))
+    }
   },
   beforeUnmount() {
     window.removeEventListener('scroll', this.onScroll)
+    window.removeEventListener('resize', this.onResizePill)
+    if (this.pillDimTimer) clearTimeout(this.pillDimTimer)
   },
   watch: {
     $route() {
       this.open = false
       // Any route change after the initial resolution is
-      // navigation (a back swipe included): the pill state
-      // holds from here on. The first firing is the router
-      // settling onto the loaded page, not a navigation.
+      // navigation (a back swipe included): the pill follows
+      // the active item, travelling to it. The first firing
+      // is the router settling onto the loaded page, not a
+      // navigation. The navigated state itself is set only
+      // by a click on a nav item (markNavTapped) — never by
+      // the route changing on its own.
       if (this.routeReady) {
-        // A fresh arrival gets a fresh arrival: clear any
-        // settled state so the incoming page's pill can play
-        // its animation again. The navigated state itself is
-        // set only by a click on a nav item (markNavTapped) —
-        // never by the route changing on its own.
-        this.$el.querySelectorAll('.pill-settled').forEach((el) => el.classList.remove('pill-settled'))
+        this.$nextTick(() => this.updatePill(true))
       }
       this.routeReady = true
       // Arriving home by any route — the brand, a back swipe —
@@ -238,22 +311,25 @@ export default {
 }
 
 .primary-nav {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 0.35rem;
 }
 
 .nav-link {
+  position: relative;
+  z-index: 1;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   color: var(--main-color);
   /* At rest the links are spaced by their text: a whisper of
      inline padding and the row reads as words, not buttons.
-     When a link is hovered, focused or current, its pill grows
-     to the full hitbox padding and the row shifts to make room
-     (Mark's feature, 2026-10-30) — the padding transition below
-     is what makes the shift glide instead of jump. */
+     The padding never changes — the current item's hitbox
+     is drawn by the travelling pill underneath it (below),
+     which expands to the full hitbox measure around the
+     word. */
   padding: 0.45rem 0.25rem;
   -webkit-tap-highlight-color: transparent;
   border-radius: 999px;
@@ -300,76 +376,47 @@ export default {
 }
 
 @media (hover: hover) {
-  /* While the current item is keyboard-focused, its arrival
-     stands down — the pill is being interacted with, so it
-     stays at full strength. Leaving lets the finished
-     arrival's end state resume. (There is no hover pill:
-     the pill appears only after a nav item is clicked.) */
-  .site-header.has-navigated .nav-link.router-link-exact-active:focus-visible {
-    animation: none;
-  }
-
   .nav-toggle:hover {
     background: color-mix(in srgb, var(--main-color) 8%, transparent);
   }
 }
 
 /* The current page is always carried by the bold text — that
-   is its standing position, on load and after. The pill
-   itself (the faded fill and ring) joins only once the
-   header has navigated, per the model above. */
+   is its standing position, on load and after. */
 .nav-link.router-link-exact-active {
   color: var(--main-color);
   font-weight: 700;
   transition: background-color 0.25s ease, box-shadow 0.25s ease, color 0.2s ease, padding 0.25s ease, font-weight 0.25s ease;
 }
 
-.site-header.has-navigated .nav-link.router-link-exact-active {
+/* The pill is one travelling element (Mark's model,
+   2026-10-30): a single background that lives under the
+   current item at its full hitbox measure. It appears only
+   after a nav item has been clicked — springing in from the
+   item's text box the way the collapsed Menu icon's pill
+   does — and when the current page changes it travels to
+   the next item, its duration set by the distance at a
+   constant velocity, with a spring in the landing. At rest
+   it dims to the reduced standing opacity. */
+.nav-pill {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  border-radius: 999px;
   background: color-mix(in srgb, var(--main-color) 6%, transparent);
   box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--main-color) 12%, transparent);
-  /* The pill arrives at full strength, then settles to a
-     quieter standing state (Mark's call, 2026-10-30): the
-     current item keeps its pill, at a reduced background
-     opacity, instead of giving it up and standing as bold
-     text alone. */
-  animation: nav-pill-fade 1.6s ease forwards;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease, background-color 0.35s ease, box-shadow 0.35s ease;
 }
 
-@keyframes nav-pill-fade {
-  /* The pill's background arrives the way the Menu toggle's
-     does (Mark's call, 2026-10-30) — the fill and ring fade
-     in, hold a beat at full strength, then dim to the
-     reduced standing pill. The padding never takes part
-     (Mark's call, 2026-10-30): the pill is a background at
-     a constant size — the items' padding is the same
-     before, during and after the arrival. */
-  0% {
-    background-color: transparent;
-    box-shadow: inset 0 0 0 1px transparent;
-  }
-  22%, 58% {
-    background-color: color-mix(in srgb, var(--main-color) 6%, transparent);
-    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--main-color) 12%, transparent);
-  }
-  100% {
-    background-color: color-mix(in srgb, var(--main-color) 3%, transparent);
-    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--main-color) 6%, transparent);
-  }
+.nav-pill.is-shown {
+  opacity: 1;
 }
 
-/* The settled state (see onNavPillSettled): the arrival's
-   end values — the reduced standing pill — as plain styles,
-   animation stood down, so the focus transitions run
-   smoothly from here. */
-.site-header.has-navigated .nav-link.router-link-exact-active.pill-settled {
-  animation: none;
+.nav-pill.is-dim {
   background: color-mix(in srgb, var(--main-color) 3%, transparent);
   box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--main-color) 6%, transparent);
-}
-
-.site-header.has-navigated .nav-link.router-link-exact-active.pill-settled:focus-visible {
-  background: color-mix(in srgb, var(--main-color) 6%, transparent);
-  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--main-color) 12%, transparent);
 }
 
 /* The Menu button and the theme switch share a wrapper so the
@@ -480,32 +527,6 @@ export default {
 
   .nav-link:focus-visible {
     background: color-mix(in srgb, var(--main-color) 8%, transparent);
-  }
-
-  /* The current item's pill, once a nav item has been
-     clicked: the background arrival only — its padding
-     never changes. Before any click the item stands as
-     bold text at its text spacing. */
-  .site-header.has-navigated .nav-link.router-link-exact-active {
-    animation: nav-pill-fade-mobile 1.6s ease forwards;
-  }
-
-  @keyframes nav-pill-fade-mobile {
-    /* Background only, as on desktop: the padding never
-       takes part — the pill is a background at a constant
-       size. */
-    0% {
-      background-color: transparent;
-      box-shadow: inset 0 0 0 1px transparent;
-    }
-    22%, 58% {
-      background-color: color-mix(in srgb, var(--main-color) 6%, transparent);
-      box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--main-color) 12%, transparent);
-    }
-    100% {
-      background-color: color-mix(in srgb, var(--main-color) 3%, transparent);
-      box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--main-color) 6%, transparent);
-    }
   }
 
   /* On mobile the bar's two alignments separate (Mark's spec,
@@ -741,14 +762,9 @@ export default {
   .nav-toggle,
   .nav-toggle-label,
   .nav-toggle-glyph,
-  .primary-nav {
+  .primary-nav,
+  .nav-pill {
     transition: none;
-  }
-
-  /* No arrival fade under reduced motion: the navigated
-     pill simply stays, as it did before the fade. */
-  .site-header.has-navigated .nav-link.router-link-exact-active {
-    animation: none;
   }
 }
 </style>
