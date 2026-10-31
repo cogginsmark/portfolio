@@ -53,7 +53,7 @@
             </div>
           </div>
         </div>
-        <p class="logo-list-text">{{ (logoSection.logos || []).slice(0,3).map((logo) => logo.alt).join(' · ') }}</p>
+        <p class="logo-list-text"><template v-for="(logo, i) in (logoSection.logos || []).slice(0, 3)" :key="logo.alt"><span class="logo-list-name">{{ logo.alt }}</span><span v-if="i < (logoSection.logos || []).slice(0, 3).length - 1" class="logo-list-sep" aria-hidden="true"> · </span></template></p>
       </div>
     </div>
     <foot v-bind:author="author" v-bind:footer="footer" />
@@ -222,30 +222,17 @@ export default {
   }
 }
 
-/* On phones the list goes vertical (Mark's call, 2026-10-30):
-   no marquee — the marks stack in a centred column, the
-   duplicated set and the text line retire. */
+/* On phones the marquee keeps rotating (Mark's correction,
+   2026-10-30: his vertical call was about the text line, not
+   the marks — an earlier pass stacked the logos themselves
+   and retired the marquee, which was the wrong read). What
+   stacks is the exact-list line beneath: one name per line,
+   the separators retired. */
 @media screen and (max-width: 40rem) {
-  .logo-container {
-    overflow: visible;
-    -webkit-mask-image: none;
-    mask-image: none;
+  .logo-list-name {
+    display: block;
   }
-  .logo-track {
-    display: flex;
-    flex-direction: column;
-    width: auto;
-    animation: none;
-  }
-  .logo-set {
-    flex-direction: column;
-    align-items: center;
-    gap: 1.75rem;
-  }
-  .logo-set + .logo-set {
-    display: none;
-  }
-  .logo-list-text {
+  .logo-list-sep {
     display: none;
   }
 }
