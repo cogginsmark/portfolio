@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <div class="page-background" aria-hidden="true"></div>
+    <div class="watercolor-layer" :class="{ 'is-on': $route.path !== '/' }" aria-hidden="true"></div>
     <a class="skip-link" href="#main">Skip to content</a>
     <SiteHeader />
     <main id="main">
@@ -77,6 +78,34 @@ export default {
   }
 }
 
+/* The watercolor stays present past Home (Mark's call,
+   2026-10-30): this fixed layer paints the same cover the hero
+   uses, over the gradient and behind the content. On Home it
+   rests at zero — the hero carries the picture there at full
+   strength — and on every other page it fades to 70%, the
+   opacity transition doing the fading as the route changes.
+   The light theme's inverted painting is set in global.css,
+   beside the hero's own. */
+.watercolor-layer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  height: 100lvh;
+  z-index: -1;
+  background-image: var(--hero-background-image);
+  background-size: cover;
+  background-position: 50%;
+  opacity: 0;
+  transition: opacity 0.45s ease;
+  pointer-events: none;
+}
+
+.watercolor-layer.is-on {
+  opacity: 0.7;
+}
+
 /* Sticky-footer shell: the column always fills the viewport, <main>
    takes whatever height is left, and each routed page stretches to
    fill it — so on short pages the footer ends at the bottom of the
@@ -134,7 +163,8 @@ export default {
 @media (prefers-reduced-motion: reduce) {
   .page-enter-active,
   .page-leave-active,
-  .skip-link {
+  .skip-link,
+  .watercolor-layer {
     transition: none;
   }
 

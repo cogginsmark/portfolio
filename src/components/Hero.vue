@@ -124,7 +124,13 @@ export default {
 @media screen and (max-width: 980px) {
   .hero-background::before {
     background-position: 60% -45px;
-    background-size: inherit;
+    /* Cover, explicitly (2026-10-30 fix): this rule used to say
+       "inherit", which once picked up the element's own cover
+       sizing — but the image lives on this pseudo-element now
+       and the element itself carries no background-size, so
+       inherit resolved to auto and phones painted the wash at
+       its natural 1920px size, a wrong zoomed slice. */
+    background-size: cover;
   }
 }
 

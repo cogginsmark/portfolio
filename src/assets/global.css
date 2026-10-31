@@ -137,6 +137,17 @@ a {
 @media screen and (max-width: 61.25rem) {
   :root[data-theme="light"] .hero-background::before {
     background-position: 60% -2.8125rem;
-    background-size: inherit;
+    /* Cover, not inherit (2026-10-30): inherit resolved to
+       auto here too — see the note in Hero.vue. */
+    background-size: cover;
   }
+}
+
+/* The watercolor's second home (Mark's call, 2026-10-30): a
+   shell layer in App.vue keeps the wash present on the other
+   pages at 70% opacity. In the light theme it is the same
+   inverted dark cover the hero paints. */
+:root[data-theme="light"] .watercolor-layer {
+  background-image: url("/falcon-dark-minus-50-brightness2.webp");
+  filter: invert(1);
 }
