@@ -330,14 +330,13 @@ export default {
      motion is pure padding and weight. */
   .nav-link.router-link-exact-active {
     animation: nav-active-in 0.3s ease;
-    /* The keyframes own the weight while the tab becomes
-       current, so the general transition stays out of it here:
-       run together, animation and transition recalculated
-       against each other and the change stuttered (Mark's
-       report, 2026-10-30). Since the size swap the padding
-       rests at full size anyway; the spacing is weight-proof —
-       the hidden bold twin sizes every link at the active
-       weight from the start. */
+    /* The keyframes own the weight and the last fraction of
+       padding while the tab becomes current, so the general
+       transition stays out of those here: run together,
+       animation and transition recalculated against each other
+       and the change stuttered (Mark's report, 2026-10-30).
+       The spacing is weight-proof — the hidden bold twin sizes
+       every link at the active weight from the start. */
     transition: background-color 0.25s ease, box-shadow 0.25s ease, color 0.2s ease;
   }
 
@@ -420,14 +419,16 @@ export default {
 }
 
 @keyframes nav-active-in {
-  /* Weight alone now (2026-10-30): since the size swap the
-     mobile links rest at their full hitbox, so there is no
-     padding left to grow — the motion is the variable weight
-     arriving. */
+  /* The growth is back, kept subtle (Mark's call, 2026-10-30):
+     since the size swap the links rest at their full hitbox,
+     so the incoming tab dips a touch under it and grows the
+     last fraction into place alongside the weight. */
   from {
+    padding-inline: 0.42rem;
     font-weight: 400;
   }
   to {
+    padding-inline: 0.5rem;
     font-weight: 700;
   }
 }
