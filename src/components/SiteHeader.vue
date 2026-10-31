@@ -264,7 +264,7 @@ export default {
   font-size: 0.95rem;
   font-weight: 500;
   cursor: pointer;
-  transition: background-color 0.2s ease, box-shadow 0.25s ease;
+  transition: background-color 0.2s ease, box-shadow 0.25s ease, padding 0.25s ease;
 }
 
 /* Built like the nav links it sits beside (Mark's call,
@@ -294,10 +294,11 @@ export default {
   .header-inner {
     padding-inline: 0.9rem;
     gap: 0.5rem;
-    /* The nav items centre on their own (Mark's spec,
-       2026-10-30): the Menu item is out of the flow, floating
-       to the side — see .mobile-menu-wrap below. */
-    justify-content: center;
+    /* Trying the nav items left-aligned (Mark's call,
+       2026-10-30): they sit on the bar's left padding line;
+       the Menu item stays floated right, out of the flow —
+       see .mobile-menu-wrap below. */
+    justify-content: flex-start;
   }
 
   .primary-nav {
@@ -360,6 +361,15 @@ export default {
        takes the text spacing the nav items used to rest at. */
     padding: 0.4rem 0.15rem;
     font-size: 0.88rem;
+  }
+
+  /* Open, the button reads Close — and expands its hotbox to
+     the full hitbox (Mark's call, 2026-10-30): the wider word
+     gets the nav items' own padding to sit in, and the target
+     grows with it. The base rule's transition animates the
+     growth. */
+  .nav-toggle[aria-expanded="true"] {
+    padding-inline: 0.5rem;
   }
 
   .theme-toggle-label {
