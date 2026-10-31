@@ -263,8 +263,9 @@ export default {
   .header-inner {
     padding-inline: 0.9rem;
     gap: 0.5rem;
-    /* The mobile bar centres its cluster — Menu and links
-       together (Mark's call, 2026-10-30). */
+    /* The nav items centre on their own (Mark's spec,
+       2026-10-30): the Menu item is out of the flow, floating
+       to the side — see .mobile-menu-wrap below. */
     justify-content: center;
   }
 
@@ -306,11 +307,17 @@ export default {
     transition: background-color 0.25s ease, box-shadow 0.25s ease, color 0.2s ease;
   }
 
-  /* On mobile the wrapper takes the bar's first slot and the
-     positioning hook; the button just fills it. */
+  /* On mobile the bar's two alignments separate (Mark's spec,
+     2026-10-30): the nav items centre on their own, and the
+     Menu item floats to the side — out of the flow, pinned to
+     the bar's left edge on its padding line and centred
+     vertically. The wrapper stays the panel's hook: positioned
+     here, it carries the dropdown with the button. */
   .mobile-menu-wrap {
-    order: 0;
-    position: relative;
+    position: absolute;
+    left: 0.9rem;
+    top: 50%;
+    transform: translateY(-50%);
   }
 
   .nav-toggle {
@@ -328,6 +335,9 @@ export default {
     font-size: 0.95rem;
     font-weight: 600;
     letter-spacing: 0.01em;
+    /* One line in the popup (Mark's call, 2026-10-30): "Light
+       mode" never wraps; the panel sizes to fit it. */
+    white-space: nowrap;
   }
 
   /* The Menu panel holds only the switch now. It stays opaque like
@@ -345,8 +355,9 @@ export default {
        loose in the header. One border all around, a solid
        surface — the theme's fallback colour — no gradient. The
        drop clears the bar by the same half rem as before: the
-       extra .65 is the bar's own bottom padding, which the
-       wrapper does not span. */
+       extra .65 covers the stretch from the centred wrapper's
+       bottom edge down to the bar's bottom, which the wrapper
+       does not span. */
     top: calc(100% + 0.5rem + 0.65rem);
     left: 0;
     margin: 0;
