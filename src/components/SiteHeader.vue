@@ -14,8 +14,10 @@
           :aria-label="open ? 'Close menu' : 'Open menu'"
           @click="open = !open"
         >
-          <span v-if="!navCentered" class="nav-toggle-label">{{ open ? 'Close' : 'Menu' }}</span>
-          <span v-else class="nav-toggle-glyph" aria-hidden="true">…</span>
+          <span class="nav-toggle-stack">
+            <span class="nav-toggle-label">{{ open ? 'Close' : 'Menu' }}</span>
+            <span class="nav-toggle-glyph" aria-hidden="true">…</span>
+          </span>
         </button>
 
         <div id="menu-panel" class="switch-wrap" :class="{ 'is-open': open }">
@@ -306,7 +308,12 @@ export default {
   .nav-link:hover {
     background: color-mix(in srgb, var(--main-color) 8%, transparent);
     padding-inline: 0.9rem;
-    transition: background-color 0.18s ease, color 0.2s ease, padding 0.25s ease, font-weight 0.25s ease;
+    /* The font readies itself for the pill (Mark's call,
+       2026-10-30): the variable weight springs up to bold on
+       hover — the bold twins already hold every link at its
+       bold width, so the growth never reflows the row. */
+    font-weight: 700;
+    transition: background-color 0.18s ease, color 0.2s ease, padding 0.25s ease, font-weight 0.45s cubic-bezier(0.34, 1.35, 0.64, 1);
   }
 
   /* While the current item is hovered or keyboard-focused,
@@ -318,14 +325,16 @@ export default {
     animation: none;
   }
 
-  /* Hovering the nav area itself brings the current item's
-     pill back (Mark's call, 2026-10-30) — after its arrival
-     fade has settled it to bold text, the pill returns while
-     the pointer is anywhere over the nav contents, and goes
-     again when the pointer leaves. This rule sits before the
-     settled item's own hover rule below so that hovering the
-     item itself still wins with the stronger fill. */
-  .site-header.has-navigated .primary-nav:hover .nav-link.router-link-exact-active {
+  /* Hovering the header brings the current item's pill back
+     (Mark's call, 2026-10-30, widened from the nav area to
+     the whole bar the same day) — after its arrival fade has
+     settled it to bold text, the pill returns while the
+     pointer is anywhere over the header, and goes again when
+     the pointer leaves. The element in the chain keeps it
+     above the settled rule; the settled item's own hover
+     rule below still wins on the item itself, with the
+     stronger fill. */
+  header.site-header.has-navigated:hover .nav-link.router-link-exact-active {
     animation: none;
     background: color-mix(in srgb, var(--main-color) 6%, transparent);
     box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--main-color) 12%, transparent);
@@ -633,13 +642,46 @@ export default {
      in the variable font, it shares the Menu word's exact
      behaviour: it rests at weight 500 and transforms to 700
      while the panel is open, the axis animating as text. */
+  /* The collapse is a morph (Mark's call, 2026-10-30): the
+     word and the glyph share one stacked cell at all times,
+     and centring crossfades them — the word squeezes and
+     drifts toward the right edge as it fades, the dots scale
+     up into its place — instead of the two swapping in a
+     cut. */
+  .nav-toggle-stack {
+    display: inline-grid;
+  }
+
+  .nav-toggle-stack > * {
+    grid-area: 1 / 1;
+  }
+
+  .nav-toggle-label {
+    justify-self: start;
+    transform-origin: right center;
+    transition: opacity 0.35s ease, transform 0.35s ease, letter-spacing 0.35s ease;
+  }
+
   .nav-toggle-glyph {
-    display: inline-block;
+    justify-self: end;
     font-size: 1.35rem;
     font-weight: 500;
     line-height: 1;
-    transform: rotate(90deg);
-    transition: font-weight 0.25s ease;
+    opacity: 0;
+    transform: rotate(90deg) scale(0.5);
+    transition: opacity 0.3s ease, transform 0.35s ease, font-weight 0.25s ease;
+  }
+
+  .site-header.nav-centered .nav-toggle-label {
+    opacity: 0;
+    transform: translateX(0.3rem) scaleX(0.6);
+    letter-spacing: -0.06em;
+  }
+
+  .site-header.nav-centered .nav-toggle-glyph {
+    opacity: 1;
+    transform: rotate(90deg) scale(1);
+    transition-delay: 0.06s, 0.06s, 0s;
   }
 
   .nav-toggle[aria-expanded="true"] .nav-toggle-glyph {
@@ -749,6 +791,8 @@ export default {
   .site-header,
   .nav-link,
   .nav-toggle,
+  .nav-toggle-label,
+  .nav-toggle-glyph,
   .primary-nav {
     transition: none;
   }

@@ -6,7 +6,7 @@
           <h1 class="text-main-title">{{name}}</h1>
           <div class="medium">{{medium}}</div>
           <div class="carousel-container" v-if="windowWidth <= 980">
-            <div v-if="images" class="carousel-shell" :class="{ 'navs-revealed': navsRevealed, 'navs-active': navsActive }" :style="{ '--nav-dur': navEffect === 'fade' ? '1200ms' : '450ms' }" @pointerdown.capture="onNavPress">
+            <div v-if="images" class="carousel-shell" :class="{ 'navs-revealed': navsRevealed, 'navs-active': navsActive }" :style="{ '--nav-dur': navEffect === 'fade' ? '1200ms' : '450ms' }" @pointerdown.capture="onNavPress" @pointerup.capture="onNavRelease">
               <div class="carousel-bed" :style="{ backgroundColor: bedColor }" aria-hidden="true"></div>
               <Carousel class="styled-carousel" :items-to-show="1" :autoplay="autoplay" :wrap-around="true" :pause-autoplay-on-hover="true" :slide-effect="navEffect" :transition="navEffect === 'fade' ? 1200 : 450" @slide-start="onSlideStart" @slide-end="onSlideEnd">
                 <Slide v-for="(image, index) in images" :key="index">
@@ -43,7 +43,7 @@
         </div>
       </div>
       <div class="carousel-container" v-if="windowWidth > 980">
-        <div v-if="images" class="carousel-shell" :class="{ 'navs-revealed': navsRevealed, 'navs-active': navsActive }" :style="{ '--nav-dur': navEffect === 'fade' ? '1200ms' : '450ms' }" @pointerdown.capture="onNavPress">
+        <div v-if="images" class="carousel-shell" :class="{ 'navs-revealed': navsRevealed, 'navs-active': navsActive }" :style="{ '--nav-dur': navEffect === 'fade' ? '1200ms' : '450ms' }" @pointerdown.capture="onNavPress" @pointerup.capture="onNavRelease">
           <div class="carousel-bed" :style="{ backgroundColor: bedColor }" aria-hidden="true"></div>
           <Carousel class="styled-carousel" :items-to-show="1" :autoplay="autoplay" :wrap-around="true" :pause-autoplay-on-hover="true" :slide-effect="navEffect" :transition="navEffect === 'fade' ? 1200 : 450" @slide-start="onSlideStart" @slide-end="onSlideEnd">
             <Slide v-for="(image, index) in images" :key="index">
@@ -118,9 +118,12 @@ export default {
         autoplay: reduceMotion ? 0 : (this.autoplayMs || 6000),
         // Autoplay crossfades; a person navigating gets a slide
         // (Mark's call, 2026-10-30). navEffect flips to 'slide'
-        // on a press of the arrows or dots and back to 'fade'
-        // when that move settles.
+        // on any press on the carousel — arrows, dots, or a
+        // touch swipe starting on a picture — and back to
+        // 'fade' when that move settles, or on release if the
+        // press never became a move.
         navEffect: 'fade',
+        pressPending: false,
         // The colour layer under the crossfade: the average
         // colour of the slide that was showing before the
         // current one (Mark's call, 2026-10-30), computed from
@@ -141,12 +144,27 @@ export default {
     onResize() {
       this.windowWidth = window.innerWidth
     },
-    onNavPress(e) {
-      if (e.target.closest('.carousel__prev, .carousel__next, .carousel__pagination-button')) {
-        this.navEffect = 'slide'
-      }
+    onNavPress() {
+      // Any press on the shell counts (Mark's call,
+      // 2026-10-30) — a touch swipe starting on a picture
+      // included, not just the chevrons and dots: manual
+      // navigation slides. Autoplay never presses, so its
+      // advances keep the fade; a press that turns into no
+      // navigation hands the fade back on release
+      // (onNavRelease below).
+      this.navEffect = 'slide'
+      this.pressPending = true
+    },
+    onNavRelease() {
+      setTimeout(() => {
+        if (this.pressPending) {
+          this.pressPending = false
+          this.navEffect = 'fade'
+        }
+      }, 250)
     },
     onSlideStart() {
+      this.pressPending = false
       this.navsRevealed = true
       this.navsActive = true
     },
