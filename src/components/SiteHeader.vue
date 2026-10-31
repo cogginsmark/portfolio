@@ -425,15 +425,19 @@ export default {
   padding-inline: 1.25rem;
 }
 
-/* The row's left end holds one-sided padding at rest
-   (Mark's call, 2026-10-30): with no pill under it, Home
-   keeps its left padding only — that padding pins the
-   word's distance from the bar's left line, and the
-   spacing on to the next item is the row's gap alone.
-   When the pill is Home's, the gated rule above outranks
-   this and the full capsule returns. (The pill element is
-   a span, so the first link is the first of its type.) */
+/* The row's left end is ANCHORED (Mark's call, 2026-10-30):
+   with no pill under it, Home's left padding is the pill's
+   own full measure and its right padding is nothing — the
+   anchor side never changes, so when the pill is added it
+   grows only on the inner side (the right padding and the
+   background arrive; About makes room) and the Home word
+   itself cannot shift. The spacing on to the next item at
+   rest is the row's gap alone. When the pill is Home's the
+   gated rule above supplies the same left measure and the
+   capsule's right side. (The pill element is a span, so
+   the first link is the first of its type.) */
 .primary-nav > .nav-link:first-of-type {
+  padding-left: 1.25rem;
   padding-right: 0;
 }
 
@@ -595,6 +599,12 @@ export default {
     padding-inline: 0.75rem;
   }
 
+  /* Home's anchor at this width: the pill's own measure on
+     the left, nothing on the right (see the base rule). */
+  .primary-nav > .nav-link:first-of-type {
+    padding-left: 0.75rem;
+  }
+
   /* And the gaps between the items open with it (Mark's
      call, 2026-10-30), from the tight resting .1rem the
      pill effect wanted to a breathed .3rem. The centred
@@ -622,12 +632,14 @@ export default {
     display: inline-flex;
     /* Text spacing at rest; opening grows it (below). The
        word matches the links' restored 1rem. The rest
-       padding is right-side only (Mark's call, 2026-10-30):
-       the wrap is anchored to the bar's right line, so the
-       right padding pins the word's distance from the edge
-       and the left carries none until the Close pill grows
-       it — the mirror of Home's left-only rest padding. */
-    padding: 0.55rem 0.15rem 0.55rem 0;
+       padding is right-side only AND at the Close pill's
+       full measure (Mark's call, 2026-10-30 — the anchor):
+       the wrap sits on the bar's right line, so a constant
+       .75rem on the right pins the word's distance from
+       the edge — opening the panel grows only the left
+       side, and the word cannot shift. The mirror of
+       Home's anchored left. */
+    padding: 0.55rem 0.75rem 0.55rem 0;
     font-size: 1rem;
   }
 
