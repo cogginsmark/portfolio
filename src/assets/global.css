@@ -122,6 +122,16 @@ html[data-theme="dark"] {
   background-color: #1a1a1a;
 }
 
+/* The Background item's colour circle in the dark theme
+   (2026-10-30): white, where the light theme's is black. It
+   lives here rather than in SiteHeader's scoped styles — the
+   scoped :global() form of this rule silently compiled away
+   once, leaving the circle dark in both modes (Mark's bug
+   report); the data-theme rules here are the proven ones. */
+html[data-theme="dark"] .theme-toggle-dot {
+  background: #ffffff;
+}
+
 a {
   text-decoration: none;
   position: relative;

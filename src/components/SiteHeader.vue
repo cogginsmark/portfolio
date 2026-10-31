@@ -631,9 +631,8 @@ export default {
     box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--main-color) 25%, transparent);
   }
 
-  :global(html[data-theme='dark']) .theme-toggle-dot {
-    background: #ffffff;
-  }
+  /* The dark theme's white circle lives in global.css beside
+     the other data-theme rules (see the note there). */
 }
 
 @media (prefers-reduced-motion: reduce) {
