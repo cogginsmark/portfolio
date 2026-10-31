@@ -19,7 +19,7 @@
         </button>
 
         <div id="menu-panel" class="switch-wrap" :class="{ 'is-open': open }">
-          <LightToggle><span class="theme-toggle-label">Background</span><span class="theme-toggle-ms" aria-hidden="true">{{ isDark ? 'contrast_inverse' : 'contrast' }}</span></LightToggle>
+          <LightToggle />
 
           <nav class="panel-links" aria-label="Quick actions" @click="open = false">
             <a class="panel-link" href="/cv.pdf" target="_blank" rel="noopener"><span>Resume / CV</span><i class="fas fa-arrow-down" aria-hidden="true"></i></a>
@@ -360,12 +360,6 @@ export default {
   box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--main-color) 12%, transparent);
 }
 
-/* The light/dark switch is labelled on mobile only; on desktop the
-   bulb stands alone in the nav row. */
-.theme-toggle-label {
-  display: none;
-}
-
 @media (max-width: 40rem) {
   /* The brand leaves the mobile bar — the name is on the pages
      anyway — so the full nav can sit inline, with the Menu text
@@ -497,27 +491,6 @@ export default {
     font-weight: 700;
   }
 
-  .theme-toggle-label {
-    display: inline;
-    /* The pill's own gap spaces the label now (2026-10-30):
-       the margin that once separated it from the switch would
-       double the space. */
-    margin-left: 0;
-    font-size: 0.95rem;
-    font-weight: 600;
-    letter-spacing: 0.01em;
-    /* One line in the popup (Mark's call, 2026-10-30): "Light
-       mode" never wraps; the panel sizes to fit it. */
-    white-space: nowrap;
-  }
-
-  /* In the panel the toggle speaks in its long form — the
-     slot's "Light mode / Dark mode" — so the pill's own short
-     word stands down there. */
-  .switch-wrap :deep(.theme-pill-word) {
-    display: none;
-  }
-
   /* The Menu panel holds only the switch now. It stays opaque like
      the old nav panel: it drops over scrolling content, and the
      translucent glass read as a transparency bug there (Mark,
@@ -600,36 +573,16 @@ export default {
   }
 
   /* The theme toggle wears the same separated pill in the
-     panel, laid out like the links — text left, icon rightmost
-     — but it is a Background item now (Mark's call,
-     2026-10-30): a fixed label and a fixed circle icon,
-     neither of which changes on toggle; only the pressed
-     treatment carries the state. Its own swapping sun/moon
-     and word stand down in the panel. */
+     panel, laid out like the links — text left, icon rightmost.
+     Its face is its own now (the Background design lives in
+     LightToggle itself, one face for bar and panel alike);
+     here it only gains the panel's solid surface and ring,
+     and stretches to the panel's width with its label and
+     icon at the ends. */
   .switch-wrap :deep(.theme-pill) {
     background: var(--fallback-background-color);
     box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--main-color) 10%, transparent);
     justify-content: space-between;
-  }
-
-  .switch-wrap :deep(.theme-pill i) {
-    display: none;
-  }
-
-  /* The Background item's icon (Mark's call, 2026-10-30):
-     Material Symbols' contrast pair, flipped with the theme
-     by the template — contrast in the light theme,
-     contrast_inverse in the dark — so the half-filled circle
-     keeps its balance on either panel. */
-  .theme-toggle-ms {
-    font-family: 'Material Symbols Rounded';
-    font-size: 1.15rem;
-    font-style: normal;
-    line-height: 1;
-    letter-spacing: normal;
-    text-transform: none;
-    white-space: nowrap;
-    font-variation-settings: 'FILL' 1, 'wght' 500, 'GRAD' 0, 'opsz' 24;
   }
 }
 

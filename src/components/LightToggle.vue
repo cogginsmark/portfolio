@@ -3,12 +3,10 @@
     type="button"
     class="theme-pill"
     :aria-pressed="isDark ? 'true' : 'false'"
-    aria-label="Dark mode"
     @click="toggleTheme"
   >
-    <i :class="isDark ? 'fas fa-moon' : 'fas fa-sun'" aria-hidden="true"></i>
-    <span class="theme-pill-word">{{ isDark ? 'Dark' : 'Light' }}</span>
-    <slot />
+    <span class="theme-pill-label">Background</span>
+    <span class="theme-pill-ms" aria-hidden="true">{{ isDark ? 'contrast_inverse' : 'contrast' }}</span>
   </button>
 </template>
 
@@ -16,18 +14,14 @@
 import { localStore, toggleTheme } from '../theme.js'
 
 // The light/dark control as a simple pill (Mark's pick,
-// 2026-10-30): the current mode's icon and word on a pill in
-// the header's own button language, state carried by
-// aria-pressed — no track, no sliding knob. Simpler and more
-// accessible than the switch it replaces: a full-height tap
-// target, a state that reads at a glance, and a pressed state
-// assistive tech announces. In the Menu panel the control is
-// a Background item instead (Mark's call, 2026-10-30): the
-// slot carries a fixed "Background" label and the contrast
-// icon, flipped with the theme (the reader-apps pattern),
-// and the pill's own swapping icon and word stand down there
-// (SiteHeader's styles), so nothing about the item's face
-// changes on toggle.
+// 2026-10-30) with a fixed face (his Background design, the
+// same day): the label always reads "Background" and the
+// icon is Material Symbols' contrast pair, flipped with the
+// theme — contrast in light, contrast_inverse in dark — so
+// neither the text nor the icon's motif changes on toggle;
+// the pressed treatment and aria-pressed carry the state.
+// One face everywhere it appears: the desktop bar's pill and
+// the Menu panel's item are the same control.
 export default {
   name: 'LightToggle',
   computed: {
@@ -61,14 +55,15 @@ export default {
   transition: background-color 0.2s ease, box-shadow 0.25s ease;
 }
 
-/* The icon's block is reserved at its final size — the site's
-   standing rule for button icons. */
-.theme-pill i {
-  flex: none;
-  width: 1rem;
-  text-align: center;
-  font-size: 0.9rem;
+.theme-pill-ms {
+  font-family: 'Material Symbols Rounded';
+  font-size: 1.15rem;
+  font-style: normal;
   line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  white-space: nowrap;
+  font-variation-settings: 'FILL' 1, 'wght' 500, 'GRAD' 0, 'opsz' 24;
 }
 
 /* Dark reads as the pressed, current pill — the header's own
