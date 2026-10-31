@@ -60,7 +60,14 @@ export default {
   },
   data: () => ({
     open: false,
-    scrolled: false
+    scrolled: false,
+    // The router's first route resolution (its START sentinel
+    // settling onto the loaded page) fires the $route watcher
+    // once at startup — that firing is not navigation, and the
+    // watcher uses this flag to say so (2026-10-30 fix: with
+    // the first firing counted, the active pill appeared on
+    // every cold load, defeating the standing state).
+    routeReady: false
   }),
   computed: {
     isDark() {
@@ -150,9 +157,14 @@ export default {
   watch: {
     $route() {
       this.open = false
-      // Any route change after load is navigation (a back
-      // swipe included): the pill state holds from here on.
-      navStore.navigated = true
+      // Any route change after the initial resolution is
+      // navigation (a back swipe included): the pill state
+      // holds from here on. The first firing is the router
+      // settling onto the loaded page, not a navigation.
+      if (this.routeReady) {
+        navStore.navigated = true
+      }
+      this.routeReady = true
       // Arriving home by any route — the brand, a back swipe —
       // restores the as-is layout too, not just the Home item.
       if (this.$route.path === '/') {
