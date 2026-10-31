@@ -246,18 +246,17 @@ export default {
     bottom: var(--gutter);
     z-index: 900;
     border-radius: 999px;
-    box-shadow: 0 12px 32px rgb(0 0 0 / 0.16);
+    /* The wrapper's own shadow stands down (patch 003): it was
+       the opaque pill's shadow, and the glass pill now carries
+       the library's shadow itself — both would double it. */
   }
 
-  .theme-float :deep(.theme-pill) {
-    background: var(--fallback-background-color);
-    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--main-color) 10%, transparent);
-  }
-
-  .theme-float :deep(.theme-pill[aria-pressed="true"]) {
-    background: color-mix(in srgb, var(--main-color) 6%, var(--fallback-background-color));
-    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--main-color) 12%, transparent);
-  }
+  /* The float's old ground rules stand down with it (patch
+     003): the opaque fallback background and the inset ring
+     would paint over the pill's glass surface in exactly the
+     home where glass matters most — floating over content.
+     The pill's own glass rules and its pressed tint govern
+     here now, as they do in the menu panel. */
 
   /* The collapse to the symbol alone (Mark's call,
      2026-10-30): when the float would overlay content the

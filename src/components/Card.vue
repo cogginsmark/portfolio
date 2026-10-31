@@ -395,6 +395,17 @@ export default {
 .styled-carousel :deep(.carousel__next) {
   opacity: 0;
   transition: opacity var(--nav-dur, 1200ms) ease;
+  /* Liquid Glass by values (patch 003): vue3-carousel renders
+     these buttons itself, so the library's classes cannot be
+     put on them — the material is applied from the library's
+     own variables instead: its fill, its blur and saturation,
+     its shadow and edge ring, on the round discs. This is the
+     one place the glass recipe is hand-applied; if the
+     library's values change, this rule follows by hand. */
+  background-color: var(--lg-fill);
+  -webkit-backdrop-filter: blur(var(--lg-blur)) saturate(var(--lg-saturate));
+  backdrop-filter: blur(var(--lg-blur)) saturate(var(--lg-saturate));
+  box-shadow: var(--lg-shadow), inset 0 0 0 0.5px var(--lg-edge);
 }
 .carousel-shell.navs-revealed .styled-carousel :deep(.carousel__prev),
 .carousel-shell.navs-revealed .styled-carousel :deep(.carousel__next) {

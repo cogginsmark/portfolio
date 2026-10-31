@@ -74,18 +74,26 @@
                   @click="toggleSound"
                   @timeupdate="onTimeUpdate"
                 ></video>
-                <button
-                  type="button"
+                <!-- The sound pill is rendered by the library's own
+                     GlassButton (patch 003): a real button, the
+                     volume glyph leading in its icon box, the
+                     press spring and refraction included. The
+                     class keeps this page's placement CSS on it;
+                     aria-pressed and the click fall through to
+                     the component's button. -->
+                <GlassButton
                   class="video-sound"
                   :aria-pressed="soundOn"
                   @click="toggleSound"
                 >
-                  <i
-                    :class="soundOn ? 'fas fa-volume-up' : 'fas fa-volume-off'"
-                    aria-hidden="true"
-                  ></i>
+                  <template #icon>
+                    <i
+                      :class="soundOn ? 'fas fa-volume-up' : 'fas fa-volume-off'"
+                      aria-hidden="true"
+                    ></i>
+                  </template>
                   {{ soundOn ? 'Sound on' : 'Tap for sound' }}
-                </button>
+                </GlassButton>
               </div>
               <a v-else class="video-thumb" :href="entry.youtube || entry.instagram" target="_blank" rel="noopener" :aria-label="`Watch: ${entry.title}`">
                 <img
@@ -127,6 +135,7 @@
 <script setup>
 import { onMounted, onUnmounted, ref } from 'vue'
 import Foot from './components/Foot.vue'
+import GlassButton from './components/liquid-glass/components/GlassButton.vue'
 import ThemeRoot from './components/ThemeRoot.vue'
 import { useReveal } from './composables/useReveal.js'
 
@@ -499,36 +508,20 @@ onUnmounted(() => {
     padding: 0.55rem 1.25rem;
   }
 
-  .video-sound {
-    font-size: 0.8rem;
-    padding: 0.4rem 1rem;
-  }
+  /* The sound pill's phone step-down is gone (patch 003): as a
+     GlassButton it keeps the library's metrics at every width,
+     like the other glass buttons. */
 }
 
+/* Placement only (patch 003): the pill itself is the library's
+   GlassButton now — its surface, metrics, type and states come
+   from the component. What stays here is where it rides on the
+   video; the opaque black ground and its hover state it used
+   to carry are gone with the old button. */
 .video-sound {
   position: absolute;
   right: 0.6rem;
   bottom: 0.6rem;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  /* Wider sides in the Apple-spec sweep (Mark's call,
-     2026-10-30), a step under the CTA pills — it rides on
-     the video itself. */
-  padding: 0.45rem 1.1rem;
-  border: 0;
-  border-radius: 999px;
-  background: rgb(0 0 0 / 0.55);
-  color: #fff;
-  font: inherit;
-  font-size: 0.85rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.25s ease;
-}
-
-.video-sound:hover {
-  background: rgb(0 0 0 / 0.78);
 }
 
 .video-thumb {

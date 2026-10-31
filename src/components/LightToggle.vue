@@ -1,13 +1,14 @@
 <template>
   <button
     type="button"
-    class="theme-pill"
+    class="theme-pill lg-glass"
+    data-liquid-glass=""
     aria-label="Background"
     :aria-pressed="isDark ? 'true' : 'false'"
     @click="toggleTheme"
   >
     <span class="theme-pill-label">Background</span>
-    <span class="theme-pill-ms" aria-hidden="true">{{ isDark ? 'contrast_inverse' : 'contrast' }}</span>
+    <span class="lg-button__icon"><span class="theme-pill-ms" aria-hidden="true">{{ isDark ? 'contrast_inverse' : 'contrast' }}</span></span>
   </button>
 </template>
 
@@ -40,6 +41,12 @@ export default {
 
 <style scoped>
 .theme-pill {
+  /* Liquid Glass (patch 003): the pill takes the library's glass
+     surface and its icon-box structure — the surface (fill, blur,
+     edge, shadow) comes from .lg-glass; --lg-h is declared so the
+     package's icon-box rule (0.48 × height) has the measure it
+     expects, at the library's canonical button height. */
+  --lg-h: 44px;
   display: inline-flex;
   align-items: center;
   gap: var(--pill-icon-gap);
@@ -52,7 +59,9 @@ export default {
   padding: 0.45rem 1.25rem;
   border: 0;
   border-radius: 999px;
-  background: transparent;
+  /* The old transparent ground stands down: .lg-glass paints the
+     surface now (its background-color outranks nothing here —
+     this declaration is simply gone so the fill can land). */
   color: var(--main-color);
   font: inherit;
   font-size: 0.95rem;
@@ -64,13 +73,17 @@ export default {
 
 .theme-pill-ms {
   font-family: 'Material Symbols Rounded';
-  font-size: 1.15rem;
+  /* Seated in the icon box (patch 003): 20px, the size the box
+     pattern uses for symbols; its weight axis was already 500,
+     and the optical size now matches the seat, as on the
+     Journalism glyph in patch 002. */
+  font-size: 20px;
   font-style: normal;
   line-height: 1;
   letter-spacing: normal;
   text-transform: none;
   white-space: nowrap;
-  font-variation-settings: 'FILL' 1, 'wght' 500, 'GRAD' 0, 'opsz' 24;
+  font-variation-settings: 'FILL' 1, 'wght' 500, 'GRAD' 0, 'opsz' 20;
   /* The reserved block (the site's icon rule, as on the
      Journalism glyph): a fixed 1em square from first paint,
      so the button is built at the glyph's final size — and
@@ -89,15 +102,20 @@ export default {
 
 
 /* Dark reads as the pressed, current pill — the header's own
-   treatment for the current thing. */
+   treatment for the current thing. The 6% tint stays: it takes
+   the fill's place as the background colour while the glass
+   blur underneath it persists, so the pressed state reads as
+   tinted glass. The inset ring stands down, because the glass
+   edge does that job now (the doubled edge was the dark
+   header's complaint in the e0b409d round). */
 .theme-pill[aria-pressed="true"] {
-  background: color-mix(in srgb, var(--main-color) 6%, transparent);
-  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--main-color) 12%, transparent);
+  background-color: color-mix(in srgb, var(--main-color) 6%, transparent);
+  box-shadow: var(--lg-glass-shadow, var(--lg-shadow)), inset 0 0 0 0.5px var(--lg-edge);
 }
 
 @media (hover: hover) {
   .theme-pill:hover {
-    background: color-mix(in srgb, var(--main-color) 8%, transparent);
+    background-color: color-mix(in srgb, var(--main-color) 8%, transparent);
   }
 }
 </style>

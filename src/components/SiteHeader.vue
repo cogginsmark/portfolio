@@ -9,6 +9,7 @@
         <button
           type="button"
           class="nav-toggle"
+          :class="{ 'lg-glass': open }"
           :aria-expanded="open ? 'true' : 'false'"
           aria-controls="menu-panel"
           :aria-label="open ? 'Close menu' : 'Open menu'"
@@ -565,7 +566,13 @@ export default {
    2026-10-30: the outlined text button read as a leftover next
    to the new pills): no border, the links' hover fill, and while
    its panel is open it wears the current link's treatment — the
-   soft fill with the inset ring. */
+   soft fill with the inset ring. On top of that treatment, the
+   open toggle now also carries the library's glass surface
+   (patch 003 — the .lg-glass class lands with the open state in
+   the template): the fill above tints the glass, the blur and
+   saturate are the material's own, and the rim stays off,
+   silenced at the header level with the bar's edge treatment.
+   At rest the word is bare again, as tuned. */
 .nav-toggle[aria-expanded="true"] {
   background: color-mix(in srgb, var(--main-color) 6%, transparent);
   box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--main-color) 12%, transparent);
