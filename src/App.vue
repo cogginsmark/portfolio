@@ -11,18 +11,23 @@
         </Transition>
       </router-view>
     </main>
+    <div class="theme-float">
+      <LightToggle />
+    </div>
   </div>
 </template>
 
 <script>
 import SiteHeader from './components/SiteHeader.vue'
+import LightToggle from './components/LightToggle.vue'
 
 // The app shell: skip link, the shared SiteHeader, and the routed page
 // inside a <main> landmark with a short fade/slide between routes.
 export default {
   name: 'App',
   components: {
-    SiteHeader
+    SiteHeader,
+    LightToggle
   },
   computed: {
     // Contact does not fade in (Mark's call, 2026-10-30): its
@@ -136,6 +141,41 @@ export default {
   flex-direction: column;
   flex: 1;
   min-height: 0;
+}
+
+/* The desktop Background control floats (Mark's call,
+   2026-10-30): out of the header, fixed to the bottom-right
+   corner on the page's own gutter lines, away from the
+   content — full circle to where the toggle lived before
+   the header era. It wears the menu pills' solid surface so
+   it reads over any content, with a soft lift from the
+   wrapper's shadow; the pressed treatment blends onto that
+   surface the way it did in the bar. Mobile never renders
+   it: there the toggle stays a row in the Menu panel. */
+.theme-float {
+  display: none;
+}
+
+@media (min-width: 40.01rem) {
+  .theme-float {
+    display: block;
+    position: fixed;
+    right: var(--gutter);
+    bottom: var(--gutter);
+    z-index: 900;
+    border-radius: 999px;
+    box-shadow: 0 12px 32px rgb(0 0 0 / 0.16);
+  }
+
+  .theme-float :deep(.theme-pill) {
+    background: var(--fallback-background-color);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--main-color) 10%, transparent);
+  }
+
+  .theme-float :deep(.theme-pill[aria-pressed="true"]) {
+    background: color-mix(in srgb, var(--main-color) 6%, var(--fallback-background-color));
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--main-color) 12%, transparent);
+  }
 }
 
 .skip-link {

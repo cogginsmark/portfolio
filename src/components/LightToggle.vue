@@ -21,9 +21,10 @@ import { localStore, toggleTheme } from '../theme.js'
 // theme — contrast in light, contrast_inverse in dark — so
 // neither the text nor the icon's motif changes on toggle;
 // the pressed treatment and aria-pressed carry the state.
-// In the Menu panel it is a labelled row; in the desktop bar
-// it is the symbol alone (Mark's call, 2026-10-30), with the
-// aria-label carrying the name there.
+// One labelled face in both of its homes: a row in the
+// mobile Menu panel, and — on desktop — a floating pill at
+// the page's bottom-right corner, mounted by App.vue (Mark's
+// call, 2026-10-30: out of the header, label restored).
 export default {
   name: 'LightToggle',
   computed: {
@@ -81,14 +82,7 @@ export default {
   overflow: hidden;
 }
 
-/* Desktop: the bar's pill is the symbol alone (Mark's call,
-   2026-10-30). The label remains for the Menu panel's row,
-   which only exists at these widths' other side. */
-@media (min-width: 40.01rem) {
-  .theme-pill-label {
-    display: none;
-  }
-}
+
 
 /* Dark reads as the pressed, current pill — the header's own
    treatment for the current thing. */

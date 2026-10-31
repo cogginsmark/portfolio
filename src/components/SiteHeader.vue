@@ -312,14 +312,21 @@ export default {
   order: 2;
 }
 
-/* The theme toggle lives in the header now; undo the sticky/float
-   positioning it needed when it sat at the bottom of each view. On
-   desktop the switch sits in the bar right after the nav; on mobile
-   the same wrapper becomes the Menu button's dropdown panel. */
+/* The switch wrap is the mobile Menu panel: the toggle row
+   over the quick-action links. On desktop it is not shown at
+   all (the rule below) — the Background control floats at
+   the page's bottom-right from App.vue instead (Mark's call,
+   2026-10-30), out of the header entirely. */
 .switch-wrap {
   display: flex;
   align-items: center;
   margin-left: 0.35rem;
+}
+
+@media (min-width: 40.01rem) {
+  .switch-wrap {
+    display: none;
+  }
 }
 
 .switch-wrap :deep(.theme-pill) {
